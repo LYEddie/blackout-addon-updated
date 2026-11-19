@@ -3,7 +3,7 @@ package kassuk.addon.blackout.modules;
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.BlackOutModule;
 import kassuk.addon.blackout.enums.SwingHand;
-import kassuk.addon.blackout.globalsettings.SwingSettings;
+import kassuk.addon.blackout.utils.globalsettings.SwingSettings;
 import kassuk.addon.blackout.utils.SettingUtils;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;

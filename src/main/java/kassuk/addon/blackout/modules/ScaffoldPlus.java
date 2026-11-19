@@ -5,7 +5,7 @@ import kassuk.addon.blackout.BlackOutModule;
 import kassuk.addon.blackout.enums.RotationType;
 import kassuk.addon.blackout.enums.SwingHand;
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.timers.TimerList;
+import kassuk.addon.blackout.utils.timers.TimerList;
 import kassuk.addon.blackout.utils.BOInvUtils;
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.PlaceData;

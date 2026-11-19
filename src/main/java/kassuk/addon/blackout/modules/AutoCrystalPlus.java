@@ -8,7 +8,7 @@ import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
 import kassuk.addon.blackout.managers.Managers;
 import kassuk.addon.blackout.mixins.PlayerInteractEntityC2SPacketAccessor;
-import kassuk.addon.blackout.timers.TimerList;
+import kassuk.addon.blackout.utils.timers.TimerList;
 import kassuk.addon.blackout.utils.BOInvUtils;
 import kassuk.addon.blackout.utils.ExtrapolationUtils;
 import kassuk.addon.blackout.utils.OLEPOSSUtils;

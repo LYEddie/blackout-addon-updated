@@ -1,4 +1,4 @@
-package kassuk.addon.blackout.globalsettings;
+package kassuk.addon.blackout.utils.globalsettings;
 
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.BlackOutModule;

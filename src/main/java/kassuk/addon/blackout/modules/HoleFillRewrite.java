@@ -6,7 +6,7 @@ import kassuk.addon.blackout.enums.HoleType;
 import kassuk.addon.blackout.enums.RotationType;
 import kassuk.addon.blackout.enums.SwingHand;
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.timers.TimerList;
+import kassuk.addon.blackout.utils.timers.TimerList;
 import kassuk.addon.blackout.utils.*;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.renderer.ShapeMode;

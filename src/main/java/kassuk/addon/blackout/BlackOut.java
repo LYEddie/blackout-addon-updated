@@ -2,7 +2,7 @@ package kassuk.addon.blackout;
 
 import com.mojang.logging.LogUtils;
 import kassuk.addon.blackout.commands.*;
-import kassuk.addon.blackout.globalsettings.*;
+import kassuk.addon.blackout.utils.globalsettings.*;
 import kassuk.addon.blackout.hud.*;
 import kassuk.addon.blackout.modules.*;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
@@ -126,6 +126,7 @@ public class BlackOut extends MeteorAddon {
         try {
             Class.forName("baritone.api.BaritoneAPI");
             modules.add(new AutoPvp());
+            LOG.info("AutoCC module added");
         } catch (ClassNotFoundException ignored) {}
     }
 

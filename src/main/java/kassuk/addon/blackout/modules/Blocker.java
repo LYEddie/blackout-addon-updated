@@ -7,7 +7,7 @@ import kassuk.addon.blackout.enums.SwingHand;
 import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.timers.TimerList;
+import kassuk.addon.blackout.utils.timers.TimerList;
 import kassuk.addon.blackout.utils.*;
 import kassuk.addon.blackout.utils.meteor.BODamageUtils;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;

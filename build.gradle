@@ -23,6 +23,14 @@ repositories {
     }
 }
 
+configurations {
+    baritoneBundle {
+        canBeConsumed = false
+        canBeResolved = true
+        transitive = false
+    }
+}
+
 dependencies {
     // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -32,6 +40,15 @@ dependencies {
     // Meteor
     modImplementation "meteordevelopment:meteor-client:${project.meteor_version}"
     modImplementation "meteordevelopment:baritone:${project.minecraft_version}-SNAPSHOT"
+    baritoneBundle "meteordevelopment:baritone:${project.minecraft_version}-SNAPSHOT"
+
+    // Loom removes nested-JAR declarations when remapping Baritone for development.
+    // Use its bundled Pathfinder on the runtime classpath, including IntelliJ runs.
+    runtimeOnly files(provider {
+        zipTree(configurations.baritoneBundle.singleFile).matching {
+            include "META-INF/jars/nether-pathfinder-*.jar"
+        }.singleFile
+    })
 }
 
 processResources {

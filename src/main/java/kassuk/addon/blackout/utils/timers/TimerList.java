@@ -1,4 +1,4 @@
-package kassuk.addon.blackout.timers;
+package kassuk.addon.blackout.utils.timers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
