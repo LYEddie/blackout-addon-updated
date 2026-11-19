@@ -63,6 +63,10 @@ public class StrictNoSlow extends BlackOutModule {
 
     @EventHandler
     private void onMove(PlayerMoveEvent event) {
+        if (mc.player == null || !mc.player.isUsingItem() || !shouldSend(mc.player.getActiveItem())) {
+            timer = 0;
+            return;
+        }
         timer++;
         if (timer > delay.get() && !single.get()) {
             send();
@@ -75,6 +79,7 @@ public class StrictNoSlow extends BlackOutModule {
     }
 
     private boolean shouldSend(ItemStack stack) {
-        return mc.player != null && (onlyGap.get() || (stack != null && !stack.isEmpty() && stack.getItem() == Items.ENCHANTED_GOLDEN_APPLE || stack.getItem() == Items.GOLDEN_APPLE));
+        return mc.player != null && stack != null && !stack.isEmpty()
+            && (!onlyGap.get() || stack.isOf(Items.ENCHANTED_GOLDEN_APPLE) || stack.isOf(Items.GOLDEN_APPLE));
     }
 }

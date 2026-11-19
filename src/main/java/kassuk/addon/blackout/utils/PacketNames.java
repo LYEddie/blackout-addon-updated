@@ -248,7 +248,8 @@ public class PacketNames {
             StringBuilder builder = new StringBuilder("pos: " + packet.getPos().toShortString() + " blockEntityType: ");
             builder.append(packet.getBlockEntityType().getRegistryEntry().getIdAsString());
             builder.append(" nbt: {");
-            ((NbtCompoundAccessor) packet.getNbt()).blackoutAddon$getEntries().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.asString()));
+            if (packet.getNbt() == null) builder.append("null");
+            else ((NbtCompoundAccessor) packet.getNbt()).blackoutAddon$getEntries().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.asString()));
             builder.append("\n}");
             return builder.toString();
         });
@@ -263,7 +264,7 @@ public class PacketNames {
             builder.append("\nBUNDLE END");
             return builder.toString();
         });
-        s2c(ChatMessageS2CPacket.class, "ChatMessage", packet -> "unsignedContent: " + packet.unsignedContent().getString() + " sender: " + packet.sender().toString() + " index: " + packet.index() + " isWritingErrorSkippable: " + packet.isWritingErrorSkippable() + " isFullyFiltered: " + packet.filterMask().isFullyFiltered() + " isPassThrough: " + packet.filterMask().isPassThrough() + " bodyContent: " + packet.body().content() + " bodySalt: " + packet.body().salt() + " bodyTimestamp: " + packet.body().timestamp() + " bodyLastSeenSize: " + packet.body().lastSeen().buf().size() + " signature: " + byteArrToString(packet.signature().data()) + " serializedParametersName: " + packet.serializedParameters().name().getString() + " serializedParametersTargetName: " + packet.serializedParameters().targetName().orElse(Text.of("null")).getString());
+        s2c(ChatMessageS2CPacket.class, "ChatMessage", packet -> "unsignedContent: " + (packet.unsignedContent() == null ? "null" : packet.unsignedContent().getString()) + " sender: " + packet.sender().toString() + " index: " + packet.index() + " isWritingErrorSkippable: " + packet.isWritingErrorSkippable() + " isFullyFiltered: " + packet.filterMask().isFullyFiltered() + " isPassThrough: " + packet.filterMask().isPassThrough() + " bodyContent: " + packet.body().content() + " bodySalt: " + packet.body().salt() + " bodyTimestamp: " + packet.body().timestamp() + " bodyLastSeenSize: " + packet.body().lastSeen().buf().size() + " signature: " + (packet.signature() == null ? "null" : byteArrToString(packet.signature().data())) + " serializedParametersName: " + packet.serializedParameters().name().getString() + " serializedParametersTargetName: " + packet.serializedParameters().targetName().orElse(Text.of("null")).getString());
         s2c(ChatSuggestionsS2CPacket.class, "ChatSuggestions", packet -> {
             StringBuilder builder = new StringBuilder("action: " + packet.action().name() + " entries: {");
             for (String entry : packet.entries()) builder.append("\n  ").append(entry);
@@ -437,7 +438,8 @@ public class PacketNames {
         s2c(NbtQueryResponseS2CPacket.class, "NbtQueryResponse", packet -> {
             StringBuilder builder = new StringBuilder("transactionId: " + packet.getTransactionId());
             builder.append(" nbt: {");
-            ((NbtCompoundAccessor) packet.getNbt()).blackoutAddon$getEntries().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.asString()));
+            if (packet.getNbt() == null) builder.append("null");
+            else ((NbtCompoundAccessor) packet.getNbt()).blackoutAddon$getEntries().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.asString()));
             builder.append("\n}");
             return builder.toString();
         });

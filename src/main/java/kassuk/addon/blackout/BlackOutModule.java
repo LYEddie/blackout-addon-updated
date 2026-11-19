@@ -65,12 +65,10 @@ public class BlackOutModule extends Module {
     public void sendSequenced(SequencedPacketCreator packetCreator) {
         if (mc.interactionManager == null || mc.world == null || mc.getNetworkHandler() == null) return;
 
-        PendingUpdateManager sequence = mc.world.getPendingUpdateManager().incrementSequence();
-        Packet<?> packet = packetCreator.predict(sequence.getSequence());
-
-        mc.getNetworkHandler().sendPacket(packet);
-
-        sequence.close();
+        try (PendingUpdateManager sequence = mc.world.getPendingUpdateManager().incrementSequence()) {
+            Packet<?> packet = packetCreator.predict(sequence.getSequence());
+            mc.getNetworkHandler().sendPacket(packet);
+        }
     }
 
     public void placeBlock(Hand hand, Vec3d blockHitVec, Direction blockDirection, BlockPos pos) {

@@ -95,9 +95,11 @@ public class RPC extends BlackOutModule {
         for (String msg : stateList) {
             Script script = MeteorStarscript.compile(msg);
             if (script != null) {
-                messages.add(MeteorStarscript.run(script));
+                String message = MeteorStarscript.run(script);
+                if (message != null) messages.add(message);
             }
         }
+        if (messages.isEmpty()) messages.add("Playing Minecraft");
         return messages;
     }
 }

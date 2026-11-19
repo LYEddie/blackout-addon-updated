@@ -1,11 +1,11 @@
 # Revisión de posibles bugs del addon
 
-Revisión estática del código, con foco en errores sencillos de lógica, límites, estado y mixins. Los hallazgos siguientes quedan pendientes de corrección; no se reprodujeron en una sesión de Minecraft. Las referencias usan los nombres nuevos de los mixins.
+Revisión estática del código, con foco en errores sencillos de lógica, límites, estado y mixins. Los 13 hallazgos siguientes se corrigieron en el segundo commit de esta tarea. La tabla conserva las ubicaciones y descripciones de la revisión inicial (commit 1b1303b); las líneas pueden haberse movido. No se reprodujeron en una sesión de Minecraft.
 
 | Prioridad | Ubicación | Problema y condición de fallo | Corrección sugerida |
 | --- | --- | --- | --- |
 | P2 | `src/main/java/kassuk/addon/blackout/mixins/PlayerEntityMixin.java:29` | SoundModifier intercepta todos los sonidos de `PlayerEntity.attack`. Guarda `attackEntity` pero nunca comprueba que sea un `EndCrystalEntity`, por lo que los ajustes de crystal-hit modifican o silencian también ataques a otras entidades. | Comprobar el objetivo y limitar el cambio al jugador local. |
-| P2 | `src/main/java/kassuk/addon/blackout/mixins/EntityMixin.java:102` | ForceSneak compara objetos `Text` por identidad (`!=`) para identificar al jugador. Los nombres no identifican la entidad y la condición incluye a entidades ajenas al jugador local. | Comparar `(Object) this == mc.player` y preservar el resultado original para las demás entidades. |
+| P2 | `src/main/java/kassuk/addon/blackout/mixins/EntityMixin.java:102` | ForceSneak compara objetos `Text` por identidad (`!=`) para identificar al jugador. Los nombres no identifican la entidad y la condición incluye a entidades ajenas al jugador local. | Aplicar el efecto a entidades PlayerEntity y conservar el resultado original para las demás. La sugerencia inicial de limitarlo al jugador local se corrigió al comprobar que el módulo declara "Makes everyone sneak". |
 | P2 | `src/main/java/kassuk/addon/blackout/mixins/EntityMixin.java:108` | AntiCrawl fuerza `doesNotCollide(Box)` a true en cualquier entidad mientras está activo. Cambia comprobaciones de colisión de entidades remotas y mobs, además del jugador. | Restringir el efecto al jugador local y a la comprobación de pose necesaria. |
 | P2 | `src/main/java/kassuk/addon/blackout/managers/PingSpoofManager.java:57` | `delayed1` y `delayed2` solo almacenan un paquete de cada tipo. Dos keepalives/pings antes del siguiente Render3DEvent sobrescriben la respuesta anterior. Además, compartir esos campos entre callbacks de red y render carece de sincronización. | Usar una cola segura para los callbacks o confinar la cola al hilo del cliente. |
 | P2 | `src/main/java/kassuk/addon/blackout/managers/PingSpoofManager.java:49` | La cola no se limpia al desconectarse/cambiar de servidor y usa el network handler actual al enviar. Puede reenviar respuestas de una conexión antigua a otra; si el handler desaparece, tampoco hay protección contra null. | Asociar los paquetes a su conexión y limpiar la cola al salir del mundo. |
@@ -30,3 +30,19 @@ Se comprobó en el bytecode local de Minecraft 1.21.1 que `Explosion.affectWorld
 - Los 10 mixins se llaman `<Target>Mixin` y las 11 interfaces `<Target>Accessor`; se actualizaron los 21 registros JSON.
 
 Los nombres de los ajustes son claves persistidas por Meteor. Las configuraciones guardadas con los nombres anteriores pueden necesitar reconfigurarse: esta tarea no incorpora una migración de claves antiguas.
+
+## Correcciones y validación del segundo commit
+
+- SoundModifier solo modifica sonidos de ataques del jugador local contra EndCrystalEntity.
+- ForceSneak conserva su alcance sobre los jugadores; no compara objetos Text ni sobrescribe resultados de otras entidades o del modo desactivado.
+- AntiCrawl se aplica exclusivamente a canChangeIntoPose(STANDING) del jugador local. Ya no fuerza doesNotCollide para todas las entidades.
+- PingSpoof usa ConcurrentLinkedQueue, procesa respuestas por tick, conserva la conexión de origen, descarta conexiones cerradas o ajenas y limpia la cola al salir del mundo. La fase de conexión sin mundo conserva el manejo vanilla.
+- StrictNoSlow comprueba correctamente only-gapples, stacks nulos/vacíos y el uso activo de un item para los envíos periódicos.
+- RPC descarta resultados nulos de Starscript y usa "Playing Minecraft" cuando no hay mensajes válidos.
+- AutoEz acepta listas con un solo mensaje de pop y sortea todos sus índices.
+- Fog normaliza RGB a 0..1 y calcula alpha como alphaDelColor * thickness / 100, sin dividir entre cero en thickness=100.
+- PacketNames muestra null para los campos opcionales de chat y protege las entradas NBT ausentes.
+- ClientConnectionMixin registra también el primer envío tras resolver el módulo.
+- sendSequenced cierra PendingUpdateManager con try-with-resources incluso si falla la creación o el envío del paquete.
+
+Validación: build de Gradle sin red y comprobación de whitespace. Se ejecutó el PingSpoofManager real con dobles de prueba de las APIs externas: ráfagas antes del tick, ausencia de duplicados, 4000 inserciones concurrentes, plazos futuros, cambio de conexión, salida del mundo, handler nulo y conexión cerrada. Todos los casos pasaron. Se comprobó en el bytecode local que PlayerEntity.canChangeIntoPose existe y participa en updatePose. Sigue pendiente la validación visual y de inyecciones dentro de Minecraft.

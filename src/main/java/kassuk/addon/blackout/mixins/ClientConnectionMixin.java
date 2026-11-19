@@ -18,6 +18,6 @@ public class ClientConnectionMixin {
     @Inject(method = "sendInternal", at = @At("HEAD"))
     private void onSent(Packet<?> packet, PacketCallbacks callbacks, boolean flush, CallbackInfo ci) {
         if (packetLogger == null) packetLogger = Modules.get().get(PacketLogger.class);
-        else if (packetLogger.isActive()) packetLogger.onSent(packet);
+        if (packetLogger != null && packetLogger.isActive()) packetLogger.onSent(packet);
     }
 }

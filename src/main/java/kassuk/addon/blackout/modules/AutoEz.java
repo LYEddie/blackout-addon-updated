@@ -373,7 +373,7 @@ public class AutoEz extends BlackOutModule {
 
     private void sendPopMessage(String name) {
         if (!popMessages.get().isEmpty()) {
-            int num = r.nextInt(0, popMessages.get().size() - 1);
+            int num = r.nextInt(popMessages.get().size());
             if (num == lastPop) {
                 num = num < popMessages.get().size() - 1 ? num + 1 : 0;
             }
