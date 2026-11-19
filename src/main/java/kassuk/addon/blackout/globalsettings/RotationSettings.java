@@ -35,13 +35,13 @@ public class RotationSettings extends BlackOutModule {
 
     //--------------------General--------------------//
     public final Setting<Boolean> vanillaRotation = sgGeneral.add(new BoolSetting.Builder()
-        .name("Vanilla Rotation")
+        .name("vanilla-rotation")
         .description("Turns your head.")
         .defaultValue(false)
         .build()
     );
     public final Setting<Double> yawStep = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Yaw Step")
+        .name("yaw-step")
         .description("How many yaw degrees should be rotated each packet.")
         .defaultValue(90)
         .range(0, 180)
@@ -49,7 +49,7 @@ public class RotationSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> pitchStep = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Pitch Step")
+        .name("pitch-step")
         .description("How many pitch degrees should be rotated each packet.")
         .defaultValue(45)
         .range(0, 180)
@@ -57,7 +57,7 @@ public class RotationSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> yawRandomization = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Yaw Randomization")
+        .name("yaw-randomization")
         .description(".")
         .defaultValue(1)
         .min(0)
@@ -65,7 +65,7 @@ public class RotationSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> pitchRandomization = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Pitch Randomization")
+        .name("pitch-randomization")
         .description(".")
         .defaultValue(1)
         .min(0)
@@ -93,7 +93,7 @@ public class RotationSettings extends BlackOutModule {
     private final Setting<Boolean> mineRotate = rotateSetting("Mining", "mining a block", sgMining);
     public final Setting<Double> mineTime = timeSetting("Mining", sgMining);
     public final Setting<RotationCheckMode> mineMode = modeSetting("Mining", sgMining);
-    public final Setting<MiningRotMode> mineTiming = sgMining.add(new EnumSetting.Builder<MiningRotMode>().name("Mining Rotate Timing").description(".").defaultValue(MiningRotMode.End).build());
+    public final Setting<MiningRotMode> mineTiming = sgMining.add(new EnumSetting.Builder<MiningRotMode>().name("mining-rotate-timing").description(".").defaultValue(MiningRotMode.End).build());
     public final Setting<Double> mineYawAngle = yawAngleSetting("Mining", sgMining, () -> mineMode.get() == RotationCheckMode.Angle);
     public final Setting<Double> minePitchAngle = pitchAngleSetting("Mining", sgMining, () -> mineMode.get() == RotationCheckMode.Angle);
     public final Setting<Integer> mineMemory = memorySetting("Mining", sgMining);
@@ -122,27 +122,27 @@ public class RotationSettings extends BlackOutModule {
     }
 
     private Setting<Boolean> rotateSetting(String type, String verb, SettingGroup sg) {
-        return sg.add(new BoolSetting.Builder().name(type + " Rotate").description("Rotates when + " + verb).defaultValue(false).build());
+        return sg.add(new BoolSetting.Builder().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-rotate").description("Rotates when + " + verb).defaultValue(false).build());
     }
 
     private Setting<Double> timeSetting(String type, SettingGroup sg) {
-        return sg.add(new DoubleSetting.Builder().name(type + " Rotation Time").description("Keeps the rotation for x seconds after ending.").defaultValue(0.5).min(0).sliderRange(0, 1).build());
+        return sg.add(new DoubleSetting.Builder().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-rotation-time").description("Keeps the rotation for x seconds after ending.").defaultValue(0.5).min(0).sliderRange(0, 1).build());
     }
 
     private Setting<RotationCheckMode> modeSetting(String type, SettingGroup sg) {
-        return sg.add(new EnumSetting.Builder<RotationCheckMode>().name(type + " Rotation Mode").description(".").defaultValue(RotationCheckMode.Raytrace).build());
+        return sg.add(new EnumSetting.Builder<RotationCheckMode>().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-rotation-mode").description(".").defaultValue(RotationCheckMode.Raytrace).build());
     }
 
     private Setting<Double> yawAngleSetting(String type, SettingGroup sg, IVisible visible) {
-        return sg.add(new DoubleSetting.Builder().name(type + " Yaw Angle").description("Accepts rotation if yaw angle to target is under this.").defaultValue(90).range(0, 180).sliderRange(0, 180).visible(visible).build());
+        return sg.add(new DoubleSetting.Builder().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-yaw-angle").description("Accepts rotation if yaw angle to target is under this.").defaultValue(90).range(0, 180).sliderRange(0, 180).visible(visible).build());
     }
 
     private Setting<Double> pitchAngleSetting(String type, SettingGroup sg, IVisible visible) {
-        return sg.add(new DoubleSetting.Builder().name(type + " Pitch Angle").description("Accepts rotation if pitch angle to target is under this.").defaultValue(45).range(0, 180).sliderRange(0, 180).visible(visible).build());
+        return sg.add(new DoubleSetting.Builder().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-pitch-angle").description("Accepts rotation if pitch angle to target is under this.").defaultValue(45).range(0, 180).sliderRange(0, 180).visible(visible).build());
     }
 
     private Setting<Integer> memorySetting(String type, SettingGroup sg) {
-        return sg.add(new IntSetting.Builder().name(type + " Memory").description("Accepts rotation if looked at it x packets earlier.").defaultValue(1).range(1, 20).sliderRange(1, 20).build());
+        return sg.add(new IntSetting.Builder().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-memory").description("Accepts rotation if looked at it x packets earlier.").defaultValue(1).range(1, 20).sliderRange(1, 20).build());
     }
 
     public final Vec3d vec = new Vec3d(0, 0, 0);

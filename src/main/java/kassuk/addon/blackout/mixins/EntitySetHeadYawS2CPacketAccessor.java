@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(EntitySetHeadYawS2CPacket.class)
-public interface IEntitySetHeadYawS2CPacket {
+public interface EntitySetHeadYawS2CPacketAccessor {
     @Accessor("entityId")
-    int getId();
+    int blackoutAddon$getId();
 }

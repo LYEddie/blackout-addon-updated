@@ -7,12 +7,14 @@ import kassuk.addon.blackout.hud.*;
 import kassuk.addon.blackout.modules.*;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
-import meteordevelopment.meteorclient.pathing.PathManagers;
+import meteordevelopment.meteorclient.utils.player.ChatUtils;
 import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.item.Items;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 
 /**
@@ -33,13 +35,10 @@ public class BlackOut extends MeteorAddon {
     @Override
     public void onInitialize() {
         LOG.info("Initializing Blackout");
-
+        ChatUtils.registerCustomPrefix(getPackage(), () -> Text.literal("[BlackOut] ").formatted(Formatting.DARK_RED));
         initializeModules(Modules.get());
-
         initializeSettings(Modules.get());
-
         initializeCommands();
-
         initializeHud(Hud.get());
     }
 

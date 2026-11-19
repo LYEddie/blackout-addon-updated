@@ -7,12 +7,12 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(RaycastContext.class)
-public interface IRaycastContext {
+public interface RaycastContextAccessor {
     @Mutable
     @Accessor("start")
-    void setStart(Vec3d start);
+    void blackoutAddon$setStart(Vec3d start);
 
     @Mutable
     @Accessor("end")
-    void setEnd(Vec3d end);
+    void blackoutAddon$setEnd(Vec3d end);
 }

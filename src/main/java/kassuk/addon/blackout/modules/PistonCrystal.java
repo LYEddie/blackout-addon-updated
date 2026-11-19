@@ -89,7 +89,7 @@ public class PistonCrystal extends BlackOutModule {
 
     //--------------------Delay--------------------//
     private final Setting<Double> pcDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("piston->-crystal")
+        .name("piston-crystal")
         .description("How many seconds to wait between placing piston and redstone.")
         .defaultValue(0)
         .min(0)
@@ -97,7 +97,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> cfDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("crystal->-fire")
+        .name("crystal-fire")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)
@@ -105,7 +105,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> crDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("crystal->-redstone")
+        .name("crystal-redstone")
         .description("How many seconds to wait between placing redstone and starting to mine it.")
         .defaultValue(0.2)
         .min(0)
@@ -113,7 +113,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> rmDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("redstone->-mine")
+        .name("redstone-mine")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)
@@ -121,7 +121,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> mpDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("mine->-piston")
+        .name("mine-piston")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)

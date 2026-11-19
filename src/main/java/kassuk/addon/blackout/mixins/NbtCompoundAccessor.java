@@ -18,7 +18,7 @@ import java.util.Map;
  */
 
 @Mixin(NbtCompound.class)
-public interface AccessorNbtCompound {
+public interface NbtCompoundAccessor {
     @Accessor("entries")
-    Map<String, NbtElement> getEntries();
+    Map<String, NbtElement> blackoutAddon$getEntries();
 }

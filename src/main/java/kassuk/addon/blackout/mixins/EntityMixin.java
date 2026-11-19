@@ -27,7 +27,7 @@ import java.util.List;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 @Mixin(Entity.class)
-public abstract class MixinEntity {
+public abstract class EntityMixin {
     @Shadow
     public abstract boolean isInPose(EntityPose pose);
 

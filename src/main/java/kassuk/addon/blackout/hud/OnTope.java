@@ -18,13 +18,13 @@ public class OnTope extends HudElement {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<SettingColor> color = sgGeneral.add(new ColorSetting.Builder()
-        .name("Color")
+        .name("color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Scale")
+        .name("scale")
         .description("Modify the size of the text.")
         .defaultValue(1)
         .min(0)
@@ -32,7 +32,7 @@ public class OnTope extends HudElement {
         .build()
     );
     private final Setting<Boolean> shadow = sgGeneral.add(new BoolSetting.Builder()
-        .name("Text Shadow")
+        .name("text-shadow")
         .description("Should the text have a shadow.")
         .defaultValue(true)
         .build()

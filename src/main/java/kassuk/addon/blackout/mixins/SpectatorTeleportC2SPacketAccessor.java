@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import java.util.UUID;
 
 @Mixin(SpectatorTeleportC2SPacket.class)
-public interface ISpectatorTeleportC2SPacket {
+public interface SpectatorTeleportC2SPacketAccessor {
     @Accessor("targetUuid")
-    UUID getID();
+    UUID blackoutAddon$getID();
 }

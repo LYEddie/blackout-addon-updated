@@ -5,13 +5,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(PlayerMoveC2SPacket.class)
-public interface IPlayerMoveC2SPacket {
+public interface PlayerMoveC2SPacketAccessor {
     @Accessor("x")
-    double getX();
+    double blackoutAddon$getX();
 
     @Accessor("y")
-    double getY();
+    double blackoutAddon$getY();
 
     @Accessor("z")
-    double getZ();
+    double blackoutAddon$getZ();
 }

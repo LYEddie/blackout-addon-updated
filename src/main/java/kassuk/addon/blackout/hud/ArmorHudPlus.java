@@ -21,7 +21,7 @@ public class ArmorHudPlus extends HudElement {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Scale")
+        .name("scale")
         .description("Scale to render at.")
         .defaultValue(1)
         .range(0, 5)
@@ -29,7 +29,7 @@ public class ArmorHudPlus extends HudElement {
         .build()
     );
     private final Setting<Integer> rounding = sgGeneral.add(new IntSetting.Builder()
-        .name("Rounding")
+        .name("rounding")
         .description("How rounded should the background be.")
         .defaultValue(50)
         .range(0, 100)
@@ -37,25 +37,25 @@ public class ArmorHudPlus extends HudElement {
         .build()
     );
     private final Setting<Boolean> bg = sgGeneral.add(new BoolSetting.Builder()
-        .name("Background")
+        .name("background")
         .description("Renders a background behind armor pieces.")
         .defaultValue(false)
         .build()
     );
     private final Setting<SettingColor> bgColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Background Color")
+        .name("background-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(0, 0, 0, 150))
         .build()
     );
     private final Setting<SettingColor> durColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Durability Color")
+        .name("durability-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     private final Setting<DurMode> durMode = sgGeneral.add(new EnumSetting.Builder<DurMode>()
-        .name("Durability Mode")
+        .name("durability-mode")
         .description("Where should durability be rendered at.")
         .defaultValue(DurMode.Bottom)
         .build()

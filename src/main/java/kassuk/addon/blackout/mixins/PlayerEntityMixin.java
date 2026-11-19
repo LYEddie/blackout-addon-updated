@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class MixinPlayerEntity {
+public abstract class PlayerEntityMixin {
 
     @Unique
     Entity attackEntity = null;

@@ -7,7 +7,7 @@ import kassuk.addon.blackout.enums.SwingHand;
 import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.mixins.IInteractEntityC2SPacket;
+import kassuk.addon.blackout.mixins.PlayerInteractEntityC2SPacketAccessor;
 import kassuk.addon.blackout.timers.TimerList;
 import kassuk.addon.blackout.utils.BOInvUtils;
 import kassuk.addon.blackout.utils.ExtrapolationUtils;
@@ -1188,7 +1188,7 @@ public class AutoCrystalPlus extends BlackOutModule {
 
             SettingUtils.registerAttack(bb);
             PlayerInteractEntityC2SPacket packet = PlayerInteractEntityC2SPacket.attack(mc.player, mc.player.isSneaking());
-            ((IInteractEntityC2SPacket) packet).setId(id);
+            ((PlayerInteractEntityC2SPacketAccessor) packet).blackoutAddon$setId(id);
 
             SettingUtils.swing(SwingState.Pre, SwingType.Attacking, Hand.MAIN_HAND);
 

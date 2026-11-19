@@ -7,16 +7,16 @@ import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(PlayerInteractEntityC2SPacket.class)
-public interface IInteractEntityC2SPacket {
+public interface PlayerInteractEntityC2SPacketAccessor {
     @Accessor("entityId")
     @Final
     @Mutable
-    void setId(final int id);
+    void blackoutAddon$setId(final int id);
 
     @Accessor("entityId")
-    int getId();
+    int blackoutAddon$getId();
 
     @Accessor("type")
-    PlayerInteractEntityC2SPacket.InteractTypeHandler getType();
+    PlayerInteractEntityC2SPacket.InteractTypeHandler blackoutAddon$getType();
 }
 

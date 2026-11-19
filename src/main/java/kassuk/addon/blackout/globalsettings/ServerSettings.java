@@ -18,19 +18,19 @@ public class ServerSettings extends BlackOutModule {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<Boolean> cc = sgGeneral.add(new BoolSetting.Builder()
-        .name("CC Hitboxes")
+        .name("cc-hitboxes")
         .description("Newly placed crystals require 1 block tall space without entity hitboxes.")
         .defaultValue(false)
         .build()
     );
     public final Setting<Boolean> oldVerCrystals = sgGeneral.add(new BoolSetting.Builder()
-        .name("1.12.2 Crystals")
+        .name("1-12-2-crystals")
         .description("Requires 2 block tall space to place crystals.")
         .defaultValue(false)
         .build()
     );
     public final Setting<Boolean> oldVerDamage = sgGeneral.add(new BoolSetting.Builder()
-        .name("1.12.2 Damage")
+        .name("1-12-2-damage")
         .description("Calculates damages in old way.")
         .defaultValue(false)
         .build()

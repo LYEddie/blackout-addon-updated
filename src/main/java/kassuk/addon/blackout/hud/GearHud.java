@@ -24,13 +24,13 @@ public class GearHud extends HudElement {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<List<Item>> items = sgGeneral.add(new ItemListSetting.Builder()
-        .name("Items")
+        .name("items")
         .description("Items to show.")
         .defaultValue(Items.END_CRYSTAL, Items.EXPERIENCE_BOTTLE, Items.OBSIDIAN, Items.TOTEM_OF_UNDYING)
         .build()
     );
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Scale")
+        .name("scale")
         .description("The scale.")
         .defaultValue(1.5)
         .min(0)
@@ -38,19 +38,19 @@ public class GearHud extends HudElement {
         .build()
     );
     private final Setting<SettingColor> color = sgGeneral.add(new ColorSetting.Builder()
-        .name("Color")
+        .name("color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     private final Setting<Boolean> shadow = sgGeneral.add(new BoolSetting.Builder()
-        .name("Shadow")
+        .name("shadow")
         .description("Renders a shadow behind the chars.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> experienceInfo = sgGeneral.add(new BoolSetting.Builder()
-        .name("Experience Info")
+        .name("experience-info")
         .description("Displays mend percentage for armor next to experience bottles.")
         .defaultValue(true)
         .build()

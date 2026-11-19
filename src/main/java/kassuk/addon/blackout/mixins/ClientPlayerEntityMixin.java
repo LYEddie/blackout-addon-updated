@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class MixinClientPlayerEntity {
+public abstract class ClientPlayerEntityMixin {
     @Shadow
     @Final
     public ClientPlayNetworkHandler networkHandler;

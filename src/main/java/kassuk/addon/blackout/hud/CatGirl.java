@@ -17,7 +17,7 @@ import net.minecraft.util.Identifier;
 public class CatGirl extends HudElement {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final Setting<Double> girlScale = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Catgirl Scale")
+        .name("catgirl-scale")
         .description("Modify the size of the Catgirl.")
         .defaultValue(1)
         .min(0)
@@ -25,7 +25,7 @@ public class CatGirl extends HudElement {
         .build()
     );
     private final Setting<SideMode> side = sgGeneral.add(new EnumSetting.Builder<SideMode>()
-        .name("Kill Message Mode")
+        .name("kill-message-mode")
         .description("What kind of messages to send.")
         .defaultValue(SideMode.Right)
         .build()

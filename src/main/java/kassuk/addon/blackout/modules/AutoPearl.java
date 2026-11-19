@@ -134,7 +134,7 @@ public class AutoPearl extends BlackOutModule {
         if (swing.get()) clientSwing(swingHand.get(), hand == null ? Hand.MAIN_HAND : hand);
 
         toggle();
-        sendToggledMsg("success");
+        info("success");
 
         if (hand == null) {
             switch (switchMode.get()) {
@@ -151,7 +151,7 @@ public class AutoPearl extends BlackOutModule {
             case PickSilent, InvSwitch -> !InvUtils.find(item -> item.getItem() instanceof BlockItem).found();
         }) {
             toggle();
-            sendToggledMsg("cc blocks not found");
+            info("cc blocks not found");
             return false;
         }
 

@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
 @Mixin(MinecraftClient.class)
-public interface AccessorMinecraftClient {
+public interface MinecraftClientAccessor {
     @Accessor("itemUseCooldown")
-    void setItemUseCooldown(int itemUseCooldown);
+    void blackoutAddon$setItemUseCooldown(int itemUseCooldown);
 }

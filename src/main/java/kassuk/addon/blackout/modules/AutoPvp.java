@@ -108,7 +108,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> antiCampSeconds = sgTarget.add(new IntSetting.Builder()
-        .name("anti-camp-time-(s)")
+        .name("anti-camp-time-s")
         .description("How many seconds a player has to stand still to get ignored.")
         .defaultValue(30)
         .min(0)

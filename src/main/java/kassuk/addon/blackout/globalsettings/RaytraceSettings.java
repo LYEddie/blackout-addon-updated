@@ -2,7 +2,7 @@ package kassuk.addon.blackout.globalsettings;
 
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.BlackOutModule;
-import kassuk.addon.blackout.mixins.IRaycastContext;
+import kassuk.addon.blackout.mixins.RaycastContextAccessor;
 import kassuk.addon.blackout.utils.meteor.BODamageUtils;
 import meteordevelopment.meteorclient.mixininterface.IVec3d;
 import meteordevelopment.meteorclient.settings.*;
@@ -25,20 +25,20 @@ public class RaytraceSettings extends BlackOutModule {
 
     //--------------------Place-Settings--------------------//
     public final Setting<Boolean> placeTrace = sgPlace.add(new BoolSetting.Builder()
-        .name("Place Traces")
+        .name("place-traces")
         .description("Raytraces when placing.")
         .defaultValue(false)
         .build()
     );
     private final Setting<PlaceTraceMode> placeMode = sgPlace.add(new EnumSetting.Builder<PlaceTraceMode>()
-        .name("Place Mode")
+        .name("place-mode")
         .description("Place trace mode.")
         .defaultValue(PlaceTraceMode.SinglePoint)
         .visible(placeTrace::get)
         .build()
     );
     private final Setting<Double> placeHeight = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Height")
+        .name("place-height")
         .description("Raytraces to x blocks above the bottom.")
         .defaultValue(0.5)
         .sliderRange(-2, 2)
@@ -46,7 +46,7 @@ public class RaytraceSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> placeHeight1 = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Height 1")
+        .name("place-height-1")
         .description("Raytraces to x blocks above the bottom.")
         .defaultValue(0.25)
         .sliderRange(-2, 1.5)
@@ -54,7 +54,7 @@ public class RaytraceSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> placeHeight2 = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Height 2")
+        .name("place-height-2")
         .description("Raytraces to x blocks above the bottom.")
         .defaultValue(0.75)
         .sliderRange(-2, 2)
@@ -62,7 +62,7 @@ public class RaytraceSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> exposure = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Exposure")
+        .name("place-exposure")
         .description("How many % of the block should be seen.")
         .defaultValue(50)
         .range(0, 100)
@@ -73,20 +73,20 @@ public class RaytraceSettings extends BlackOutModule {
 
     //--------------------Place-Settings--------------------//
     public final Setting<Boolean> attackTrace = sgAttack.add(new BoolSetting.Builder()
-        .name("Attack Traces")
+        .name("attack-traces")
         .description("Raytraces when attacking.")
         .defaultValue(false)
         .build()
     );
     private final Setting<AttackTraceMode> attackMode = sgAttack.add(new EnumSetting.Builder<AttackTraceMode>()
-        .name("Attack Mode")
+        .name("attack-mode")
         .description("Attack trace mode.")
         .defaultValue(AttackTraceMode.SinglePoint)
         .visible(attackTrace::get)
         .build()
     );
     private final Setting<Double> attackHeight = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Height")
+        .name("attack-height")
         .description("Raytraces to x blocks above the bottom.")
         .defaultValue(1.5)
         .sliderRange(-2, 2)
@@ -94,7 +94,7 @@ public class RaytraceSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> attackHeight1 = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Height 1")
+        .name("attack-height-1")
         .description("Raytraces to x * hitbox height above the bottom.")
         .defaultValue(0.5)
         .sliderRange(-2, 2)
@@ -102,7 +102,7 @@ public class RaytraceSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> attackHeight2 = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Height 2")
+        .name("attack-height-2")
         .description("Raytraces to x * hitbox height above the bottom.")
         .defaultValue(0.5)
         .sliderRange(-2, 2)
@@ -110,7 +110,7 @@ public class RaytraceSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> attackExposure = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Exposure")
+        .name("attack-exposure")
         .description("How many % of the entity should be seen.")
         .defaultValue(50)
         .range(0, 100)
@@ -149,20 +149,20 @@ public class RaytraceSettings extends BlackOutModule {
 
         switch (placeMode.get()) {
             case SinglePoint -> {
-                ((IRaycastContext) raycastContext).setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + placeHeight.get(), pos.getZ() + 0.5));
+                ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + placeHeight.get(), pos.getZ() + 0.5));
 
                 result = BODamageUtils.raycast(raycastContext);
                 return result.getBlockPos().equals(pos);
             }
             case DoublePoint -> {
-                ((IRaycastContext) raycastContext).setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + placeHeight1.get(), pos.getZ() + 0.5));
+                ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + placeHeight1.get(), pos.getZ() + 0.5));
 
                 result = BODamageUtils.raycast(raycastContext);
                 if (result.getBlockPos().equals(pos)) {
                     return true;
                 }
 
-                ((IRaycastContext) raycastContext).setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + placeHeight2.get(), pos.getZ() + 0.5));
+                ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + placeHeight2.get(), pos.getZ() + 0.5));
 
                 result = BODamageUtils.raycast(raycastContext);
                 return result.getBlockPos().equals(pos);
@@ -170,7 +170,7 @@ public class RaytraceSettings extends BlackOutModule {
             case Sides -> {
                 ((IVec3d) vec).set(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 for (Direction dir : Direction.values()) {
-                    ((IRaycastContext) raycastContext).setEnd(vec.add(dir.getOffsetX() / 2f, dir.getOffsetY() / 2f, dir.getOffsetZ() / 2f));
+                    ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(vec.add(dir.getOffsetX() / 2f, dir.getOffsetY() / 2f, dir.getOffsetZ() / 2f));
 
                     result = BODamageUtils.raycast(raycastContext);
                     if (result.getBlockPos().equals(pos)) {
@@ -185,7 +185,7 @@ public class RaytraceSettings extends BlackOutModule {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((IRaycastContext) raycastContext).setEnd(vec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
+                            ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(vec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
 
                             result = BODamageUtils.raycast(raycastContext);
                             if (result.getBlockPos().equals(pos)) {
@@ -205,7 +205,7 @@ public class RaytraceSettings extends BlackOutModule {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((IRaycastContext) raycastContext).setEnd(vec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
+                            ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(vec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
 
                             result = BODamageUtils.raycast(raycastContext);
                             if (result.getBlockPos().equals(pos)) {
@@ -251,7 +251,7 @@ public class RaytraceSettings extends BlackOutModule {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((IRaycastContext) raycastContext).setEnd(vec.add(MathHelper.lerp(x / 2f, 0.1, xw - 0.1), MathHelper.lerp(y / 2f, 0.0, yh - 0.1), MathHelper.lerp(z / 2f, 0.1, zw - 0.1)));
+                            ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(vec.add(MathHelper.lerp(x / 2f, 0.1, xw - 0.1), MathHelper.lerp(y / 2f, 0.0, yh - 0.1), MathHelper.lerp(z / 2f, 0.1, zw - 0.1)));
 
                             result = BODamageUtils.raycast(raycastContext);
                             if (result.getType() != HitResult.Type.BLOCK) {
@@ -273,7 +273,7 @@ public class RaytraceSettings extends BlackOutModule {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((IRaycastContext) raycastContext).setEnd(vec.add(MathHelper.lerp(x / 2f, 0.1, xw - 0.1), MathHelper.lerp(y / 2f, 0.0, yh - 0.1), MathHelper.lerp(z / 2f, 0.1, zw - 0.1)));
+                            ((RaycastContextAccessor) raycastContext).blackoutAddon$setEnd(vec.add(MathHelper.lerp(x / 2f, 0.1, xw - 0.1), MathHelper.lerp(y / 2f, 0.0, yh - 0.1), MathHelper.lerp(z / 2f, 0.1, zw - 0.1)));
 
                             result = BODamageUtils.raycast(raycastContext);
                             if (result.getType() != HitResult.Type.BLOCK) {
@@ -291,7 +291,7 @@ public class RaytraceSettings extends BlackOutModule {
         if (raycastContext == null) {
             raycastContext = new RaycastContext(mc.player.getEyePos(), null, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.ANY, mc.player);
         } else {
-            ((IRaycastContext) raycastContext).setStart(mc.player.getEyePos());
+            ((RaycastContextAccessor) raycastContext).blackoutAddon$setStart(mc.player.getEyePos());
         }
     }
 }

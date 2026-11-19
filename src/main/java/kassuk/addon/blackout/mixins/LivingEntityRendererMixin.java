@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 @Mixin(LivingEntityRenderer.class)
-public class MixinLivingEntityRenderer<T extends LivingEntity> {
+public class LivingEntityRendererMixin<T extends LivingEntity> {
     @Unique
     private boolean itsami = false;
 

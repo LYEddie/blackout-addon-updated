@@ -24,7 +24,7 @@ public class RangeSettings extends BlackOutModule {
 
     //  Place Ranges
     public final Setting<Double> placeRange = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Range")
+        .name("place-range")
         .description("Range for placing.")
         .defaultValue(5.2)
         .range(0, 6)
@@ -32,7 +32,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> placeRangeWalls = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Range Walls")
+        .name("place-range-walls")
         .description("Range for placing behind blocks.")
         .defaultValue(5.2)
         .range(0, 6)
@@ -40,19 +40,19 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<FromMode> placeRangeFrom = sgPlace.add(new EnumSetting.Builder<FromMode>()
-        .name("Place Range From")
+        .name("place-range-from")
         .description("Where to calculate place ranges from.")
         .defaultValue(FromMode.Eyes)
         .build()
     );
     private final Setting<PlaceRangeMode> placeRangeMode = sgPlace.add(new EnumSetting.Builder<PlaceRangeMode>()
-        .name("Place Range Mode")
+        .name("place-range-mode")
         .description("Where to calculate place ranges from.")
         .defaultValue(PlaceRangeMode.NCP)
         .build()
     );
     private final Setting<Double> blockWidth = sgPlace.add(new DoubleSetting.Builder()
-        .name("Block Width")
+        .name("block-width")
         .description("How wide should the box be for closest range.")
         .defaultValue(2)
         .min(0)
@@ -61,7 +61,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> blockHeight = sgPlace.add(new DoubleSetting.Builder()
-        .name("Block Height")
+        .name("block-height")
         .description("How tall should the box be for closest range.")
         .defaultValue(2)
         .min(0)
@@ -70,7 +70,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> placeHeight = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Height")
+        .name("place-height")
         .description("The height to calculate ranges from.")
         .defaultValue(0.5)
         .sliderRange(0, 1)
@@ -80,7 +80,7 @@ public class RangeSettings extends BlackOutModule {
 
     //  Attack Ranges
     public final Setting<Double> attackRange = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Range")
+        .name("attack-range")
         .description("Range for attacking entities.")
         .defaultValue(4.8)
         .range(0, 6)
@@ -88,7 +88,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> attackRangeWalls = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Range Walls")
+        .name("attack-range-walls")
         .description("Range for attacking entities behind blocks.")
         .defaultValue(4.8)
         .range(0, 6)
@@ -96,13 +96,13 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Boolean> reduce = sgAttack.add(new BoolSetting.Builder()
-        .name("Reduce")
+        .name("reduce")
         .description("Reduces range on every hit by reduce step until it reaches (range - reduce amount).")
         .defaultValue(false)
         .build()
     );
     public final Setting<Double> reduceAmount = sgAttack.add(new DoubleSetting.Builder()
-        .name("Reduce Amount")
+        .name("reduce-amount")
         .description("Check description from 'Reduce' setting.")
         .defaultValue(0.8)
         .range(0, 6)
@@ -111,7 +111,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> reduceStep = sgAttack.add(new DoubleSetting.Builder()
-        .name("Reduce Step")
+        .name("reduce-step")
         .description("Check description from 'Reduce' setting.")
         .defaultValue(0.14)
         .range(0, 6)
@@ -120,19 +120,19 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<FromMode> attackRangeFrom = sgAttack.add(new EnumSetting.Builder<FromMode>()
-        .name("Attack Range From")
+        .name("attack-range-from")
         .description("Where to calculate ranges from.")
         .defaultValue(FromMode.Eyes)
         .build()
     );
     private final Setting<AttackRangeMode> attackRangeMode = sgAttack.add(new EnumSetting.Builder<AttackRangeMode>()
-        .name("Attack Range Mode")
+        .name("attack-range-mode")
         .description("Where to calculate ranges from.")
         .defaultValue(AttackRangeMode.NCP)
         .build()
     );
     private final Setting<Double> closestAttackWidth = sgAttack.add(new DoubleSetting.Builder()
-        .name("Closest Attack Width")
+        .name("closest-attack-width")
         .description("How wide should the box be for closest range.")
         .defaultValue(1)
         .min(0)
@@ -141,7 +141,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> closestAttackHeight = sgAttack.add(new DoubleSetting.Builder()
-        .name("Closest Attack Height")
+        .name("closest-attack-height")
         .description("How tall should the box be for closest range.")
         .defaultValue(1)
         .min(0)
@@ -150,7 +150,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> attackHeight = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Height")
+        .name("attack-height")
         .description("The height above feet to calculate ranges from.")
         .defaultValue(1)
         .sliderRange(-2, 2)
@@ -160,7 +160,7 @@ public class RangeSettings extends BlackOutModule {
 
     //  Mining Ranges
     public final Setting<Double> miningRange = sgMining.add(new DoubleSetting.Builder()
-        .name("Mining Range")
+        .name("mining-range")
         .description("Range for mining blocks.")
         .defaultValue(4.8)
         .range(0, 6)
@@ -168,7 +168,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     public final Setting<Double> miningRangeWalls = sgMining.add(new DoubleSetting.Builder()
-        .name("Mining Range Walls")
+        .name("mining-range-walls")
         .description("Range for mining blocks behind other blocks.")
         .defaultValue(4.8)
         .range(0, 6)
@@ -176,19 +176,19 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<FromMode> miningRangeFrom = sgMining.add(new EnumSetting.Builder<FromMode>()
-        .name("Mining Range From")
+        .name("mining-range-from")
         .description("Where to calculate mining ranges from.")
         .defaultValue(FromMode.Eyes)
         .build()
     );
     private final Setting<MiningRangeMode> miningRangeMode = sgMining.add(new EnumSetting.Builder<MiningRangeMode>()
-        .name("Mining Range Mode")
+        .name("mining-range-mode")
         .description("Where to calculate mining ranges from.")
         .defaultValue(MiningRangeMode.NCP)
         .build()
     );
     private final Setting<Double> closestMiningWidth = sgMining.add(new DoubleSetting.Builder()
-        .name("Closest Mining Width")
+        .name("closest-mining-width")
         .description("How wide should the box be for closest range.")
         .defaultValue(1)
         .min(0)
@@ -197,7 +197,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> closestMiningHeight = sgMining.add(new DoubleSetting.Builder()
-        .name("Closest Mining Height")
+        .name("closest-mining-height")
         .description("How tall should the box be for closest range.")
         .defaultValue(1)
         .min(0)
@@ -206,7 +206,7 @@ public class RangeSettings extends BlackOutModule {
         .build()
     );
     private final Setting<Double> miningHeight = sgMining.add(new DoubleSetting.Builder()
-        .name("Mining Height")
+        .name("mining-height")
         .description("The height above block bottom to calculate ranges from.")
         .defaultValue(0.5)
         .sliderRange(0, 1)

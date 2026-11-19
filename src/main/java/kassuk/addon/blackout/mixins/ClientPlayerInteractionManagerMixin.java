@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientPlayerInteractionManager.class)
-public abstract class MixinClientPlayerInteractionManager {
+public abstract class ClientPlayerInteractionManagerMixin {
     @Shadow
     public abstract void sendSequencedPacket(ClientWorld world, SequencedPacketCreator packetCreator);
 

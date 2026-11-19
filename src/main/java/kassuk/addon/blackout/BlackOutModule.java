@@ -7,11 +7,9 @@ import kassuk.addon.blackout.managers.Managers;
 import kassuk.addon.blackout.modules.SwingModifier;
 import kassuk.addon.blackout.utils.PriorityUtils;
 import kassuk.addon.blackout.utils.SettingUtils;
-import meteordevelopment.meteorclient.mixininterface.IChatHud;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
-import meteordevelopment.meteorclient.systems.config.Config;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.systems.modules.Modules;
@@ -29,14 +27,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
-import java.util.Objects;
-
 /**
  * @author OLEPOSSU
  */
 
 public class BlackOutModule extends Module {
-    private final String prefix = Formatting.DARK_RED + "[BlackOut]";
     public final int priority;
 
     public BlackOutModule(Category category, String name, String description) {
@@ -44,48 +39,22 @@ public class BlackOutModule extends Module {
         this.priority = PriorityUtils.get(this);
     }
 
-    //  Messages
-    public void sendToggledMsg() {
-        if (Config.get().chatFeedback.get() && chatFeedback && mc.world != null) {
-            ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + title + (isActive() ? Formatting.GREEN + " ON" : Formatting.RED + " OFF");
-            sendMessage(Text.of(msg), hashCode());
-        }
-    }
-
-    public void sendToggledMsg(String message) {
-        if (Config.get().chatFeedback.get() && chatFeedback && mc.world != null) {
-            ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + title + (isActive() ? Formatting.GREEN + " ON " : Formatting.RED + " OFF ") + Formatting.GRAY + message;
-            sendMessage(Text.of(msg), hashCode());
-        }
-    }
-
     public void sendDisableMsg(String text) {
-        if (mc.world != null) {
-            ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + title + Formatting.RED + " OFF " + Formatting.GRAY + text;
-            sendMessage(Text.of(msg), hashCode());
-        }
+        info(Text.literal(text).formatted(Formatting.GRAY));
     }
 
     public void sendBOInfo(String text) {
-        if (mc.world != null) {
-            ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + title + " " + text;
-            sendMessage(Text.of(msg), Objects.hash(title + "-info"));
-        }
+        info(Text.literal(text));
     }
+
     public void debug(String text) {
-        if (mc.world != null) {
-            ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + title + " " + Formatting.AQUA + text;
-            sendMessage(Text.of(msg), 0);
-        }
+        info(Text.literal(text).formatted(Formatting.AQUA));
     }
 
     public void sendMessage(Text text, int id) {
-        ((IChatHud) mc.inGameHud.getChatHud()).meteor$add(text, id);
+        if (mc.world == null) return;
+        ChatUtils.forceNextPrefixClass(getClass());
+        ChatUtils.sendMsg(id, null, null, text);
     }
 
     public void sendPacket(Packet<?> packet) {
@@ -147,7 +116,7 @@ public class BlackOutModule extends Module {
 
     public Setting<Boolean> addPauseEat(SettingGroup group) {
         return group.add(new BoolSetting.Builder()
-            .name("Pause Eat")
+            .name("pause-eat")
             .description("Pauses when eating")
             .defaultValue(false)
             .build()

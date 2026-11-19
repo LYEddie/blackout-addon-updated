@@ -50,7 +50,7 @@ public class BedAuraPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> fiveB = sgGeneral.add(new BoolSetting.Builder()
-        .name("5B5T")
+        .name("5b5t")
         .description("For example requires floor for both bed blocks and allows placing inside entities.")
         .defaultValue(false)
         .build()

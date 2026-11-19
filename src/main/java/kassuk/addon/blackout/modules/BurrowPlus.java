@@ -148,7 +148,7 @@ public class BurrowPlus extends BlackOutModule {
 
         if (!switched) {
             toggle();
-            sendToggledMsg("correct blocks not found");
+            info("correct blocks not found");
             return;
         }
 
@@ -187,7 +187,7 @@ public class BurrowPlus extends BlackOutModule {
 
         if (!pFly.get()) {
             toggle();
-            sendToggledMsg("success");
+            info("success");
         }
     }
 
@@ -195,11 +195,11 @@ public class BurrowPlus extends BlackOutModule {
     public void onDeactivate() {
         if (enabledPFly && Modules.get().isActive(PacketFly.class)) {
             Modules.get().get(PacketFly.class).toggle();
-            Modules.get().get(PacketFly.class).sendToggledMsg("disabled by burrow+");
+            Modules.get().get(PacketFly.class).info("disabled by burrow+");
         }
         if (enabledScaffold && Modules.get().isActive(ScaffoldPlus.class)) {
             Modules.get().get(ScaffoldPlus.class).toggle();
-            Modules.get().get(ScaffoldPlus.class).sendToggledMsg("disabled by burrow+");
+            Modules.get().get(ScaffoldPlus.class).info("disabled by burrow+");
         }
     }
 
@@ -209,12 +209,12 @@ public class BurrowPlus extends BlackOutModule {
 
             if (!Modules.get().isActive(PacketFly.class)) {
                 Modules.get().get(PacketFly.class).toggle();
-                Modules.get().get(PacketFly.class).sendToggledMsg("enabled by burrow+");
+                Modules.get().get(PacketFly.class).info("enabled by burrow+");
                 enabledPFly = true;
             }
             if (scaffold.get() && !Modules.get().isActive(ScaffoldPlus.class)) {
                 Modules.get().get(ScaffoldPlus.class).toggle();
-                Modules.get().get(ScaffoldPlus.class).sendToggledMsg("enabled by burrow+");
+                Modules.get().get(ScaffoldPlus.class).info("enabled by burrow+");
                 enabledScaffold = true;
             }
         }

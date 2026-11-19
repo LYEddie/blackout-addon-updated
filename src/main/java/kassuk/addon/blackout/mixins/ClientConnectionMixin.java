@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientConnection.class)
-public class MixinClientConnection {
+public class ClientConnectionMixin {
     @Unique private PacketLogger packetLogger = null;
 
     @Inject(method = "sendInternal", at = @At("HEAD"))

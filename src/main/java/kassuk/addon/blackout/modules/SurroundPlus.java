@@ -445,21 +445,21 @@ public class SurroundPlus extends BlackOutModule {
         if (lastPos != null) {
             if (toggleMove.get() && (currentPos.getX() != lastPos.getX() || currentPos.getZ() != lastPos.getZ())) {
                 toggle();
-                sendToggledMsg("moved horizontally");
+                info("moved horizontally");
                 return true;
             }
 
             if (toggleVertical.get() == VerticalToggleMode.Up || toggleVertical.get() == VerticalToggleMode.Any) {
                 if (currentPos.getY() > lastPos.getY()) {
                     toggle();
-                    sendToggledMsg("moved up");
+                    info("moved up");
                     return true;
                 }
             }
             if (toggleVertical.get() == VerticalToggleMode.Down || toggleVertical.get() == VerticalToggleMode.Any) {
                 if (currentPos.getY() < lastPos.getY()) {
                     toggle();
-                    sendToggledMsg("moved down");
+                    info("moved down");
                     return true;
                 }
             }

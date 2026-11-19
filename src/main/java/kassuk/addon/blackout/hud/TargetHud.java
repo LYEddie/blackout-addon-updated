@@ -39,14 +39,14 @@ public class TargetHud extends HudElement {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Mode> mode = sgGeneral.add(new EnumSetting.Builder<Mode>()
-        .name("Mode")
+        .name("mode")
         .description("What mode to use for the TargetHud.")
         .defaultValue(Mode.Blackout)
         .build()
     );
 
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Scale")
+        .name("scale")
         .description("Scale to render at")
         .defaultValue(1)
         .range(0, 5)
@@ -54,31 +54,31 @@ public class TargetHud extends HudElement {
         .build()
     );
     private final Setting<SettingColor> bgColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Background Color")
+        .name("background-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(0, 0, 0, 200))
         .build()
     );
     private final Setting<SettingColor> textColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Text Color")
+        .name("text-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     private final Setting<SettingColor> healthColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Health Color")
+        .name("health-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> absorptionColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Absorption Color")
+        .name("absorption-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 0, 255))
         .build()
     );
     private final Setting<Double> damageTilt = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Damage Tilt")
+        .name("damage-tilt")
         .description("How many degrees should the box be rotated when enemy takes damage.")
         .defaultValue(10)
         .min(0)

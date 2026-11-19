@@ -2,7 +2,7 @@ package kassuk.addon.blackout.modules;
 
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.BlackOutModule;
-import kassuk.addon.blackout.mixins.AccessorMinecraftClient;
+import kassuk.addon.blackout.mixins.MinecraftClientAccessor;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.utils.player.Rotations;
@@ -58,7 +58,7 @@ public class FastXP extends BlackOutModule {
         if (mc.player == null || mc.world == null) return;
 
         if (mc.player.getMainHandStack().getItem() == Items.EXPERIENCE_BOTTLE  && mc.options.useKey.isPressed()){
-            ((AccessorMinecraftClient) mc).setItemUseCooldown(yeetDelay.get());
+            ((MinecraftClientAccessor) mc).blackoutAddon$setItemUseCooldown(yeetDelay.get());
 
             if (rotMode.get() == RotationMode.Silent && rotate.get())
                 Rotations.rotate(mc.player.getYaw(), pitch.get());

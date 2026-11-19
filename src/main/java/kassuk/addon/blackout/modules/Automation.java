@@ -46,7 +46,7 @@ public class Automation extends BlackOutModule {
         if (!mc.player.getBlockPos().equals(lastPos) && inAHole(mc.player)) {
             if (holeSurround.get() && !surround.isActive()) {
                 surround.toggle();
-                surround.sendToggledMsg("enabled by Automation");
+                surround.info("enabled by Automation");
             }
         }
 

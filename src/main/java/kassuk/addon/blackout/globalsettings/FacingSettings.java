@@ -30,25 +30,25 @@ public class FacingSettings extends BlackOutModule {
 
     //  Place Ranges
     public final Setting<Boolean> strictDir = sgGeneral.add(new BoolSetting.Builder()
-        .name("Strict Direction")
+        .name("strict-direction")
         .description("Doesn't place on faces which aren't in your direction.")
         .defaultValue(false)
         .build()
     );
     public final Setting<Boolean> unblocked = sgGeneral.add(new BoolSetting.Builder()
-        .name("Unblocked")
+        .name("unblocked")
         .description("Doesn't place on faces that have block on them.")
         .defaultValue(false)
         .build()
     );
     public final Setting<Boolean> airPlace = sgGeneral.add(new BoolSetting.Builder()
-        .name("Air Place")
+        .name("air-place")
         .description("Allows placing blocks in air.")
         .defaultValue(false)
         .build()
     );
     public final Setting<MaxHeight> maxHeight = sgGeneral.add(new EnumSetting.Builder<MaxHeight>()
-        .name("Max Height")
+        .name("max-height")
         .description("Doesn't place on top sides of blocks at max height. Old: 1.12, New: 1.17+")
         .defaultValue(MaxHeight.New)
         .build()

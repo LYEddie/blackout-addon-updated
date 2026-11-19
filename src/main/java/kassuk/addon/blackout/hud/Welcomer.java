@@ -18,7 +18,7 @@ public class Welcomer extends HudElement {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Double> scale = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Scale")
+        .name("scale")
         .description("Scale to render at.")
         .defaultValue(1)
         .min(0)
@@ -26,13 +26,13 @@ public class Welcomer extends HudElement {
         .build()
     );
     private final Setting<SettingColor> textColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Text Color")
+        .name("text-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     private final Setting<Boolean> shadow = sgGeneral.add(new BoolSetting.Builder()
-        .name("Text Shadow")
+        .name("text-shadow")
         .description("Should the text have a shadow.")
         .defaultValue(true)
         .build()

@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.utils;
 
-import kassuk.addon.blackout.mixins.IBlockSettings;
+import kassuk.addon.blackout.mixins.AbstractBlockSettingsAccessor;
 import meteordevelopment.meteorclient.mixin.AbstractBlockAccessor;
 import net.minecraft.block.*;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
@@ -87,7 +87,7 @@ public class OLEPOSSUtils {
 
     @SuppressWarnings("DataFlowIssue")
     public static boolean replaceable(BlockPos block) {
-        return ((IBlockSettings) AbstractBlock.Settings.copy(mc.world.getBlockState(block).getBlock())).replaceable();
+        return ((AbstractBlockSettingsAccessor) AbstractBlock.Settings.copy(mc.world.getBlockState(block).getBlock())).blackoutAddon$replaceable();
     }
 
     public static boolean solid2(BlockPos block) {
