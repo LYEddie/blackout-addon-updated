@@ -1,5 +1,10 @@
 package kassuk.addon.blackout.managers;
 
+import kassuk.addon.blackout.managers.impl.HoldingManager;
+import kassuk.addon.blackout.managers.impl.OnGroundManager;
+import kassuk.addon.blackout.managers.impl.PingSpoofManager;
+import kassuk.addon.blackout.managers.impl.RotationManager;
+
 /**
  * @author OLEPOSSU
  */

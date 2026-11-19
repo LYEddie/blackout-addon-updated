@@ -3,16 +3,16 @@
   "package": "kassuk.addon.blackout.mixins",
   "compatibilityLevel": "JAVA_17",
   "client": [
-    "MinecraftClientAccessor",
-    "AbstractBlockSettingsAccessor",
-    "EntityS2CPacketAccessor",
-    "EntitySetHeadYawS2CPacketAccessor",
-    "EntityStatusS2CPacketAccessor",
-    "PlayerInteractEntityC2SPacketAccessor",
-    "PlayerMoveC2SPacketAccessor",
-    "RaycastContextAccessor",
-    "SetCameraEntityS2CPacketAccessor",
-    "SpectatorTeleportC2SPacketAccessor",
+    "accessor.MinecraftClientAccessor",
+    "accessor.AbstractBlockSettingsAccessor",
+    "accessor.EntityS2CPacketAccessor",
+    "accessor.EntitySetHeadYawS2CPacketAccessor",
+    "accessor.EntityStatusS2CPacketAccessor",
+    "accessor.PlayerInteractEntityC2SPacketAccessor",
+    "accessor.PlayerMoveC2SPacketAccessor",
+    "accessor.RaycastContextAccessor",
+    "accessor.SetCameraEntityS2CPacketAccessor",
+    "accessor.SpectatorTeleportC2SPacketAccessor",
     "BackgroundRendererMixin",
     "ClientCommonNetworkHandlerMixin",
     "ClientPlayerEntityMixin",
@@ -27,7 +27,7 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "NbtCompoundAccessor",
+    "accessor.NbtCompoundAccessor",
     "ClientConnectionMixin"
   ]
 }

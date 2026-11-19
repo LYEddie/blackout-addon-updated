@@ -7,9 +7,8 @@
 package kassuk.addon.blackout.utils;
 
 import com.mojang.authlib.properties.Property;
-import kassuk.addon.blackout.mixins.NbtCompoundAccessor;
-import kassuk.addon.blackout.mixins.PlayerInteractEntityC2SPacketAccessor;
-import meteordevelopment.meteorclient.mixininterface.IPlayerInteractEntityC2SPacket;
+import kassuk.addon.blackout.mixins.accessor.NbtCompoundAccessor;
+import kassuk.addon.blackout.mixins.accessor.PlayerInteractEntityC2SPacketAccessor;
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.map.MapDecoration;

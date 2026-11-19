@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.mixins;
 
-import kassuk.addon.blackout.modules.SoundModifier;
+import kassuk.addon.blackout.modules.impl.SoundModifier;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;

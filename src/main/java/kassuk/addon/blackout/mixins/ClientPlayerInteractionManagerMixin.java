@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.mixins;
 
-import kassuk.addon.blackout.modules.AutoMine;
+import kassuk.addon.blackout.modules.impl.AutoMine;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;

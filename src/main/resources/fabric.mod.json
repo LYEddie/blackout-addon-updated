@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "id": "blackout",
+  "id": "blackout-addon",
   "version": "${version}",
-  "name": "Blackout",
+  "name": "Blackout Addon",
   "description": "Epik cheetos addon.",
   "authors": [
-    "KassuK and OLEPOSSU"
+    "KassuK", "OLEPOSSU", "LYEddie"
   ],
   "contact": {
     "repo": "https://github.com/KassuK1/BlackOut/",

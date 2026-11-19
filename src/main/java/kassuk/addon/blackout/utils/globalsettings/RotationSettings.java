@@ -1,9 +1,9 @@
 package kassuk.addon.blackout.utils.globalsettings;
 
 import kassuk.addon.blackout.BlackOut;
-import kassuk.addon.blackout.BlackOutModule;
+import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.RotationType;
-import kassuk.addon.blackout.managers.RotationManager;
+import kassuk.addon.blackout.managers.impl.RotationManager;
 import kassuk.addon.blackout.utils.NCPRaytracer;
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.RotationUtils;

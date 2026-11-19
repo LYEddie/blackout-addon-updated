@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.mixins;
 
-import kassuk.addon.blackout.modules.PacketLogger;
+import kassuk.addon.blackout.modules.impl.PacketLogger;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.network.ClientConnection;
 import net.minecraft.network.PacketCallbacks;

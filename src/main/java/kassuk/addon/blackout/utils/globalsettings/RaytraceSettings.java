@@ -1,8 +1,8 @@
 package kassuk.addon.blackout.utils.globalsettings;
 
 import kassuk.addon.blackout.BlackOut;
-import kassuk.addon.blackout.BlackOutModule;
-import kassuk.addon.blackout.mixins.RaycastContextAccessor;
+import kassuk.addon.blackout.modules.BlackOutModule;
+import kassuk.addon.blackout.mixins.accessor.RaycastContextAccessor;
 import kassuk.addon.blackout.utils.meteor.BODamageUtils;
 import meteordevelopment.meteorclient.mixininterface.IVec3d;
 import meteordevelopment.meteorclient.settings.*;

@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.mixins;
 
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.modules.PingSpoof;
+import kassuk.addon.blackout.modules.impl.PingSpoof;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.network.ClientConnection;

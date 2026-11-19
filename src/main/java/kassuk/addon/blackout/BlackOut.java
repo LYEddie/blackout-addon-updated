@@ -4,7 +4,7 @@ import com.mojang.logging.LogUtils;
 import kassuk.addon.blackout.commands.*;
 import kassuk.addon.blackout.utils.globalsettings.*;
 import kassuk.addon.blackout.hud.*;
-import kassuk.addon.blackout.modules.*;
+import kassuk.addon.blackout.modules.impl.*;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;

@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.utils;
 
-import kassuk.addon.blackout.mixins.AbstractBlockSettingsAccessor;
+import kassuk.addon.blackout.mixins.accessor.AbstractBlockSettingsAccessor;
 import meteordevelopment.meteorclient.mixin.AbstractBlockAccessor;
 import net.minecraft.block.*;
 import net.minecraft.component.type.ItemEnchantmentsComponent;

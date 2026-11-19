@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.mixins;
 
-import kassuk.addon.blackout.modules.ForceSneak;
-import kassuk.addon.blackout.modules.StepPlus;
+import kassuk.addon.blackout.modules.impl.ForceSneak;
+import kassuk.addon.blackout.modules.impl.StepPlus;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;

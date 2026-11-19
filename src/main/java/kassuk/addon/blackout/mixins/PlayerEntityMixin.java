@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.mixins;
 
-import kassuk.addon.blackout.modules.SoundModifier;
-import kassuk.addon.blackout.modules.AntiCrawl;
+import kassuk.addon.blackout.modules.impl.AntiCrawl;
+import kassuk.addon.blackout.modules.impl.SoundModifier;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;

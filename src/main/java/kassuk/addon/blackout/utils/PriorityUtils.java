@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.utils;
 
-import kassuk.addon.blackout.modules.*;
+import kassuk.addon.blackout.modules.impl.*;
 
 /**
  * @author OLEPOSSU

@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.mixins;
 
-import kassuk.addon.blackout.modules.Fog;
+import kassuk.addon.blackout.modules.impl.Fog;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.render.BackgroundRenderer;
 import net.minecraft.client.render.Camera;
@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BackgroundRenderer.class)
 public class BackgroundRendererMixin {
+
     @Inject(method = "applyFog", at = @At("TAIL"))
     private static void applyFog(Camera camera, BackgroundRenderer.FogType fogType, float viewDistance, boolean thickFog, float tickDelta, CallbackInfo info) {
         Fog fog = Modules.get().get(Fog.class);

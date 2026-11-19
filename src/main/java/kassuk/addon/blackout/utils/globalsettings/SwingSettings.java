@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.utils.globalsettings;
 
 import kassuk.addon.blackout.BlackOut;
-import kassuk.addon.blackout.BlackOutModule;
+import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
 import meteordevelopment.meteorclient.settings.BoolSetting;

@@ -1,8 +1,8 @@
 package kassuk.addon.blackout.mixins;
 
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.modules.SwingModifier;
-import kassuk.addon.blackout.modules.TickShift;
+import kassuk.addon.blackout.modules.impl.SwingModifier;
+import kassuk.addon.blackout.modules.impl.TickShift;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.ClientPlayerEntity;

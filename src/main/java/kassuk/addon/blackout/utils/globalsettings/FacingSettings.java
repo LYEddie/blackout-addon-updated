@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.utils.globalsettings;
 
 import kassuk.addon.blackout.BlackOut;
-import kassuk.addon.blackout.BlackOutModule;
+import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.PlaceData;
 import kassuk.addon.blackout.utils.SettingUtils;
