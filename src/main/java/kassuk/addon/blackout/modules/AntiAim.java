@@ -24,7 +24,7 @@ import java.util.Random;
 
 public class AntiAim extends BlackOutModule {
     public AntiAim() {
-        super(BlackOut.BLACKOUT, "Anti Aim", "Funi conter stik module.");
+        super(BlackOut.BLACKOUT, "anti-aim", "Funi conter stik module.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -32,13 +32,13 @@ public class AntiAim extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Modes> mode = sgGeneral.add(new EnumSetting.Builder<Modes>()
-        .name("Mode")
+        .name("mode")
         .description(".")
         .defaultValue(Modes.Custom)
         .build()
     );
     private final Setting<Double> enemyRange = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Enemy Range")
+        .name("enemy-range")
         .description("Looks at players in the range.")
         .defaultValue(20)
         .range(0, 1000)
@@ -48,7 +48,7 @@ public class AntiAim extends BlackOutModule {
         .build()
     );
     private final Setting<Double> spinSpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Spin Speed")
+        .name("spin-speed")
         .description("How many degrees should be turned every tick.")
         .defaultValue(5)
         .min(0)
@@ -58,21 +58,21 @@ public class AntiAim extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> rYaw = sgGeneral.add(new BoolSetting.Builder()
-        .name("Random Yaw")
+        .name("random-yaw")
         .description("Sets yaw to random value.")
         .defaultValue(true)
         .visible(() -> mode.get().equals(Modes.CSGO))
         .build()
     );
     private final Setting<Boolean> rPitch = sgGeneral.add(new BoolSetting.Builder()
-        .name("Random Pitch")
+        .name("random-pitch")
         .description("Sets pitch to random value.")
         .defaultValue(false)
         .visible(() -> mode.get().equals(Modes.CSGO))
         .build()
     );
     private final Setting<Integer> csgoPitch = sgGeneral.add(new IntSetting.Builder()
-        .name("CS Pitch")
+        .name("cs-pitch")
         .description("Sets pitch to this")
         .defaultValue(90)
         .range(-90, 90)
@@ -82,7 +82,7 @@ public class AntiAim extends BlackOutModule {
         .build()
     );
     private final Setting<Double> csDelay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("CSGO Delay")
+        .name("csgo-delay")
         .description("Tick delay between csgo rotation update.")
         .defaultValue(5)
         .range(0, 100)
@@ -92,7 +92,7 @@ public class AntiAim extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> yaw = sgGeneral.add(new IntSetting.Builder()
-        .name("Yaw")
+        .name("yaw")
         .description("Sets yaw to this")
         .defaultValue(0)
         .range(-180, 180)
@@ -102,7 +102,7 @@ public class AntiAim extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> pitch = sgGeneral.add(new IntSetting.Builder()
-        .name("Pitch")
+        .name("pitch")
         .description("Sets pitch to this")
         .defaultValue(90)
         .range(-90, 90)
@@ -112,13 +112,13 @@ public class AntiAim extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> bowMode = sgGeneral.add(new BoolSetting.Builder()
-        .name("Look Up With Bow")
+        .name("look-up-with-bow")
         .description("Looks up while holding a bow.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> encMode = sgGeneral.add(new BoolSetting.Builder()
-        .name("Look Down With Exp")
+        .name("look-down-with-exp")
         .description("Looks down while holding experience bottles.")
         .defaultValue(true)
         .build()
@@ -126,25 +126,25 @@ public class AntiAim extends BlackOutModule {
 
     //--------------------Ignore--------------------//
     private final Setting<Boolean> iYaw = sgIgnore.add(new BoolSetting.Builder()
-        .name("Ignore Yaw")
+        .name("ignore-yaw")
         .description("Doesn't change yaw when holding specific items.")
         .defaultValue(true)
         .build()
     );
     private final Setting<List<Item>> yItems = sgIgnore.add(new ItemListSetting.Builder()
-        .name("Ignore Yaw Items")
+        .name("ignore-yaw-items")
         .description("Ignores yaw rotations when holding these items.")
         .defaultValue(Items.ENDER_PEARL, Items.BOW, Items.EXPERIENCE_BOTTLE)
         .build()
     );
     private final Setting<Boolean> iPitch = sgIgnore.add(new BoolSetting.Builder()
-        .name("Ignore Pitch")
+        .name("ignore-pitch")
         .description("Doesn't change pitch when holding specific items.")
         .defaultValue(true)
         .build()
     );
     private final Setting<List<Item>> pItems = sgIgnore.add(new ItemListSetting.Builder()
-        .name("Ignore Pitch items")
+        .name("ignore-pitch-items")
         .description("Ignores pitch rotations when holding these items.")
         .defaultValue(Items.ENDER_PEARL, Items.BOW, Items.EXPERIENCE_BOTTLE)
         .build()

@@ -17,12 +17,12 @@ import net.minecraft.registry.tag.FluidTags;
 
 public class JesusPlus extends BlackOutModule {
     public JesusPlus() {
-        super(BlackOut.BLACKOUT, "Jesus+", "Better jesus");
+        super(BlackOut.BLACKOUT, "jesus+", "Better jesus");
     }
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Double> bob = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Bob force")
+        .name("bob-force")
         .description("Use 0.005 or 0.1")
         .defaultValue(0.005)
         .min(0)
@@ -30,12 +30,12 @@ public class JesusPlus extends BlackOutModule {
         .build()
     );
     private final  Setting<Boolean> toggle = sgGeneral.add(new BoolSetting.Builder()
-        .name("Change speed")
+        .name("change-speed")
         .description("")
         .build()
     );
     private final Setting<Double> water_speed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Water speed")
+        .name("water-speed")
         .description("0.265 is generally better")
         .defaultValue(1.175)
         .min(0)

@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 
 public class AnchorAuraRewrite extends BlackOutModule {
     public AnchorAuraRewrite() {
-        super(BlackOut.BLACKOUT, "Anchor Aura Rewrite", "Automatically destroys people using anchors.");
+        super(BlackOut.BLACKOUT, "anchor-aura-rewrite", "Automatically destroys people using anchors.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -47,25 +47,25 @@ public class AnchorAuraRewrite extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Eat")
+        .name("pause-eat")
         .description("Pauses when you are eating.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Switching method. Silent is the most reliable but doesn't work everywhere.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<Boolean> packet = sgRender.add(new BoolSetting.Builder()
-        .name("Packet")
+        .name("packet")
         .description("Doesn't place blocks client side.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> placeSpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Place Speed")
+        .name("place-speed")
         .description("How many anchors should be placed every second.")
         .defaultValue(2)
         .min(0)
@@ -73,7 +73,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Double> explodeSpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Explode Speed")
+        .name("explode-speed")
         .description("How many anchors should be blown every second.")
         .defaultValue(4)
         .min(0)
@@ -83,7 +83,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
 
     //--------------------Damage--------------------//
     private final Setting<Double> minDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage")
+        .name("min-damage")
         .description("Minimum damage required to place.")
         .defaultValue(8)
         .min(0)
@@ -91,7 +91,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Damage")
+        .name("max-damage")
         .description("Maximum damage to self.")
         .defaultValue(6)
         .min(0)
@@ -99,7 +99,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage Ratio")
+        .name("min-damage-ratio")
         .description("Damage ratio between enemy damage and self damage (enemy / self).")
         .defaultValue(2)
         .min(0)
@@ -109,7 +109,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
 
     //--------------------Extrapolation--------------------//
     private final Setting<Integer> selfExt = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Self Extrapolation")
+        .name("self-extrapolation")
         .description("How many ticks of movement should be predicted for self damage checks.")
         .defaultValue(0)
         .range(0, 100)
@@ -117,7 +117,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> extrapolation = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Extrapolation")
+        .name("extrapolation")
         .description("How many ticks of movement should be predicted for enemy damage checks.")
         .defaultValue(0)
         .range(0, 100)
@@ -125,7 +125,7 @@ public class AnchorAuraRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> extSmoothness = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Extrapolation Smoothening")
+        .name("extrapolation-smoothening")
         .description("How many earlier ticks should be used in average calculation for extrapolation motion.")
         .defaultValue(2)
         .range(1, 20)
@@ -135,45 +135,45 @@ public class AnchorAuraRewrite extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> interactSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Interact Swing")
+        .name("interact-swing")
         .description("Renders swing animation when interacting with a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> interactHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Interact Hand")
+        .name("interact-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(interactSwing::get)
         .build()
     );
     public final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts should be renderer.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Line color of rendered stuff")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> color = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Side color of rendered stuff")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

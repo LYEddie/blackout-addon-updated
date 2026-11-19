@@ -48,7 +48,7 @@ public class BlackOutModule extends Module {
     public void sendToggledMsg() {
         if (Config.get().chatFeedback.get() && chatFeedback && mc.world != null) {
             ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + name + (isActive() ? Formatting.GREEN + " ON" : Formatting.RED + " OFF");
+            String msg = prefix + " " + Formatting.WHITE + title + (isActive() ? Formatting.GREEN + " ON" : Formatting.RED + " OFF");
             sendMessage(Text.of(msg), hashCode());
         }
     }
@@ -56,7 +56,7 @@ public class BlackOutModule extends Module {
     public void sendToggledMsg(String message) {
         if (Config.get().chatFeedback.get() && chatFeedback && mc.world != null) {
             ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + name + (isActive() ? Formatting.GREEN + " ON " : Formatting.RED + " OFF ") + Formatting.GRAY + message;
+            String msg = prefix + " " + Formatting.WHITE + title + (isActive() ? Formatting.GREEN + " ON " : Formatting.RED + " OFF ") + Formatting.GRAY + message;
             sendMessage(Text.of(msg), hashCode());
         }
     }
@@ -64,7 +64,7 @@ public class BlackOutModule extends Module {
     public void sendDisableMsg(String text) {
         if (mc.world != null) {
             ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + name + Formatting.RED + " OFF " + Formatting.GRAY + text;
+            String msg = prefix + " " + Formatting.WHITE + title + Formatting.RED + " OFF " + Formatting.GRAY + text;
             sendMessage(Text.of(msg), hashCode());
         }
     }
@@ -72,14 +72,14 @@ public class BlackOutModule extends Module {
     public void sendBOInfo(String text) {
         if (mc.world != null) {
             ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + name + " " + text;
-            sendMessage(Text.of(msg), Objects.hash(name + "-info"));
+            String msg = prefix + " " + Formatting.WHITE + title + " " + text;
+            sendMessage(Text.of(msg), Objects.hash(title + "-info"));
         }
     }
     public void debug(String text) {
         if (mc.world != null) {
             ChatUtils.forceNextPrefixClass(getClass());
-            String msg = prefix + " " + Formatting.WHITE + name + " " + Formatting.AQUA + text;
+            String msg = prefix + " " + Formatting.WHITE + title + " " + Formatting.AQUA + text;
             sendMessage(Text.of(msg), 0);
         }
     }

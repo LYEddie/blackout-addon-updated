@@ -36,7 +36,7 @@ import java.util.*;
 
 public class HoleFillRewrite extends BlackOutModule {
     public HoleFillRewrite() {
-        super(BlackOut.BLACKOUT, "Hole Fill+", "Automatically is a cunt to your enemies.");
+        super(BlackOut.BLACKOUT, "hole-fill+", "Automatically is a cunt to your enemies.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -46,31 +46,31 @@ public class HoleFillRewrite extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Eat")
+        .name("pause-eat")
         .description("Pauses when you are eating")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> efficient = sgGeneral.add(new BoolSetting.Builder()
-        .name("Efficient")
+        .name("efficient")
         .description("Only places if the hole is closer to target")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> above = sgGeneral.add(new BoolSetting.Builder()
-        .name("Above")
+        .name("above")
         .description("Only places if target is above the hole")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> iHole = sgGeneral.add(new BoolSetting.Builder()
-        .name("Ignore Hole")
+        .name("ignore-hole")
         .description("Doesn't place if enemy is in a hole")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> holeRange = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Hole Range")
+        .name("hole-range")
         .description("Places when enemy is close enough to target hole")
         .defaultValue(3)
         .min(0)
@@ -80,19 +80,19 @@ public class HoleFillRewrite extends BlackOutModule {
 
     //--------------------Placing--------------------//
     private final Setting<SwitchMode> switchMode = sgPlacing.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable but delays crystals on some servers.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<List<Block>> blocks = sgPlacing.add(new BlockListSetting.Builder()
-        .name("Blocks")
+        .name("blocks")
         .description("Which blocks to use.")
         .defaultValue(Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK)
         .build()
     );
     private final Setting<Double> placeDelay = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Place Delay")
+        .name("place-delay")
         .description("Delay between places.")
         .defaultValue(0.125)
         .min(0)
@@ -100,7 +100,7 @@ public class HoleFillRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> places = sgPlacing.add(new IntSetting.Builder()
-        .name("Places")
+        .name("places")
         .description("Blocks placed per place")
         .defaultValue(1)
         .min(1)
@@ -108,7 +108,7 @@ public class HoleFillRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Double> delay = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Delay between places at single spot.")
         .defaultValue(1)
         .min(0)
@@ -118,19 +118,19 @@ public class HoleFillRewrite extends BlackOutModule {
 
     //--------------------Hole--------------------//
     private final Setting<Boolean> single = sgHole.add(new BoolSetting.Builder()
-        .name("Single")
+        .name("single")
         .description("Fills 1x1 holes")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> doubleHole = sgHole.add(new BoolSetting.Builder()
-        .name("Double")
+        .name("double")
         .description("Fills 2x1 block holes")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> quad = sgHole.add(new BoolSetting.Builder()
-        .name("Quad")
+        .name("quad")
         .description("Fills 2x2 block holes")
         .defaultValue(true)
         .build()
@@ -138,26 +138,26 @@ public class HoleFillRewrite extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description(".")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<Double> renderTime = sgRender.add(new DoubleSetting.Builder()
-        .name("Render Time")
+        .name("render-time")
         .description("How long the box should remain in full alpha.")
         .defaultValue(0.3)
         .min(0)
@@ -165,7 +165,7 @@ public class HoleFillRewrite extends BlackOutModule {
         .build()
     );
     private final Setting<Double> fadeTime = sgRender.add(new DoubleSetting.Builder()
-        .name("Fade Time")
+        .name("fade-time")
         .description("How long the fading should take.")
         .defaultValue(1)
         .min(0)
@@ -173,13 +173,13 @@ public class HoleFillRewrite extends BlackOutModule {
         .build()
     );
     public final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Color of the outline.")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> color = sgRender.add(new ColorSetting.Builder()
-        .name("Color")
+        .name("color")
         .description("Color of the sides.")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

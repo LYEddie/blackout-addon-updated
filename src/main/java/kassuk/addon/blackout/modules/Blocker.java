@@ -49,7 +49,7 @@ import java.util.Objects;
 
 public class Blocker extends BlackOutModule {
     public Blocker() {
-        super(BlackOut.BLACKOUT, "Blocker", "Covers your surround blocks if any enemy tries to mine them.");
+        super(BlackOut.BLACKOUT, "blocker", "Covers your surround blocks if any enemy tries to mine them.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -62,20 +62,20 @@ public class Blocker extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> oldVer = sgGeneral.add(new BoolSetting.Builder()
-        .name("1.12 Crystals")
+        .name("1-12-crystals")
         .description("Uses 1.12.2 crystal mechanics.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> pauseEat = addPauseEat(sgGeneral);
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<Double> mineTime = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Mine Time")
+        .name("mine-time")
         .description("How long do we let enemies mine our surround for before protecting it.")
         .defaultValue(1)
         .min(0)
@@ -83,7 +83,7 @@ public class Blocker extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxMineTime = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Max Mine Time")
+        .name("max-mine-time")
         .description("Ignores mining after x seconds.")
         .defaultValue(5)
         .min(0)
@@ -91,13 +91,13 @@ public class Blocker extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> packet = sgGeneral.add(new BoolSetting.Builder()
-        .name("Packet")
+        .name("packet")
         .description(".")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> onlyHole = sgGeneral.add(new BoolSetting.Builder()
-        .name("Only Hole")
+        .name("only-hole")
         .description("Only protects when you are in a hole.")
         .defaultValue(true)
         .build()
@@ -105,43 +105,43 @@ public class Blocker extends BlackOutModule {
 
     //--------------------Protection--------------------//
     private final Setting<Boolean> surroundFloor = sgProtection.add(new BoolSetting.Builder()
-        .name("Surround Floor")
+        .name("surround-floor")
         .description("Places blocks around to surround floor blocks.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> surroundFloorBottom = sgProtection.add(new BoolSetting.Builder()
-        .name("Surround Floor Bottom")
+        .name("surround-floor-bottom")
         .description("Places blocks under surround floor blocks.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> surroundSides = sgProtection.add(new BoolSetting.Builder()
-        .name("Surround Sides")
+        .name("surround-sides")
         .description("Places blocks next to surround blocks.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> surroundTop = sgProtection.add(new BoolSetting.Builder()
-        .name("Surround Side Top")
+        .name("surround-side-top")
         .description("Places a block on top of surround.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> surroundBottom = sgProtection.add(new BoolSetting.Builder()
-        .name("Surround Side Bottom")
+        .name("surround-side-bottom")
         .description("Places a block on bottom of surround.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> trapCev = sgProtection.add(new BoolSetting.Builder()
-        .name("Trap Cev")
+        .name("trap-cev")
         .description("Places on top of trap side block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> cev = sgProtection.add(new BoolSetting.Builder()
-        .name("Cev")
+        .name("cev")
         .description("Places on top of trap top blocks.")
         .defaultValue(true)
         .build()
@@ -149,13 +149,13 @@ public class Blocker extends BlackOutModule {
 
     //--------------------Speed--------------------//
     private final Setting<SurroundPlus.PlaceDelayMode> placeDelayMode = sgSpeed.add(new EnumSetting.Builder<SurroundPlus.PlaceDelayMode>()
-        .name("Place Delay Mode")
+        .name("place-delay-mode")
         .description(".")
         .defaultValue(SurroundPlus.PlaceDelayMode.Ticks)
         .build()
     );
     private final Setting<Integer> placeDelayT = sgSpeed.add(new IntSetting.Builder()
-        .name("Place Tick Delay")
+        .name("place-tick-delay")
         .description("Tick delay between places.")
         .defaultValue(1)
         .min(1)
@@ -164,7 +164,7 @@ public class Blocker extends BlackOutModule {
         .build()
     );
     private final Setting<Double> placeDelayS = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Place Delay")
+        .name("place-delay")
         .description("Delay between places.")
         .defaultValue(0.1)
         .min(0)
@@ -173,7 +173,7 @@ public class Blocker extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> places = sgSpeed.add(new IntSetting.Builder()
-        .name("Places")
+        .name("places")
         .description("How many blocks to place each time.")
         .defaultValue(1)
         .min(1)
@@ -181,7 +181,7 @@ public class Blocker extends BlackOutModule {
         .build()
     );
     private final Setting<Double> cooldown = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Cooldown")
+        .name("cooldown")
         .description("Waits x seconds before trying to place at the same position if there is only 1 missing block.")
         .defaultValue(0.5)
         .min(0)
@@ -191,7 +191,7 @@ public class Blocker extends BlackOutModule {
 
     //--------------------Blocks--------------------//
     private final Setting<List<Block>> blocks = sgBlocks.add(new BlockListSetting.Builder()
-        .name("Blocks")
+        .name("blocks")
         .description("Blocks to use.")
         .defaultValue(Blocks.OBSIDIAN)
         .build()
@@ -199,13 +199,13 @@ public class Blocker extends BlackOutModule {
 
     //--------------------Attack--------------------//
     private final Setting<Boolean> attack = sgAttack.add(new BoolSetting.Builder()
-        .name("Attack")
+        .name("attack")
         .description("Attacks crystals blocking surround.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> attackSpeed = sgAttack.add(new DoubleSetting.Builder()
-        .name("Attack Speed")
+        .name("attack-speed")
         .description("How many times to attack every second.")
         .defaultValue(4)
         .min(0)
@@ -215,13 +215,13 @@ public class Blocker extends BlackOutModule {
 
     //--------------------Damage--------------------//
     private final Setting<Boolean> always = sgGeneral.add(new BoolSetting.Builder()
-        .name("Always")
+        .name("always")
         .description("Doesn't check for damages.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> maxDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage")
+        .name("min-damage")
         .description("Doesn't place if you would take less damage than this.")
         .defaultValue(6)
         .min(0)
@@ -232,45 +232,45 @@ public class Blocker extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Swing Hand")
+        .name("place-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> attackSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Attack Swing")
+        .name("attack-swing")
         .description("Renders swing animation when placing a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> attackHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Attack Swing Hand")
+        .name("attack-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(attackSwing::get)
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of boxes should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

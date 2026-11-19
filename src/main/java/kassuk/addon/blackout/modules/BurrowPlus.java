@@ -28,7 +28,7 @@ import java.util.function.Predicate;
 
 public class BurrowPlus extends BlackOutModule {
     public BurrowPlus() {
-        super(BlackOut.BLACKOUT, "Burrow+", "Places a block inside your feet.");
+        super(BlackOut.BLACKOUT, "burrow+", "Places a block inside your feet.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -37,31 +37,31 @@ public class BurrowPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Which method of switching should be used.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<List<Block>> blocks = sgGeneral.add(new BlockListSetting.Builder()
-        .name("Blocks")
+        .name("blocks")
         .description("Blocks to use.")
         .defaultValue(Blocks.OBSIDIAN, Blocks.ENDER_CHEST)
         .build()
     );
     private final Setting<Boolean> instaRot = sgGeneral.add(new BoolSetting.Builder()
-        .name("Instant Rotation")
+        .name("instant-rotation")
         .description("Instantly rotates.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> pFly = sgGeneral.add(new BoolSetting.Builder()
-        .name("Packet Fly")
+        .name("packet-fly")
         .description("Enables packetfly after lagging back inside the block.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> scaffold = sgGeneral.add(new BoolSetting.Builder()
-        .name("Scaffold")
+        .name("scaffold")
         .description("Enables scaffold+ after lagging back inside the block.")
         .defaultValue(false)
         .visible(pFly::get)
@@ -70,14 +70,14 @@ public class BurrowPlus extends BlackOutModule {
 
     //--------------------Rubberband--------------------//
     private final Setting<Double> rubberbandOffset = sgRubberband.add(new DoubleSetting.Builder()
-        .name("Rubberband Offset")
+        .name("rubberband-offset")
         .description("Y offset of rubberband packet.")
         .defaultValue(9)
         .sliderRange(-10, 10)
         .build()
     );
     private final Setting<Integer> rubberbandPackets = sgRubberband.add(new IntSetting.Builder()
-        .name("Rubberband Packets")
+        .name("rubberband-packets")
         .description("How many offset packets to send.")
         .defaultValue(1)
         .min(0)
@@ -87,13 +87,13 @@ public class BurrowPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)

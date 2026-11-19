@@ -19,7 +19,7 @@ import java.util.Random;
 public class AutoMoan extends BlackOutModule {
 
     public AutoMoan() {
-        super(BlackOut.BLACKOUT, "Auto Moan", "Moans sexual things to the closest person.");
+        super(BlackOut.BLACKOUT, "auto-moan", "Moans sexual things to the closest person.");
     }
 
     //Where the fuck did I go so wrong in life to end up coding fucking AutoMoan
@@ -27,20 +27,20 @@ public class AutoMoan extends BlackOutModule {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<MoanMode> moanmode = sgGeneral.add(new EnumSetting.Builder<MoanMode>()
-        .name("Message Mode")
+        .name("message-mode")
         .description("What kind of messages to send.")
         .defaultValue(MoanMode.Submissive)
         .build()
     );
 
     private final Setting<Boolean> iFriends = sgGeneral.add(new BoolSetting.Builder()
-        .name("Ignore Friends")
+        .name("ignore-friends")
         .description("Doesn't send messages targeted to friends.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> delay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Tick delay between moans.")
         .defaultValue(50)
         .min(0)

@@ -30,32 +30,32 @@ import java.util.Objects;
 
 public class AutoPearl extends BlackOutModule {
     public AutoPearl() {
-        super(BlackOut.BLACKOUT, "Auto Pearl", "Easily clip inside walls with pearls.");
+        super(BlackOut.BLACKOUT, "auto-pearl", "Easily clip inside walls with pearls.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgRender = settings.createGroup("Render");
 
     private final Setting<Boolean> ccBypass = sgGeneral.add(new BoolSetting.Builder()
-        .name("CC Bypass")
+        .name("cc-bypass")
         .description("Does funny stuff to bypass cc's anti delay.")
         .defaultValue(false)
         .build()
     );
     private final Setting<SwitchMode> ccSwitchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("CC Switch Mode")
+        .name("cc-switch-mode")
         .description("Which method of switching should be used for cc items.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Which method of switching should be used.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<Integer> pitch = sgGeneral.add(new IntSetting.Builder()
-        .name("Pitch")
+        .name("pitch")
         .description("How deep down to look.")
         .defaultValue(85)
         .range(-90, 90)
@@ -63,7 +63,7 @@ public class AutoPearl extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> instaRot = sgGeneral.add(new BoolSetting.Builder()
-        .name("Instant Rotation")
+        .name("instant-rotation")
         .description("Instantly rotates.")
         .defaultValue(false)
         .build()
@@ -71,13 +71,13 @@ public class AutoPearl extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> swing = sgRender.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when throwing an ender pearl.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> swingHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(swing::get)

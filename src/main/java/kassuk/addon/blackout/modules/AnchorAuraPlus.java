@@ -41,7 +41,7 @@ import java.util.*;
 
 public class AnchorAuraPlus extends BlackOutModule {
     public AnchorAuraPlus() {
-        super(BlackOut.BLACKOUT, "Anchor Aura+", "Automatically destroys people using anchors.");
+        super(BlackOut.BLACKOUT, "anchor-aura+", "Automatically destroys people using anchors.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -50,25 +50,25 @@ public class AnchorAuraPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Eat")
+        .name("pause-eat")
         .description("Pauses when you are eating.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Switching method. Silent is the most reliable but doesn't work everywhere.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<LogicMode> logicMode = sgGeneral.add(new EnumSetting.Builder<LogicMode>()
-        .name("Logic Mode")
+        .name("logic-mode")
         .description("Logic for bullying kids.")
         .defaultValue(LogicMode.BreakPlace)
         .build()
     );
     private final Setting<Double> speed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Speed")
+        .name("speed")
         .description("How many anchors should be blown every second.")
         .defaultValue(2)
         .min(0)
@@ -78,7 +78,7 @@ public class AnchorAuraPlus extends BlackOutModule {
 
     //--------------------Damage--------------------//
     private final Setting<Double> minDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage")
+        .name("min-damage")
         .description("Minimum damage required to place.")
         .defaultValue(8)
         .min(0)
@@ -86,7 +86,7 @@ public class AnchorAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Damage")
+        .name("max-damage")
         .description("Maximum damage to self.")
         .defaultValue(6)
         .min(0)
@@ -94,7 +94,7 @@ public class AnchorAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage Ratio")
+        .name("min-damage-ratio")
         .description("Damage ratio between enemy damage and self damage (enemy / self).")
         .defaultValue(2)
         .min(0)
@@ -104,45 +104,45 @@ public class AnchorAuraPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> interactSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Interact Swing")
+        .name("interact-swing")
         .description("Renders swing animation when interacting with a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> interactHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Interact Hand")
+        .name("interact-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(interactSwing::get)
         .build()
     );
     public final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts should be renderer.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Line color of rendered stuff")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> color = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Side color of rendered stuff")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

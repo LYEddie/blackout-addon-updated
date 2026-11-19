@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class HoleSnap extends BlackOutModule {
     public HoleSnap() {
-        super(BlackOut.BLACKOUT, "Hole Snap", "For the times when you cant even press W.");
+        super(BlackOut.BLACKOUT, "hole-snap", "For the times when you cant even press W.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -34,13 +34,13 @@ public class HoleSnap extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> jump = sgGeneral.add(new BoolSetting.Builder()
-        .name("Jump")
+        .name("jump")
         .description("Jumps to the hole (very useful).")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> jumpCoolDown = sgGeneral.add(new IntSetting.Builder()
-        .name("Jump Cooldown")
+        .name("jump-cooldown")
         .description("Ticks between jumps.")
         .defaultValue(5)
         .min(0)
@@ -49,7 +49,7 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> range = sgGeneral.add(new IntSetting.Builder()
-        .name("Range")
+        .name("range")
         .description("Horizontal range for finding holes.")
         .defaultValue(3)
         .range(0, 5)
@@ -57,7 +57,7 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> downRange = sgGeneral.add(new IntSetting.Builder()
-        .name("Down Range")
+        .name("down-range")
         .description("Vertical range for finding holes.")
         .defaultValue(3)
         .range(0, 5)
@@ -65,7 +65,7 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> coll = sgGeneral.add(new IntSetting.Builder()
-        .name("Collisions to disable")
+        .name("collisions-to-disable")
         .description("0 = doesn't disable.")
         .defaultValue(15)
         .min(0)
@@ -73,7 +73,7 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> rDisable = sgGeneral.add(new IntSetting.Builder()
-        .name("Rubberbands to disable")
+        .name("rubberbands-to-disable")
         .description("0 = doesn't disable.")
         .defaultValue(1)
         .min(0)
@@ -83,7 +83,7 @@ public class HoleSnap extends BlackOutModule {
 
     //--------------------Speed--------------------//
     private final Setting<Double> speed = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Speed")
+        .name("speed")
         .description("Movement Speed.")
         .defaultValue(0.2873)
         .min(0)
@@ -91,13 +91,13 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> boost = sgSpeed.add(new BoolSetting.Builder()
-        .name("Speed Boost")
+        .name("speed-boost")
         .description("Jumps to the hole (very useful).")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> boostedSpeed = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Boosted Speed")
+        .name("boosted-speed")
         .description("Movement Speed.")
         .defaultValue(0.5)
         .min(0)
@@ -106,7 +106,7 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> boostTicks = sgSpeed.add(new IntSetting.Builder()
-        .name("Boost Ticks")
+        .name("boost-ticks")
         .description("How many boosted speed packets should be sent before returning to normal speed.")
         .defaultValue(3)
         .min(1)
@@ -115,7 +115,7 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Double> timer = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Timer")
+        .name("timer")
         .description("Sends packets faster.")
         .defaultValue(10)
         .min(0)
@@ -125,13 +125,13 @@ public class HoleSnap extends BlackOutModule {
 
     //--------------------Hole--------------------//
     private final Setting<Boolean> singleTarget = sgHole.add(new BoolSetting.Builder()
-        .name("Single Target")
+        .name("single-target")
         .description("Only chooses target hole once.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> depth = sgHole.add(new IntSetting.Builder()
-        .name("Hole Depth")
+        .name("hole-depth")
         .description("How deep a hole has to be.")
         .defaultValue(3)
         .range(1, 5)
@@ -139,19 +139,19 @@ public class HoleSnap extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> singleHoles = sgHole.add(new BoolSetting.Builder()
-        .name("Single Holes")
+        .name("single-holes")
         .description("Targets single block holes.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> doubleHoles = sgHole.add(new BoolSetting.Builder()
-        .name("Double Holes")
+        .name("double-holes")
         .description("Targets double holes.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> quadHoles = sgHole.add(new BoolSetting.Builder()
-        .name("Quad Holes")
+        .name("quad-holes")
         .description("Targets quad holes.")
         .defaultValue(true)
         .build()

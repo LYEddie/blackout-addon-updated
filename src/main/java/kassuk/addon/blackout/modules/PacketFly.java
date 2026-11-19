@@ -22,7 +22,7 @@ import java.util.*;
 
 public class PacketFly extends BlackOutModule {
     public PacketFly() {
-        super(BlackOut.BLACKOUT, "Packet Fly", "Flies with packets.");
+        super(BlackOut.BLACKOUT, "packet-fly", "Flies with packets.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -31,53 +31,53 @@ public class PacketFly extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> onGroundSpoof = sgGeneral.add(new BoolSetting.Builder()
-        .name("On Ground Spoof")
+        .name("on-ground-spoof")
         .description("Spoofs on ground.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> onGround = sgGeneral.add(new BoolSetting.Builder()
-        .name("On Ground")
+        .name("on-ground")
         .description("Should we tell the server that you are on ground.")
         .defaultValue(false)
         .visible(onGroundSpoof::get)
         .build()
     );
     private final Setting<Integer> xzBound = sgGeneral.add(new IntSetting.Builder()
-        .name("XZ Bound")
+        .name("xz-bound")
         .description("Bounds offset horizontally.")
         .defaultValue(1337)
         .sliderRange(-1337, 1337)
         .build()
     );
     private final Setting<Integer> yBound = sgGeneral.add(new IntSetting.Builder()
-        .name("Y Bound")
+        .name("y-bound")
         .description("Bounds offset vertically.")
         .defaultValue(0)
         .sliderRange(-1337, 1337)
         .build()
     );
     private final Setting<Boolean> strictVertical = sgGeneral.add(new BoolSetting.Builder()
-        .name("Strict Vertical")
+        .name("strict-vertical")
         .description("Doesn't move horizontally and vertically in the same packet.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> antiKick = sgGeneral.add(new BoolSetting.Builder()
-        .name("Anti-Kick")
+        .name("anti-kick")
         .description("Slowly falls down.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> antiKickAmount = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Anti-Kick Multiplier")
+        .name("anti-kick-multiplier")
         .description("Fall speed multiplier for antikick (0.04 blocks * multiplier).")
         .defaultValue(1)
         .sliderRange(0, 10)
         .build()
     );
     private final Setting<Integer> antiKickDelay = sgGeneral.add(new IntSetting.Builder()
-        .name("Anti-Kick Delay")
+        .name("anti-kick-delay")
         .description("Tick delay between moving anti kick packets.")
         .defaultValue(10)
         .min(1)
@@ -85,13 +85,13 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> predictID = sgGeneral.add(new BoolSetting.Builder()
-        .name("Predict ID")
+        .name("predict-id")
         .description("Predicts the id of next rubberband.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> debugID = sgGeneral.add(new BoolSetting.Builder()
-        .name("Debug ID")
+        .name("debug-id")
         .description("Sends rubberband packet id in chat.")
         .defaultValue(false)
         .build()
@@ -99,7 +99,7 @@ public class PacketFly extends BlackOutModule {
 
     //--------------------Fly--------------------//
     private final Setting<Double> packets = sgFly.add(new DoubleSetting.Builder()
-        .name("Fly Packets")
+        .name("fly-packets")
         .description("How many packets to send every movement tick.")
         .defaultValue(1)
         .min(0)
@@ -107,7 +107,7 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Double> speed = sgFly.add(new DoubleSetting.Builder()
-        .name("Fly Speed")
+        .name("fly-speed")
         .description("Distance to travel each packet.")
         .defaultValue(0.2873)
         .min(0)
@@ -115,13 +115,13 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> fastVertical = sgFly.add(new BoolSetting.Builder()
-        .name("Fast Vertical Fly")
+        .name("fast-vertical-fly")
         .description("Sends multiple packets every movement tick while going up.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> downSpeed = sgFly.add(new DoubleSetting.Builder()
-        .name("Fly Down Speed")
+        .name("fly-down-speed")
         .description("How fast to fly down.")
         .defaultValue(0.062)
         .min(0)
@@ -129,7 +129,7 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Double> upSpeed = sgFly.add(new DoubleSetting.Builder()
-        .name("Fly Up Speed")
+        .name("fly-up-speed")
         .description("How fast to fly up.")
         .defaultValue(0.062)
         .min(0)
@@ -139,7 +139,7 @@ public class PacketFly extends BlackOutModule {
 
     //--------------------Phase--------------------//
     private final Setting<Double> phasePackets = sgPhase.add(new DoubleSetting.Builder()
-        .name("Phase Packets")
+        .name("phase-packets")
         .description("How many packets to send every movement tick.")
         .defaultValue(1)
         .min(0)
@@ -147,7 +147,7 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Double> phaseSpeed = sgPhase.add(new DoubleSetting.Builder()
-        .name("Phase Speed")
+        .name("phase-speed")
         .description("Distance to travel each packet.")
         .defaultValue(0.062)
         .min(0)
@@ -155,13 +155,13 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> phaseFastVertical = sgPhase.add(new BoolSetting.Builder()
-        .name("Fast Vertical Phase")
+        .name("fast-vertical-phase")
         .description("Sends multiple packets every movement tick while going up.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> phaseDownSpeed = sgPhase.add(new DoubleSetting.Builder()
-        .name("Phase Down Speed")
+        .name("phase-down-speed")
         .description("How fast to phase down.")
         .defaultValue(0.062)
         .min(0)
@@ -169,7 +169,7 @@ public class PacketFly extends BlackOutModule {
         .build()
     );
     private final Setting<Double> phaseUpSpeed = sgPhase.add(new DoubleSetting.Builder()
-        .name("Phase Up Speed")
+        .name("phase-up-speed")
         .description("How fast to phase up.")
         .defaultValue(0.062)
         .min(0)

@@ -51,7 +51,7 @@ import java.util.function.Predicate;
 
 public class AutoCrystalPlus extends BlackOutModule {
     public AutoCrystalPlus() {
-        super(BlackOut.BLACKOUT, "Auto Crystal+", "Breaks and places crystals automatically (but better).");
+        super(BlackOut.BLACKOUT, "auto-crystal+", "Breaks and places crystals automatically (but better).");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -67,37 +67,37 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> place = sgGeneral.add(new BoolSetting.Builder()
-        .name("Place")
+        .name("place")
         .description("Places crystals.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> explode = sgGeneral.add(new BoolSetting.Builder()
-        .name("Explode")
+        .name("explode")
         .description("Explodes crystals.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> pauseEat = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Eat")
+        .name("pause-eat")
         .description("Pauses while eating.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> performance = sgGeneral.add(new BoolSetting.Builder()
-        .name("Performance Mode")
+        .name("performance-mode")
         .description("Doesn't calculate placements as often.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> smartRot = sgGeneral.add(new BoolSetting.Builder()
-        .name("Smart Rotations")
+        .name("smart-rotations")
         .description("Looks at the top of placement block to make the ca faster.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> ignoreTerrain = sgGeneral.add(new BoolSetting.Builder()
-        .name("Ignore Terrain")
+        .name("ignore-terrain")
         .description("Spams trough terrain to kill your enemy.")
         .defaultValue(true)
         .build()
@@ -105,13 +105,13 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Place--------------------//
     private final Setting<Boolean> instantPlace = sgPlace.add(new BoolSetting.Builder()
-        .name("Instant Place")
+        .name("instant-place")
         .description("Ignores delay after crystal has disappeared.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> speedLimit = sgPlace.add(new DoubleSetting.Builder()
-        .name("Speed Limit")
+        .name("speed-limit")
         .description("Maximum amount of place packets every second. 0 = no limit.")
         .defaultValue(0)
         .min(0)
@@ -120,7 +120,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> placeSpeed = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Speed")
+        .name("place-speed")
         .description("How many times should the module place per second.")
         .defaultValue(10)
         .min(0)
@@ -128,13 +128,13 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<DelayMode> placeDelayMode = sgPlace.add(new EnumSetting.Builder<DelayMode>()
-        .name("Place Delay Mode")
+        .name("place-delay-mode")
         .description("Should we count the delay in seconds or ticks.")
         .defaultValue(DelayMode.Seconds)
         .build()
     );
     private final Setting<Double> placeDelay = sgPlace.add(new DoubleSetting.Builder()
-        .name("Place Delay")
+        .name("place-delay")
         .description("How many seconds after attacking a crystal should we place.")
         .defaultValue(0)
         .min(0)
@@ -143,7 +143,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> placeDelayTicks = sgPlace.add(new IntSetting.Builder()
-        .name("Place Delay Ticks")
+        .name("place-delay-ticks")
         .description("How many ticks should the crystal exist before attacking.")
         .defaultValue(0)
         .min(0)
@@ -152,7 +152,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> slowDamage = sgPlace.add(new DoubleSetting.Builder()
-        .name("Slow Damage")
+        .name("slow-damage")
         .description("Switches to slow speed when the target would take under this amount of damage.")
         .defaultValue(3)
         .min(0)
@@ -160,7 +160,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> slowSpeed = sgPlace.add(new DoubleSetting.Builder()
-        .name("Slow Speed")
+        .name("slow-speed")
         .description("How many times should the module place per second when damage is under slow damage.")
         .defaultValue(2)
         .min(0)
@@ -170,25 +170,25 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Explode--------------------//
     private final Setting<Boolean> onlyOwn = sgExplode.add(new BoolSetting.Builder()
-        .name("Only Own")
+        .name("only-own")
         .description("Only attacks own crystals.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> inhibit = sgExplode.add(new BoolSetting.Builder()
-        .name("Inhibit")
+        .name("inhibit")
         .description("Stops targeting attacked crystals.")
         .defaultValue(false)
         .build()
     );
     private final Setting<DelayMode> existedMode = sgExplode.add(new EnumSetting.Builder<DelayMode>()
-        .name("Existed Mode")
+        .name("existed-mode")
         .description("Should crystal existed times be counted in seconds or ticks.")
         .defaultValue(DelayMode.Seconds)
         .build()
     );
     private final Setting<Double> existed = sgExplode.add(new DoubleSetting.Builder()
-        .name("Existed")
+        .name("existed")
         .description("How many seconds should the crystal exist before attacking.")
         .defaultValue(0)
         .min(0)
@@ -197,7 +197,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> existedTicks = sgExplode.add(new IntSetting.Builder()
-        .name("Existed Ticks")
+        .name("existed-ticks")
         .description("How many ticks should the crystal exist before attacking.")
         .defaultValue(0)
         .min(0)
@@ -206,19 +206,19 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<SequentialMode> sequential = sgExplode.add(new EnumSetting.Builder<SequentialMode>()
-        .name("Sequential")
+        .name("sequential")
         .description("Doesn't place and attack during the same tick.")
         .defaultValue(SequentialMode.Disabled)
         .build()
     );
     private final Setting<Boolean> instantAttack = sgExplode.add(new BoolSetting.Builder()
-        .name("Instant Attack")
+        .name("instant-attack")
         .description("Delay isn't calculated for first attack.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> expSpeedLimit = sgExplode.add(new DoubleSetting.Builder()
-        .name("Explode Speed Limit")
+        .name("explode-speed-limit")
         .description("How many times to hit any crystal each second. 0 = no limit")
         .defaultValue(0)
         .min(0)
@@ -227,7 +227,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> expSpeed = sgExplode.add(new DoubleSetting.Builder()
-        .name("Explode Speed")
+        .name("explode-speed")
         .description("How many times to hit crystal each second.")
         .defaultValue(4)
         .range(0.01, 20)
@@ -235,13 +235,13 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> setDead = sgExplode.add(new BoolSetting.Builder()
-        .name("Set Dead")
+        .name("set-dead")
         .description("Hides the crystal after hitting it. Not needed since the module already is smart enough.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> setDeadDelay = sgExplode.add(new DoubleSetting.Builder()
-        .name("Set Dead Delay")
+        .name("set-dead-delay")
         .description("How long after hitting should the crystal disappear.")
         .defaultValue(0.05)
         .range(0, 1)
@@ -252,13 +252,13 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Switch--------------------//
     private final Setting<SwitchMode> switchMode = sgSwitch.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Mode for switching to crystal in main hand.")
         .defaultValue(SwitchMode.Disabled)
         .build()
     );
     private final Setting<Double> switchPenalty = sgSwitch.add(new DoubleSetting.Builder()
-        .name("Switch Penalty")
+        .name("switch-penalty")
         .description("Time to wait after switching before hitting crystals.")
         .defaultValue(0.25)
         .min(0)
@@ -268,13 +268,13 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Damage--------------------//
     private final Setting<DmgCheckMode> dmgCheckMode = sgDamage.add(new EnumSetting.Builder<DmgCheckMode>()
-        .name("Dmg Check Mode")
+        .name("dmg-check-mode")
         .description("How safe are the placements (normal is good).")
         .defaultValue(DmgCheckMode.Normal)
         .build()
     );
     private final Setting<Double> minPlace = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Place")
+        .name("min-place")
         .description("Minimum damage to place.")
         .defaultValue(4)
         .min(0)
@@ -282,7 +282,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxPlace = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Place")
+        .name("max-place")
         .description("Max self damage for placing.")
         .defaultValue(8)
         .min(0)
@@ -290,7 +290,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minPlaceRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Place Ratio")
+        .name("min-place-ratio")
         .description("Max self damage ratio for placing (enemy / self).")
         .defaultValue(1.4)
         .min(0)
@@ -298,7 +298,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxFriendPlace = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Friend Place")
+        .name("max-friend-place")
         .description("Max friend damage for placing.")
         .defaultValue(8)
         .min(0)
@@ -306,7 +306,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minFriendPlaceRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Friend Place Ratio")
+        .name("min-friend-place-ratio")
         .description("Max friend damage ratio for placing (enemy / friend).")
         .defaultValue(2)
         .min(0)
@@ -314,13 +314,13 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<ExplodeMode> expMode = sgDamage.add(new EnumSetting.Builder<ExplodeMode>()
-        .name("Explode Damage Mode")
+        .name("explode-damage-mode")
         .description("Which things should be checked for exploding.")
         .defaultValue(ExplodeMode.FullCheck)
         .build()
     );
     private final Setting<Double> minExplode = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Explode")
+        .name("min-explode")
         .description("Minimum enemy damage for exploding a crystal.")
         .defaultValue(2.5)
         .min(0)
@@ -328,7 +328,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxExp = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Explode")
+        .name("max-explode")
         .description("Max self damage for exploding a crystal.")
         .defaultValue(9)
         .min(0)
@@ -336,7 +336,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minExpRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Explode Ratio")
+        .name("min-explode-ratio")
         .description("Max self damage ratio for exploding a crystal (enemy / self).")
         .defaultValue(1.1)
         .min(0)
@@ -344,7 +344,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxFriendExp = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Friend Explode")
+        .name("max-friend-explode")
         .description("Max friend damage for exploding a crystal.")
         .defaultValue(12)
         .min(0)
@@ -352,7 +352,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minFriendExpRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Friend Explode Ratio")
+        .name("min-friend-explode-ratio")
         .description("Min friend damage ratio for exploding a crystal (enemy / friend).")
         .defaultValue(2)
         .min(0)
@@ -360,7 +360,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> forcePop = sgDamage.add(new DoubleSetting.Builder()
-        .name("Force Pop")
+        .name("force-pop")
         .description("Ignores damage checks if any enemy will be popped in x hits.")
         .defaultValue(1)
         .min(0)
@@ -368,7 +368,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> antiFriendPop = sgDamage.add(new DoubleSetting.Builder()
-        .name("Anti Friend Pop")
+        .name("anti-friend-pop")
         .description("Cancels any action if any friend will be popped in x hits.")
         .defaultValue(1)
         .min(0)
@@ -376,7 +376,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> antiSelfPop = sgDamage.add(new DoubleSetting.Builder()
-        .name("Anti Self Pop")
+        .name("anti-self-pop")
         .description("Cancels any action if you will be popped in x hits.")
         .defaultValue(1)
         .min(0)
@@ -386,13 +386,13 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------ID-Predict--------------------//
     private final Setting<Boolean> idPredict = sgID.add(new BoolSetting.Builder()
-        .name("ID Predict")
+        .name("id-predict")
         .description("Hits the crystal before it spawns.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> idStartOffset = sgID.add(new IntSetting.Builder()
-        .name("Id Start Offset")
+        .name("id-start-offset")
         .description("How many id's ahead should we attack.")
         .defaultValue(1)
         .min(0)
@@ -400,7 +400,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> idOffset = sgID.add(new IntSetting.Builder()
-        .name("Id Packet Offset")
+        .name("id-packet-offset")
         .description("How many id's ahead should we attack between id packets.")
         .defaultValue(1)
         .min(1)
@@ -408,7 +408,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> idPackets = sgID.add(new IntSetting.Builder()
-        .name("Id Packets")
+        .name("id-packets")
         .description("How many packets to send.")
         .defaultValue(1)
         .min(1)
@@ -416,7 +416,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> idDelay = sgID.add(new DoubleSetting.Builder()
-        .name("ID Start Delay")
+        .name("id-start-delay")
         .description("Starts sending id predict packets after this many seconds.")
         .defaultValue(0.05)
         .min(0)
@@ -424,7 +424,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> idPacketDelay = sgID.add(new DoubleSetting.Builder()
-        .name("ID Packet Delay")
+        .name("id-packet-delay")
         .description("Waits this many seconds between sending ID packets.")
         .defaultValue(0.05)
         .min(0)
@@ -434,7 +434,7 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Extrapolation--------------------//
     private final Setting<Integer> selfExt = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Self Extrapolation")
+        .name("self-extrapolation")
         .description("How many ticks of movement should be predicted for self damage checks.")
         .defaultValue(0)
         .range(0, 100)
@@ -442,7 +442,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> extrapolation = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Extrapolation")
+        .name("extrapolation")
         .description("How many ticks of movement should be predicted for enemy damage checks.")
         .defaultValue(0)
         .range(0, 100)
@@ -450,7 +450,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> rangeExtrapolation = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Range Extrapolation")
+        .name("range-extrapolation")
         .description("How many ticks of movement should be predicted for attack ranges before placing.")
         .defaultValue(0)
         .range(0, 100)
@@ -458,7 +458,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> hitboxExtrapolation = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Hitbox Extrapolation")
+        .name("hitbox-extrapolation")
         .description("How many ticks of movement should be predicted for hitboxes in placing checks.")
         .defaultValue(0)
         .range(0, 100)
@@ -466,7 +466,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> extSmoothness = sgExtrapolation.add(new IntSetting.Builder()
-        .name("Extrapolation Smoothening")
+        .name("extrapolation-smoothening")
         .description("How many earlier ticks should be used in average calculation for extrapolation motion.")
         .defaultValue(2)
         .range(1, 20)
@@ -476,45 +476,45 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> attackSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Attack Swing")
+        .name("attack-swing")
         .description("Renders swing animation when placing a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> attackHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Attack Hand")
+        .name("attack-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(attackSwing::get)
         .build()
     );
     private final Setting<Boolean> render = sgRender.add(new BoolSetting.Builder()
-        .name("Render")
+        .name("render")
         .description("Renders box on placement.")
         .defaultValue(true)
         .build()
     );
     private final Setting<RenderMode> renderMode = sgRender.add(new EnumSetting.Builder<RenderMode>()
-        .name("Render Mode")
+        .name("render-mode")
         .description("What should the render look like.")
         .defaultValue(RenderMode.BlackOut)
         .build()
     );
     private final Setting<Double> renderTime = sgRender.add(new DoubleSetting.Builder()
-        .name("Render Time")
+        .name("render-time")
         .description("How long the box should remain in full alpha value.")
         .defaultValue(0.3)
         .min(0)
@@ -523,21 +523,21 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<FadeMode> fadeMode = sgRender.add(new EnumSetting.Builder<FadeMode>()
-        .name("Fade Mode")
+        .name("fade-mode")
         .description("How long the fading should take.")
         .defaultValue(FadeMode.Normal)
         .visible(() -> renderMode.get() == RenderMode.BlackOut)
         .build()
     );
     private final Setting<EarthFadeMode> earthFadeMode = sgRender.add(new EnumSetting.Builder<EarthFadeMode>()
-        .name("Earth Fade Mode")
+        .name("earth-fade-mode")
         .description(".")
         .defaultValue(EarthFadeMode.Normal)
         .visible(() -> renderMode.get() == RenderMode.Earthhack)
         .build()
     );
     private final Setting<Double> fadeTime = sgRender.add(new DoubleSetting.Builder()
-        .name("Fade Time")
+        .name("fade-time")
         .description("How long the fading should take.")
         .defaultValue(1)
         .min(0)
@@ -546,7 +546,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> animationSpeed = sgRender.add(new DoubleSetting.Builder()
-        .name("Animation Move Speed")
+        .name("animation-move-speed")
         .description("How fast should blackout mode box move.")
         .defaultValue(1)
         .min(0)
@@ -555,7 +555,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> animationMoveExponent = sgRender.add(new DoubleSetting.Builder()
-        .name("Animation Move Exponent")
+        .name("animation-move-exponent")
         .description("Moves faster when longer away from the target.")
         .defaultValue(2)
         .min(0)
@@ -564,7 +564,7 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> animationExponent = sgRender.add(new DoubleSetting.Builder()
-        .name("Animation Exponent")
+        .name("animation-exponent")
         .description("How fast should blackout mode box grow.")
         .defaultValue(3)
         .min(0)
@@ -573,19 +573,19 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of render should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Line color of rendered boxes")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> color = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Side color of rendered boxes")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
@@ -593,7 +593,7 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Compatibility--------------------//
     private final Setting<Double> autoMineDamage = sgCompatibility.add(new DoubleSetting.Builder()
-        .name("Auto Mine Damage")
+        .name("auto-mine-damage")
         .description("Prioritizes placing on automine target block.")
         .defaultValue(1.1)
         .min(1)
@@ -601,13 +601,13 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> amPlace = sgCompatibility.add(new BoolSetting.Builder()
-        .name("Auto Mine Place")
+        .name("auto-mine-place")
         .description("Ignores automine block before if actually breaks.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> amProgress = sgCompatibility.add(new DoubleSetting.Builder()
-        .name("Auto Mine Progress")
+        .name("auto-mine-progress")
         .description("Ignores the block after it has reached this progress.")
         .defaultValue(0.95)
         .range(0, 1)
@@ -616,26 +616,26 @@ public class AutoCrystalPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> amSpam = sgCompatibility.add(new BoolSetting.Builder()
-        .name("Auto Mine Spam")
+        .name("auto-mine-spam")
         .description("Spams crystals before the block breaks.")
         .defaultValue(false)
         .visible(amPlace::get)
         .build()
     );
     private final Setting<AutoMineBrokenMode> amBroken = sgCompatibility.add(new EnumSetting.Builder<AutoMineBrokenMode>()
-        .name("Auto Mine Broken")
+        .name("auto-mine-broken")
         .description("Doesn't place on automine block.")
         .defaultValue(AutoMineBrokenMode.Near)
         .build()
     );
     private final Setting<Boolean> paAttack = sgCompatibility.add(new BoolSetting.Builder()
-        .name("Piston Crystal Attack")
+        .name("piston-crystal-attack")
         .description("Doesn't attack the crystal placed by piston crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> paPlace = sgCompatibility.add(new BoolSetting.Builder()
-        .name("Piston Crystal Placing")
+        .name("piston-crystal-placing")
         .description("Doesn't place crystals when piston crystal is enabled.")
         .defaultValue(true)
         .build()
@@ -643,13 +643,13 @@ public class AutoCrystalPlus extends BlackOutModule {
 
     //--------------------Debug--------------------//
     private final Setting<Boolean> renderExt = sgDebug.add(new BoolSetting.Builder()
-        .name("Render Extrapolation")
+        .name("render-extrapolation")
         .description("Renders boxes at players' predicted positions.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> renderSelfExt = sgDebug.add(new BoolSetting.Builder()
-        .name("Render Self Extrapolation")
+        .name("render-self-extrapolation")
         .description("Renders box at your predicted position.")
         .defaultValue(false)
         .build()

@@ -13,19 +13,19 @@ import meteordevelopment.meteorclient.settings.SettingGroup;
 
 public class SoundModifier extends BlackOutModule {
     public SoundModifier() {
-        super(BlackOut.BLACKOUT, "Sound Modifier", "Modifies sounds to make crystal pvp less horrible for ears.");
+        super(BlackOut.BLACKOUT, "sound-modifier", "Modifies sounds to make crystal pvp less horrible for ears.");
     }
 
     private final SettingGroup sgCrystal = settings.createGroup("Crystal");
 
     public final Setting<Boolean> crystalHits = sgCrystal.add(new BoolSetting.Builder()
-        .name("Crystal Hit Sound")
+        .name("crystal-hit-sound")
         .description("Allows hit sounds when attacking end crystal.")
         .defaultValue(true)
         .build()
     );
     public final Setting<Double> crystalHitVolume = sgCrystal.add(new DoubleSetting.Builder()
-        .name("Crystal Hit Volume")
+        .name("crystal-hit-volume")
         .description("Multiplies crystal hit volumes.")
         .defaultValue(1)
         .sliderRange(0, 10)
@@ -33,7 +33,7 @@ public class SoundModifier extends BlackOutModule {
         .build()
     );
     public final Setting<Double> crystalHitPitch = sgCrystal.add(new DoubleSetting.Builder()
-        .name("Crystal Hit Pitch")
+        .name("crystal-hit-pitch")
         .description("Multiplies pitch of crystal hit sounds.")
         .defaultValue(1)
         .sliderRange(0, 10)
@@ -41,13 +41,13 @@ public class SoundModifier extends BlackOutModule {
         .build()
     );
     public final Setting<Boolean> expSound = sgCrystal.add(new BoolSetting.Builder()
-        .name("Explosion Sound")
+        .name("explosion-sound")
         .description("Allows explosion sounds")
         .defaultValue(true)
         .build()
     );
     public final Setting<Double> explosionVolume = sgCrystal.add(new DoubleSetting.Builder()
-        .name("Explosion Volume")
+        .name("explosion-volume")
         .description("Multiplies explosion volumes.")
         .defaultValue(1)
         .sliderRange(0, 10)
@@ -55,7 +55,7 @@ public class SoundModifier extends BlackOutModule {
         .build()
     );
     public final Setting<Double> explosionPitch = sgCrystal.add(new DoubleSetting.Builder()
-        .name("Explosion Pitch")
+        .name("explosion-pitch")
         .description("Multiplies pitch of explosions sounds.")
         .defaultValue(1)
         .sliderRange(0, 10)

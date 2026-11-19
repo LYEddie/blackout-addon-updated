@@ -16,26 +16,26 @@ import meteordevelopment.orbit.EventHandler;
 
 public class FlightPlus extends BlackOutModule {
     public FlightPlus() {
-        super(BlackOut.BLACKOUT, "Flight+", "KasumsSoft Flight.");
+        super(BlackOut.BLACKOUT, "flight+", "KasumsSoft Flight.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<FlightMode> flyMode = sgGeneral.add(new EnumSetting.Builder<FlightMode>()
-        .name("Flight Mode")
+        .name("flight-mode")
         .description("Method of flying.")
         .defaultValue(FlightMode.Momentum)
         .build()
     );
     private final Setting<Boolean> useTimer = sgGeneral.add(new BoolSetting.Builder()
-        .name("Use Timer")
+        .name("use-timer")
         .description("Should we use timer.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> timer = sgGeneral.add(new DoubleSetting.Builder()
         .visible(useTimer::get)
-        .name("Timer")
+        .name("timer")
         .description("How many times more packets should be sent.")
         .defaultValue(1.088)
         .min(0)
@@ -44,7 +44,7 @@ public class FlightPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> speed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Speed")
+        .name("speed")
         .description("How many blocks should be moved each tick.")
         .defaultValue(0.6)
         .min(0)
@@ -53,7 +53,7 @@ public class FlightPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> ySpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Y Speed")
+        .name("y-speed")
         .description("DA Y SPEEDOS.")
         .defaultValue(0.5)
         .min(0)
@@ -62,7 +62,7 @@ public class FlightPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> antiKickDelay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Anti-Kick Delay")
+        .name("anti-kick-delay")
         .description("How many ticks should be waited between antikick packets.")
         .defaultValue(10)
         .min(0)
@@ -71,7 +71,7 @@ public class FlightPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> antiKickAmount = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Anti-Kick Amount")
+        .name("anti-kick-amount")
         .description("How much to move down.")
         .defaultValue(1)
         .min(0)
@@ -80,14 +80,14 @@ public class FlightPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> keepY = sgGeneral.add(new BoolSetting.Builder()
-        .name("KeepY")
+        .name("keep-y")
         .description("Should we try to keep the same y level when jump flying.")
         .defaultValue(true)
         .visible(() -> flyMode.get() == FlightMode.Jump)
         .build()
     );
     private final Setting<Double> glideAmount = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Glide amount")
+        .name("glide-amount")
         .description("How much to glide down.")
         .defaultValue(0.2)
         .min(0)

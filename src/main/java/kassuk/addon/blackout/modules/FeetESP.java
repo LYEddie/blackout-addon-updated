@@ -18,49 +18,49 @@ import net.minecraft.util.math.Vec3d;
 
 public class FeetESP extends BlackOutModule {
     public FeetESP() {
-        super(BlackOut.BLACKOUT, "Feet ESP", "No, it doesn't show you pictures of feet.");
+        super(BlackOut.BLACKOUT, "feet-esp", "No, it doesn't show you pictures of feet.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> friend = sgGeneral.add(new BoolSetting.Builder()
-        .name("Friend")
+        .name("friend")
         .description("Renders friends' feet.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> other = sgGeneral.add(new BoolSetting.Builder()
-        .name("Other")
+        .name("other")
         .description("Renders other players' feet.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> self = sgGeneral.add(new BoolSetting.Builder()
-        .name("Self")
+        .name("self")
         .description("Renders own feet.")
         .defaultValue(true)
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgGeneral.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of feet should be rendered")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Color of the feet outlines.")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> sideColor = sgGeneral.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Color of the feet sides.")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
     );
     private final Setting<Double> range = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Range")
+        .name("range")
         .description("Renders feet inside this range.")
         .defaultValue(25)
         .min(0)

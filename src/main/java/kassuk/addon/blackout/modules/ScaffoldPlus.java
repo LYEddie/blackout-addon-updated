@@ -46,7 +46,7 @@ import java.util.Objects;
 
 public class ScaffoldPlus extends BlackOutModule {
     public ScaffoldPlus() {
-        super(BlackOut.BLACKOUT, "Scaffold+", "KasumsSoft blockwalk.");
+        super(BlackOut.BLACKOUT, "scaffold+", "KasumsSoft blockwalk.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -55,41 +55,41 @@ public class ScaffoldPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<ScaffoldMode> scaffoldMode = sgGeneral.add(new EnumSetting.Builder<ScaffoldMode>()
-        .name("Scaffold Mode")
+        .name("scaffold-mode")
         .description("Mode for scaffold.")
         .defaultValue(ScaffoldMode.Normal)
         .build()
     );
     private final Setting<Boolean> smart = sgGeneral.add(new BoolSetting.Builder()
-        .name("Smart")
+        .name("smart")
         .description("Only places on blocks that you can reach.")
         .defaultValue(true)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
         .build()
     );
     private final Setting<Boolean> tower = sgGeneral.add(new BoolSetting.Builder()
-        .name("Tower")
+        .name("tower")
         .description("Flies up with blocks.")
         .defaultValue(true)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
         .build()
     );
     private final Setting<Boolean> sSprint = sgGeneral.add(new BoolSetting.Builder()
-        .name("Stop Sprint")
+        .name("stop-sprint")
         .description("Stops you from sprinting.")
         .defaultValue(true)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
         .build()
     );
     private final Setting<Boolean> safeWalk = sgGeneral.add(new BoolSetting.Builder()
-        .name("SafeWalk")
+        .name("safe-walk")
         .description("Should SafeWalk be used.")
         .defaultValue(true)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
         .build()
     );
     private final Setting<Boolean> useTimer = sgGeneral.add(new BoolSetting.Builder()
-        .name("Use timer")
+        .name("use-timer")
         .description("Should we use timer.")
         .defaultValue(false)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
@@ -97,7 +97,7 @@ public class ScaffoldPlus extends BlackOutModule {
     );
     private final Setting<Double> timer = sgGeneral.add(new DoubleSetting.Builder()
         .visible(useTimer::get)
-        .name("Timer")
+        .name("timer")
         .description("Sends more packets.")
         .defaultValue(1.088)
         .min(0)
@@ -108,21 +108,21 @@ public class ScaffoldPlus extends BlackOutModule {
 
     //--------------------Placing--------------------//
     private final Setting<SwitchMode> switchMode = sgPlacing.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
         .build()
     );
     private final Setting<List<Block>> blocks = sgPlacing.add(new BlockListSetting.Builder()
-        .name("Blocks")
+        .name("blocks")
         .description("Blocks to use.")
         .defaultValue(Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK)
         .visible(() -> scaffoldMode.get() == ScaffoldMode.Normal)
         .build()
     );
     private final Setting<Double> placeDelay = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Place Delay")
+        .name("place-delay")
         .description("Delay between places.")
         .defaultValue(0.125)
         .range(0, 10)
@@ -131,7 +131,7 @@ public class ScaffoldPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> places = sgPlacing.add(new IntSetting.Builder()
-        .name("Places")
+        .name("places")
         .description("Blocks placed per place.")
         .defaultValue(1)
         .range(1, 10)
@@ -140,7 +140,7 @@ public class ScaffoldPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> cooldown = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Cooldown")
+        .name("cooldown")
         .description("Delay between places at each spot.")
         .defaultValue(0.3)
         .range(0, 5)
@@ -149,7 +149,7 @@ public class ScaffoldPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> extrapolation = sgPlacing.add(new IntSetting.Builder()
-        .name("Extrapolation")
+        .name("extrapolation")
         .description("Predicts movement.")
         .defaultValue(3)
         .range(1, 20)
@@ -160,32 +160,32 @@ public class ScaffoldPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of boxes should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

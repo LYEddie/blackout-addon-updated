@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class ElytraFlyPlus extends BlackOutModule {
     public ElytraFlyPlus() {
-        super(BlackOut.BLACKOUT, "Elytra Fly+", "Better efly.");
+        super(BlackOut.BLACKOUT, "elytra-fly+", "Better efly.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -27,21 +27,21 @@ public class ElytraFlyPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Mode> mode = sgGeneral.add(new EnumSetting.Builder<Mode>()
-        .name("Mode")
+        .name("mode")
         .description(".")
         .defaultValue(Mode.Wasp)
         .build()
     );
 
     private final Setting<Boolean> stopWater = sgGeneral.add(new BoolSetting.Builder()
-        .name("Stop Water")
+        .name("stop-water")
         .description("Doesn't modify movement while in water.")
         .defaultValue(true)
         .build()
     );
 
     private final Setting<Boolean> stopLava = sgGeneral.add(new BoolSetting.Builder()
-        .name("Stop Lava")
+        .name("stop-lava")
         .description("Doesn't modify movement while in lava.")
         .defaultValue(true)
         .build()
@@ -49,7 +49,7 @@ public class ElytraFlyPlus extends BlackOutModule {
 
     //--------------------Speed--------------------//
     private final Setting<Double> horizontal = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Horizontal Speed")
+        .name("horizontal-speed")
         .description("How many blocks to move each tick horizontally.")
         .defaultValue(1)
         .min(0)
@@ -59,7 +59,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> up = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Up Speed")
+        .name("up-speed")
         .description("How many blocks to move up each tick.")
         .defaultValue(1)
         .min(0)
@@ -69,7 +69,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> speed = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Speed")
+        .name("speed")
         .description("How many blocks to move each tick.")
         .defaultValue(1)
         .min(0)
@@ -79,7 +79,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> upMultiplier = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Up Multiplier")
+        .name("up-multiplier")
         .description("How many times faster should we fly up.")
         .defaultValue(1)
         .min(0)
@@ -89,7 +89,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> down = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Down Speed")
+        .name("down-speed")
         .description("How many blocks to move down each tick.")
         .defaultValue(1)
         .min(0)
@@ -99,7 +99,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Boolean> smartFall = sgSpeed.add(new BoolSetting.Builder()
-        .name("Smart Fall")
+        .name("smart-fall")
         .description("Only falls down when looking down.")
         .defaultValue(true)
         .visible(() -> mode.get() == Mode.Wasp)
@@ -107,7 +107,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> fallSpeed = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Fall Speed")
+        .name("fall-speed")
         .description("How many blocks to fall down each tick.")
         .defaultValue(0.01)
         .min(0)
@@ -117,7 +117,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> constSpeed = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Const Speed")
+        .name("const-speed")
         .description("Maximum speed for constantiam mode.")
         .defaultValue(1)
         .min(0)
@@ -127,7 +127,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Double> constAcceleration = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Const Acceleration")
+        .name("const-acceleration")
         .description("Maximum speed for constantiam mode.")
         .defaultValue(1)
         .min(0)
@@ -137,7 +137,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     );
 
     private final Setting<Boolean> constStop = sgSpeed.add(new BoolSetting.Builder()
-        .name("Const Stop")
+        .name("const-stop")
         .description("Stops movement when no input.")
         .defaultValue(true)
         .visible(() -> mode.get() == Mode.Constantiam)

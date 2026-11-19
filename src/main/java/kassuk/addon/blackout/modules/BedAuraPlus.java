@@ -40,7 +40,7 @@ import java.util.Objects;
 
 public class BedAuraPlus extends BlackOutModule {
     public BedAuraPlus() {
-        super(BlackOut.BLACKOUT, "Bed Aura+", "Automatically places and breaks beds to cause damage to your opponents but better.");
+        super(BlackOut.BLACKOUT, "bed-aura+", "Automatically places and breaks beds to cause damage to your opponents but better.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -56,31 +56,31 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> pauseEat = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Eat")
+        .name("pause-eat")
         .description("Pauses when you are eating.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> doubleInteract = sgGeneral.add(new BoolSetting.Builder()
-        .name("Double Interact")
+        .name("double-interact")
         .description("Clicks both bed blocks every time.")
         .defaultValue(true)
         .build()
     );
     private final Setting<LogicMode> logicMode = sgGeneral.add(new EnumSetting.Builder<LogicMode>()
-        .name("Logic Mode")
+        .name("logic-mode")
         .description("Logic for bullying kids.")
         .defaultValue(LogicMode.PlaceBreak)
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<RotationMode> rotMode = sgGeneral.add(new EnumSetting.Builder<RotationMode>()
-        .name("Rotation Mode")
+        .name("rotation-mode")
         .description("Packet- Sends 1 rotation packet for each bed. Manager- Modifies movement packets to set rotation.")
         .defaultValue(RotationMode.Manager)
         .build()
@@ -88,13 +88,13 @@ public class BedAuraPlus extends BlackOutModule {
 
     //--------------------Placing--------------------//
     private final Setting<SpeedMode> speedMode = sgPlacing.add(new EnumSetting.Builder<SpeedMode>()
-        .name("Speed Mode")
+        .name("speed-mode")
         .description("Normal mode should be used in everywhere else than 5B.")
         .defaultValue(SpeedMode.Normal)
         .build()
     );
     private final Setting<Double> speed = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Speed")
+        .name("speed")
         .description("How many beds to blow up every second.")
         .defaultValue(2)
         .min(0)
@@ -103,7 +103,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> damageSpeed = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Damage Speed Factor")
+        .name("damage-speed-factor")
         .description("Sets speed to damage multiplied by factor.")
         .defaultValue(1)
         .min(0)
@@ -112,7 +112,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxSpeed = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Damage Speed")
+        .name("damage-speed")
         .description("Maximum speed for damage mode.")
         .defaultValue(12)
         .min(0)
@@ -123,7 +123,7 @@ public class BedAuraPlus extends BlackOutModule {
 
     //--------------------Damage--------------------//
     private final Setting<Double> minDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage")
+        .name("min-damage")
         .description("Minimum damage to place.")
         .defaultValue(8)
         .min(0)
@@ -131,7 +131,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Damage")
+        .name("max-damage")
         .description("Maximum self damage to place.")
         .defaultValue(6)
         .min(0)
@@ -139,7 +139,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxFriendDmg = sgDamage.add(new DoubleSetting.Builder()
-        .name("Max Friend Damage")
+        .name("max-friend-damage")
         .description("Maximum friend damage to place.")
         .defaultValue(6)
         .min(0)
@@ -147,7 +147,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Damage Ratio")
+        .name("min-damage-ratio")
         .description("Minimum damage ratio between self damage and enemy damage.")
         .defaultValue(2)
         .min(0)
@@ -155,7 +155,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> minFriendRatio = sgDamage.add(new DoubleSetting.Builder()
-        .name("Min Friend Damage Ratio")
+        .name("min-friend-damage-ratio")
         .description("Minimum damage ratio between friend damage and enemy damage.")
         .defaultValue(2)
         .min(0)
@@ -163,7 +163,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> forcePop = sgDamage.add(new DoubleSetting.Builder()
-        .name("Force Pop")
+        .name("force-pop")
         .description("Ignores damage checks if enemy would pop after x explodes.")
         .defaultValue(1)
         .min(0)
@@ -171,7 +171,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> antiPop = sgDamage.add(new DoubleSetting.Builder()
-        .name("Anti Pop")
+        .name("anti-pop")
         .description("Cancels actions if you would pop after x explodes.")
         .defaultValue(1)
         .min(0)
@@ -179,7 +179,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> antiFriendPop = sgDamage.add(new DoubleSetting.Builder()
-        .name("Anti Friend Pop")
+        .name("anti-friend-pop")
         .description("Cancels actions if any friend would pop after x explodes.")
         .defaultValue(1)
         .min(0)
@@ -187,7 +187,7 @@ public class BedAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> friendSacrifice = sgDamage.add(new BoolSetting.Builder()
-        .name("Friend Sacrifice")
+        .name("friend-sacrifice")
         .description("Kills your friend if you can also kill any enemy with same bed.")
         .defaultValue(true)
         .build()
@@ -195,57 +195,57 @@ public class BedAuraPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing the crafting table.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> interactSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Interact Swing")
+        .name("interact-swing")
         .description("Renders swing animation when interacting with a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> interactHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Interact Hand")
+        .name("interact-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(interactSwing::get)
         .build()
     );
     public final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of the render should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Head Line Color")
+        .name("head-line-color")
         .description("Line color of head block.")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> color = sgRender.add(new ColorSetting.Builder()
-        .name("Head Side Color")
+        .name("head-side-color")
         .description("Side color of head block.")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
     );
     private final Setting<SettingColor> fLineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Feet Line Color")
+        .name("feet-line-color")
         .description("Line color of feet block")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> fColor = sgRender.add(new ColorSetting.Builder()
-        .name("Feet Side Color")
+        .name("feet-side-color")
         .description("Side color of feet block")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

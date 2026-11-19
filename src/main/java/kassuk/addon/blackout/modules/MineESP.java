@@ -23,14 +23,14 @@ import java.util.List;
 
 public class MineESP extends BlackOutModule {
     public MineESP() {
-        super(BlackOut.BLACKOUT, "Mine ESP,", "Renders a box at blocks being mined by other players.");
+        super(BlackOut.BLACKOUT, "mine-esp", "Renders a box at blocks being mined by other players.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgRender = settings.createGroup("Render");
 
     private final Setting<Double> range = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Range")
+        .name("range")
         .description("Only renders inside this range.")
         .defaultValue(10)
         .min(0)
@@ -38,7 +38,7 @@ public class MineESP extends BlackOutModule {
         .build()
     );
     private final Setting<Double> maxTime = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Max Time")
+        .name("max-time")
         .description("Removes rendered box after this time.")
         .defaultValue(10)
         .min(0)
@@ -48,19 +48,19 @@ public class MineESP extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of boxes should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     public final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Color of the outline.")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Color of the sides.")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

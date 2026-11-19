@@ -52,7 +52,7 @@ import java.util.*;
 
 public class AutoMine extends BlackOutModule {
     public AutoMine() {
-        super(BlackOut.BLACKOUT, "Auto Mine", "Automatically mines blocks to destroy your enemies.");
+        super(BlackOut.BLACKOUT, "auto-mine", "Automatically mines blocks to destroy your enemies.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -68,74 +68,74 @@ public class AutoMine extends BlackOutModule {
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = addPauseEat(sgGeneral);
     private final Setting<Boolean> pauseSword = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Sword")
+        .name("pause-sword")
         .description("Doesn't mine while holding sword.")
         .defaultValue(false)
         .build()
     );
     private final Setting<SwitchMode> pickAxeSwitchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Pickaxe Switch Mode")
+        .name("pickaxe-switch-mode")
         .description("Method of switching. InvSwitch is used in most clients.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SwitchMode> crystalSwitchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Crystal Switch Mode")
+        .name("crystal-switch-mode")
         .description("Method of switching. InvSwitch is used in most clients.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<Boolean> autoMine = sgGeneral.add(new BoolSetting.Builder()
-        .name("Auto Mine")
+        .name("auto-mine")
         .description("Sets target block to the block you clicked.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> manualMine = sgGeneral.add(new BoolSetting.Builder()
-        .name("Manual Mine")
+        .name("manual-mine")
         .description("Sets target block to the block you clicked.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> manualInsta = sgGeneral.add(new BoolSetting.Builder()
-        .name("Manual Instant")
+        .name("manual-instant")
         .description("Uses civ mine when mining manually.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> manualRemine = sgGeneral.add(new BoolSetting.Builder()
-        .name("Manual Remine")
+        .name("manual-remine")
         .description("Mines the manually mined block again.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> fastRemine = sgGeneral.add(new BoolSetting.Builder()
-        .name("Fast Remine")
+        .name("fast-remine")
         .description("Calculates mining progress from last block broken.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> manualRangeReset = sgGeneral.add(new BoolSetting.Builder()
-        .name("Manual Range Reset")
+        .name("manual-range-reset")
         .description("Resets manual mining if out of range.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> resetOnSwitch = sgGeneral.add(new BoolSetting.Builder()
-        .name("Reset On Switch")
+        .name("reset-on-switch")
         .description("Resets mining when switched held item.")
         .defaultValue(false)
         .build()
     );
     /*
     private final Setting<Boolean> mineBeds = sgGeneral.add(new BoolSetting.Builder()
-        .name("Mine Beds")
+        .name("mine-beds")
         .description("Allows the automine to mine beds.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> mineAnchors = sgGeneral.add(new BoolSetting.Builder()
-        .name("Mine Anchors")
+        .name("mine-anchors")
         .description("Allows the automine to mine respawn anchors.")
         .defaultValue(false)
         .build()
@@ -143,7 +143,7 @@ public class AutoMine extends BlackOutModule {
 
     //--------------------Speed--------------------//
     private final Setting<Double> speed = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Speed")
+        .name("speed")
         .description("Vanilla speed multiplier.")
         .defaultValue(1)
         .min(0)
@@ -151,7 +151,7 @@ public class AutoMine extends BlackOutModule {
         .build()
     );
     private final Setting<Double> instaDelay = sgSpeed.add(new DoubleSetting.Builder()
-        .name("Instant Delay")
+        .name("instant-delay")
         .description("Delay between civ mines.")
         .defaultValue(0.5)
         .min(0)
@@ -159,19 +159,19 @@ public class AutoMine extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> onGroundCheck = sgSpeed.add(new BoolSetting.Builder()
-        .name("On Ground Check")
+        .name("on-ground-check")
         .description("Mines 5x slower when not on ground.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> effectCheck = sgSpeed.add(new BoolSetting.Builder()
-        .name("Effect Check")
+        .name("effect-check")
         .description("Modifies mining speed depending on haste and mining fatigue.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> waterCheck = sgSpeed.add(new BoolSetting.Builder()
-        .name("Water Check")
+        .name("water-check")
         .description("Mines 5x slower while submerged in water.")
         .defaultValue(true)
         .build()
@@ -179,7 +179,7 @@ public class AutoMine extends BlackOutModule {
 
     //--------------------Explode--------------------//
     private final Setting<Double> explodeSpeed = sgExplode.add(new DoubleSetting.Builder()
-        .name("Explode Speed")
+        .name("explode-speed")
         .description("How many times to attack a crystal every second.")
         .defaultValue(2)
         .min(0)
@@ -187,7 +187,7 @@ public class AutoMine extends BlackOutModule {
         .build()
     );
     private final Setting<Double> explodeTime = sgExplode.add(new DoubleSetting.Builder()
-        .name("Explode Time")
+        .name("explode-time")
         .description("Tries to attack a crystal for this many seconds.")
         .defaultValue(2)
         .min(0)
@@ -197,37 +197,37 @@ public class AutoMine extends BlackOutModule {
 
     //--------------------Cev--------------------//
     private final Setting<Priority> cevPriority = sgCev.add(new EnumSetting.Builder<Priority>()
-        .name("Cev Priority")
+        .name("cev-priority")
         .description("Priority of cev.")
         .defaultValue(Priority.Normal)
         .build()
     );
     private final Setting<Boolean> instaCev = sgCev.add(new BoolSetting.Builder()
-        .name("Instant Cev")
+        .name("instant-cev")
         .description("Only sends 1 mine start packet for each block.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Priority> trapCevPriority = sgCev.add(new EnumSetting.Builder<Priority>()
-        .name("Trap Cev Priority")
+        .name("trap-cev-priority")
         .description("Priority of trap cev.")
         .defaultValue(Priority.Normal)
         .build()
     );
     private final Setting<Boolean> instaTrapCev = sgCev.add(new BoolSetting.Builder()
-        .name("Instant Trap Cev")
+        .name("instant-trap-cev")
         .description("Only sends 1 mine start packet for each block.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Priority> surroundCevPriority = sgCev.add(new EnumSetting.Builder<Priority>()
-        .name("Surround Cev Priority")
+        .name("surround-cev-priority")
         .description("Priority of trap cev.")
         .defaultValue(Priority.Normal)
         .build()
     );
     private final Setting<Boolean> instaSurroundCev = sgCev.add(new BoolSetting.Builder()
-        .name("Instant Surround Cev")
+        .name("instant-surround-cev")
         .description("Only sends 1 mine start packet for each block.")
         .defaultValue(false)
         .build()
@@ -235,31 +235,31 @@ public class AutoMine extends BlackOutModule {
 
     //--------------------Anti-Surround--------------------//
     private final Setting<Priority> surroundMinerPriority = sgAntiSurround.add(new EnumSetting.Builder<Priority>()
-        .name("Surround Miner Priority")
+        .name("surround-miner-priority")
         .description("Priority of surround miner.")
         .defaultValue(Priority.Normal)
         .build()
     );
     private final Setting<Boolean> instaSurroundMiner = sgAntiSurround.add(new BoolSetting.Builder()
-        .name("Instant Surround Miner")
+        .name("instant-surround-miner")
         .description("Only sends 1 mine start packet for each block.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Priority> autoCityPriority = sgAntiSurround.add(new EnumSetting.Builder<Priority>()
-        .name("Auto City Priority")
+        .name("auto-city-priority")
         .description("Priority of anti surround. Places crystal next to enemy's surround block.")
         .defaultValue(Priority.Normal)
         .build()
     );
     private final Setting<Boolean> instaAutoCity = sgAntiSurround.add(new BoolSetting.Builder()
-        .name("Instant Auto City")
+        .name("instant-auto-city")
         .description("Only sends 1 mine start packet for each block.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> explodeCrystal = sgAntiSurround.add(new BoolSetting.Builder()
-        .name("Explode Crystal")
+        .name("explode-crystal")
         .description("Attacks the crystal we placed.")
         .defaultValue(false)
         .build()
@@ -267,7 +267,7 @@ public class AutoMine extends BlackOutModule {
 
     //--------------------Anti-Burrow--------------------//
     private final Setting<Priority> antiBurrowPriority = sgAntiBurrow.add(new EnumSetting.Builder<Priority>()
-        .name("Anti Burrow Priority")
+        .name("anti-burrow-priority")
         .description("Priority of anti burrow.")
         .defaultValue(Priority.Normal)
         .build()
@@ -275,52 +275,52 @@ public class AutoMine extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> mineStartSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Mine Start Swing")
+        .name("mine-start-swing")
         .description("Renders swing animation when starting mining.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> mineEndSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Mine End Swing")
+        .name("mine-end-swing")
         .description("Renders swing animation when ending mining.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> mineHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Mine Hand")
+        .name("mine-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(() -> mineStartSwing.get() || mineEndSwing.get())
         .build()
     );
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> attackSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Attack Swing")
+        .name("attack-swing")
         .description("Renders swing animation when attacking a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> attackHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Attack Hand")
+        .name("attack-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(attackSwing::get)
         .build()
     );
     private final Setting<Double> animationExp = sgRender.add(new DoubleSetting.Builder()
-        .name("Animation Exponent")
+        .name("animation-exponent")
         .description("3 - 4 look cool.")
         .defaultValue(3)
         .range(0, 10)
@@ -328,31 +328,31 @@ public class AutoMine extends BlackOutModule {
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of render should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineStartColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Start Color")
+        .name("line-start-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 0))
         .build()
     );
     private final Setting<SettingColor> lineEndColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line End Color")
+        .name("line-end-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> startColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side Start Color")
+        .name("side-start-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 0))
         .build()
     );
     private final Setting<SettingColor> endColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side End Color")
+        .name("side-end-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

@@ -37,7 +37,7 @@ import java.util.*;
 
 public class HoleFillPlus extends BlackOutModule {
     public HoleFillPlus() {
-        super(BlackOut.BLACKOUT, "Hole Fill Rewrite", "Automatically is a cunt to your enemies.");
+        super(BlackOut.BLACKOUT, "hole-fill-rewrite", "Automatically is a cunt to your enemies.");
     }
 
     private final SettingGroup sgNear = settings.createGroup("Near");
@@ -50,13 +50,13 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Near--------------------//
     private final Setting<Boolean> near = sgNear.add(new BoolSetting.Builder()
-        .name("Near")
+        .name("near")
         .description(".")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> nearDistance = sgNear.add(new DoubleSetting.Builder()
-        .name("Near Distance")
+        .name("near-distance")
         .description(".")
         .defaultValue(3)
         .min(0)
@@ -64,7 +64,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> nearExt = sgNear.add(new IntSetting.Builder()
-        .name("Extrapolation")
+        .name("extrapolation")
         .description(".")
         .defaultValue(5)
         .min(0)
@@ -72,7 +72,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> selfExt = sgNear.add(new IntSetting.Builder()
-        .name("Self Extrapolation")
+        .name("self-extrapolation")
         .description(".")
         .defaultValue(2)
         .min(0)
@@ -80,7 +80,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> extSmooth = sgNear.add(new IntSetting.Builder()
-        .name("Extrapolation Smoothening")
+        .name("extrapolation-smoothening")
         .description(".")
         .defaultValue(2)
         .min(1)
@@ -88,19 +88,19 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> efficient = sgNear.add(new BoolSetting.Builder()
-        .name("Efficient")
+        .name("efficient")
         .description("Only places if the hole is closer to target.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> above = sgNear.add(new BoolSetting.Builder()
-        .name("Above")
+        .name("above")
         .description("Only places if target is above the hole.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> iHole = sgNear.add(new BoolSetting.Builder()
-        .name("Ignore Hole")
+        .name("ignore-hole")
         .description("Doesn't place if enemy is in a hole.")
         .defaultValue(true)
         .build()
@@ -108,13 +108,13 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Walking--------------------//
     private final Setting<Boolean> walking = sgWalking.add(new BoolSetting.Builder()
-        .name("Walking")
+        .name("walking")
         .description(".")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> walkingDist = sgWalking.add(new DoubleSetting.Builder()
-        .name("Walking Dist")
+        .name("walking-dist")
         .description(".")
         .defaultValue(6)
         .min(0)
@@ -122,7 +122,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> walkMemory = sgWalking.add(new IntSetting.Builder()
-        .name("Walk Memory")
+        .name("walk-memory")
         .description("Fills the hole is enemy was walking to it during previous x ticks.")
         .defaultValue(5)
         .min(0)
@@ -132,13 +132,13 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Look--------------------//
     private final Setting<Boolean> look = sgLooking.add(new BoolSetting.Builder()
-        .name("Looking")
+        .name("looking")
         .description(".")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> lookDist = sgLooking.add(new DoubleSetting.Builder()
-        .name("Look Dist")
+        .name("look-dist")
         .description(".")
         .defaultValue(10)
         .min(0)
@@ -146,7 +146,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> lookMemory = sgWalking.add(new IntSetting.Builder()
-        .name("Look Memory")
+        .name("look-memory")
         .description("Fills the hole is enemy was looking at it during previous x ticks.")
         .defaultValue(5)
         .min(0)
@@ -156,33 +156,33 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Self--------------------//
     private final Setting<Boolean> iSelfHole = sgSelf.add(new BoolSetting.Builder()
-        .name("Ignore Self Hole")
+        .name("ignore-self-hole")
         .description("Doesn't check 'efficient' if you are in a hole.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> selfAbove = sgSelf.add(new BoolSetting.Builder()
-        .name("Self Above")
+        .name("self-above")
         .description("Only checks 'efficient' if you are above the hole.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> selfDistance = sgSelf.add(new DoubleSetting.Builder()
-        .name("Self Distance")
+        .name("self-distance")
         .description("Doesn't place if the block is this close to you.")
         .defaultValue(0)
         .sliderRange(0, 10)
         .build()
     );
     private final Setting<Boolean> selfWalking = sgSelf.add(new BoolSetting.Builder()
-        .name("Self Walking")
+        .name("self-walking")
         .description("Doesn't check 'efficient' if you are in a hole.")
         .defaultValue(true)
         .visible(efficient::get)
         .build()
     );
     private final Setting<Double> selfWalkingDist = sgSelf.add(new DoubleSetting.Builder()
-        .name("Self Walk Dist")
+        .name("self-walk-dist")
         .description(".")
         .defaultValue(3)
         .min(0)
@@ -190,7 +190,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> selfWalkMemory = sgSelf.add(new IntSetting.Builder()
-        .name("Self Walk Memory")
+        .name("self-walk-memory")
         .description("Doesn't fill any hole you were walking to during past x ticks.")
         .defaultValue(2)
         .min(0)
@@ -200,19 +200,19 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Placing--------------------//
     private final Setting<SwitchMode> switchMode = sgPlacing.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable but delays crystals on some servers.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SurroundPlus.PlaceDelayMode> placeDelayMode = sgPlacing.add(new EnumSetting.Builder<SurroundPlus.PlaceDelayMode>()
-        .name("Place Delay Mode")
+        .name("place-delay-mode")
         .description(".")
         .defaultValue(SurroundPlus.PlaceDelayMode.Ticks)
         .build()
     );
     private final Setting<Integer> placeDelayT = sgPlacing.add(new IntSetting.Builder()
-        .name("Place Tick Delay")
+        .name("place-tick-delay")
         .description("Tick delay between places.")
         .defaultValue(1)
         .min(1)
@@ -221,7 +221,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> placeDelayS = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Place Delay")
+        .name("place-delay")
         .description("Delay between places.")
         .defaultValue(0.1)
         .min(0)
@@ -230,7 +230,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> places = sgPlacing.add(new IntSetting.Builder()
-        .name("Places")
+        .name("places")
         .description("How many blocks to place each time.")
         .defaultValue(1)
         .min(1)
@@ -238,7 +238,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> delay = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Waits x seconds before trying to place at the same position if there is more than 1 missing block.")
         .defaultValue(0.3)
         .min(0)
@@ -246,13 +246,13 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<List<Block>> blocks = sgPlacing.add(new BlockListSetting.Builder()
-        .name("Blocks")
+        .name("blocks")
         .description("Blocks to use.")
         .defaultValue(Blocks.OBSIDIAN)
         .build()
     );
     private final Setting<Integer> boxExt = sgPlacing.add(new IntSetting.Builder()
-        .name("Box Extrapolation")
+        .name("box-extrapolation")
         .description("Enemy hitbox extrapolation")
         .defaultValue(0)
         .min(0)
@@ -260,7 +260,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> boxExtSmooth = sgPlacing.add(new IntSetting.Builder()
-        .name("Box Extrapolation Smoothening")
+        .name("box-extrapolation-smoothening")
         .description(".")
         .defaultValue(2)
         .min(1)
@@ -270,19 +270,19 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Hole--------------------//
     private final Setting<Boolean> single = sgHole.add(new BoolSetting.Builder()
-        .name("Single")
+        .name("single")
         .description("Fills 1x1 holes")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> doubleHole = sgHole.add(new BoolSetting.Builder()
-        .name("Double")
+        .name("double")
         .description("Fills 2x1 block holes")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> quad = sgHole.add(new BoolSetting.Builder()
-        .name("Quad")
+        .name("quad")
         .description("Fills 2x2 block holes")
         .defaultValue(true)
         .build()
@@ -290,20 +290,20 @@ public class HoleFillPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Double> renderTime = sgRender.add(new DoubleSetting.Builder()
-        .name("Render Time")
+        .name("render-time")
         .description("How long the box should remain in full alpha.")
         .defaultValue(0.3)
         .min(0)
@@ -311,7 +311,7 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> fadeTime = sgRender.add(new DoubleSetting.Builder()
-        .name("Fade Time")
+        .name("fade-time")
         .description("How long the fading should take.")
         .defaultValue(1)
         .min(0)
@@ -319,19 +319,19 @@ public class HoleFillPlus extends BlackOutModule {
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of boxes should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

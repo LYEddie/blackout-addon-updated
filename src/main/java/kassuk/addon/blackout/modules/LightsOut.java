@@ -22,13 +22,13 @@ import net.minecraft.util.math.Vec3d;
 
 public class LightsOut extends BlackOutModule {
     public LightsOut() {
-        super(BlackOut.BLACKOUT, "Lights Out", "A tribute to Reliant.");
+        super(BlackOut.BLACKOUT, "lights-out", "A tribute to Reliant.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Double> delay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Tick Delay")
+        .name("tick-delay")
         .description("Delay between breaking torches.")
         .defaultValue(2)
         .range(0, 10)
@@ -36,13 +36,13 @@ public class LightsOut extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> swing = sgGeneral.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when breaking a torch.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> swingHand = sgGeneral.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(swing::get)

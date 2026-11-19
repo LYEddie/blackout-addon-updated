@@ -47,21 +47,21 @@ import java.util.*;
 
 public class PacketLogger extends BlackOutModule {
     public PacketLogger() {
-        super(BlackOut.BLACKOUT, "Logger", "Logs packets or whatever you want. (only packets rn)");
+        super(BlackOut.BLACKOUT, "logger", "Logs packets or whatever you want. (only packets rn)");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     // yoinked these settings from meteor
     private final Setting<Set<Class<? extends Packet<?>>>> receivePackets = sgGeneral.add(new PacketListSetting.Builder()
-        .name("Receive")
+        .name("receive")
         .description("Server-to-client packets to cancel.")
         .filter(aClass -> PacketUtils.getS2CPackets().contains(aClass))
         .build()
     );
 
     private final Setting<Set<Class<? extends Packet<?>>>> sendPackets = sgGeneral.add(new PacketListSetting.Builder()
-        .name("Send")
+        .name("send")
         .description("Client-to-server packets to cancel.")
         .filter(aClass -> PacketUtils.getC2SPackets().contains(aClass))
         .build()

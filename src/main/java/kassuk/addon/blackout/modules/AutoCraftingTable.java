@@ -39,20 +39,20 @@ import static kassuk.addon.blackout.utils.OLEPOSSUtils.replaceable;
 
 public class AutoCraftingTable extends BlackOutModule {
     public AutoCraftingTable() {
-        super(BlackOut.BLACKOUT, "Auto Crafting Table", "Automatically places and opens an Crafting table.");
+        super(BlackOut.BLACKOUT, "auto-crafting-table", "Automatically places and opens an Crafting table.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
     private final SettingGroup sgRender = settings.createGroup("Render");
 
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Switching method. Silent is the most reliable but doesn't work everywhere..")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<Double> placeSpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Place Speed")
+        .name("place-speed")
         .description("Tries to place this many times every second.")
         .defaultValue(1)
         .min(0)
@@ -60,7 +60,7 @@ public class AutoCraftingTable extends BlackOutModule {
         .build()
     );
     private final Setting<Double> interactSpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Interact Speed")
+        .name("interact-speed")
         .description("Tries to open the crafting table this many times every second.")
         .defaultValue(1)
         .min(0)
@@ -70,39 +70,39 @@ public class AutoCraftingTable extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing the crafting table.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<Boolean> interactSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Interact Swing")
+        .name("interact-swing")
         .description("Renders swing animation when interacting with a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> interactHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Interact Hand")
+        .name("interact-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(interactSwing::get)
         .build()
     );
     public final Setting<SettingColor> color = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Side color of rendered stuff")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
     );
     public final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Line color of rendered stuff")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()

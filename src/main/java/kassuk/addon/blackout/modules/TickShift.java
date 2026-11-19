@@ -15,19 +15,19 @@ import meteordevelopment.orbit.EventHandler;
 
 public class TickShift extends BlackOutModule {
     public TickShift() {
-        super(BlackOut.BLACKOUT, "Tick Shift", "Stores packets when standing still and uses them when you start moving.");
+        super(BlackOut.BLACKOUT, "tick-shift", "Stores packets when standing still and uses them when you start moving.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<SmoothMode> smooth = sgGeneral.add(new EnumSetting.Builder<SmoothMode>()
-        .name("Smoothness")
+        .name("smoothness")
         .description(".")
         .defaultValue(SmoothMode.Exponent)
         .build()
     );
     public final Setting<Integer> packets = sgGeneral.add(new IntSetting.Builder()
-        .name("Packets")
+        .name("packets")
         .description("How many packets to store for later use.")
         .defaultValue(50)
         .min(0)
@@ -35,7 +35,7 @@ public class TickShift extends BlackOutModule {
         .build()
     );
     private final Setting<Double> timer = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Timer")
+        .name("timer")
         .description("How many packets to send every movement tick.")
         .defaultValue(2)
         .min(1)

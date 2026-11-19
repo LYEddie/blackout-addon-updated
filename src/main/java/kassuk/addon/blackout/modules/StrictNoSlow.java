@@ -22,25 +22,25 @@ import net.minecraft.util.Hand;
 
 public class StrictNoSlow extends BlackOutModule {
     public StrictNoSlow() {
-        super(BlackOut.BLACKOUT, "Strict No Slow", "Should only be used on very strict servers. Requires any other noslow to work.");
+        super(BlackOut.BLACKOUT, "strict-no-slow", "Should only be used on very strict servers. Requires any other noslow to work.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<Boolean> onlyGap = sgGeneral.add(new BoolSetting.Builder()
-        .name("Only Gapples")
+        .name("only-gapples")
         .description("Only sends packets when eating gapples.")
         .defaultValue(true)
         .build()
     );
     public final Setting<Boolean> single = sgGeneral.add(new BoolSetting.Builder()
-        .name("Single Packet")
+        .name("single-packet")
         .description("Only sends 1 switch packet after starting to eat. Works on most servers that require this module.")
         .defaultValue(true)
         .build()
     );
     public final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Tick delay between switch packets.")
         .defaultValue(0)
         .min(0)

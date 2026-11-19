@@ -24,27 +24,27 @@ import java.util.List;
 
 public class RPC extends BlackOutModule {
     public RPC() {
-        super(BlackOut.BLACKOUT, "RPC", "Epic rpc.");
+        super(BlackOut.BLACKOUT, "rpc", "Epic rpc.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<List<String>> l1 = sgGeneral.add(new StringListSetting.Builder()
-        .name("Line 1")
+        .name("line-1")
         .description(".")
         .defaultValue("Playing on {server}", "{player}")
         .renderer(StarscriptTextBoxRenderer.class)
         .build()
     );
     private final Setting<List<String>> l2 = sgGeneral.add(new StringListSetting.Builder()
-        .name("Line 2")
+        .name("line-2")
         .description(".")
         .defaultValue("{server.player_count} Players online", "{round(player.health, 1)}hp")
         .renderer(StarscriptTextBoxRenderer.class)
         .build()
     );
     private final Setting<Integer> refreshDelay = sgGeneral.add(new IntSetting.Builder()
-        .name("Refresh Delay")
+        .name("refresh-delay")
         .description("Ticks between refreshing.")
         .defaultValue(100)
         .range(0, 1000)

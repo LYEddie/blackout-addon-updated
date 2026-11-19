@@ -13,19 +13,19 @@ import net.minecraft.client.render.FogShape;
 
 public class Fog extends BlackOutModule {
     public Fog() {
-        super(BlackOut.BLACKOUT, "Fog", "Customizable fog.");
+        super(BlackOut.BLACKOUT, "fog", "Customizable fog.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<FogShape> shape = sgGeneral.add(new EnumSetting.Builder<FogShape>()
-        .name("Shape")
+        .name("shape")
         .description("Fog shape.")
         .defaultValue(FogShape.SPHERE)
         .build()
     );
     public final Setting<Double> distance = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Distance")
+        .name("distance")
         .description("How far away should the fog start rendering.")
         .defaultValue(25)
         .min(0)
@@ -33,7 +33,7 @@ public class Fog extends BlackOutModule {
         .build()
     );
     public final Setting<Integer> fading = sgGeneral.add(new IntSetting.Builder()
-        .name("Fading")
+        .name("fading")
         .description("How smoothly should the fog fade.")
         .defaultValue(25)
         .min(0)
@@ -41,7 +41,7 @@ public class Fog extends BlackOutModule {
         .build()
     );
     public final Setting<Double> thickness = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Thickness")
+        .name("thickness")
         .description(".")
         .defaultValue(10)
         .range(1, 100)
@@ -49,7 +49,7 @@ public class Fog extends BlackOutModule {
         .build()
     );
     public final Setting<SettingColor> color = sgGeneral.add(new ColorSetting.Builder()
-        .name("Color")
+        .name("color")
         .description("Color of the fog.")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()

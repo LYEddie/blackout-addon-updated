@@ -40,7 +40,7 @@ import java.util.Objects;
 
 public class AutoTrapPlus extends BlackOutModule {
     public AutoTrapPlus() {
-        super(BlackOut.BLACKOUT, "Auto Trap+", "Traps enemies (literally selftrap but places on enemies).");
+        super(BlackOut.BLACKOUT, "auto-trap+", "Traps enemies (literally selftrap but places on enemies).");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -50,31 +50,31 @@ public class AutoTrapPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = sgGeneral.add(new BoolSetting.Builder()
-        .name("Pause Eat")
+        .name("pause-eat")
         .description("Pauses when you are eating.")
         .defaultValue(false)
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<TrapMode> trapMode = sgGeneral.add(new EnumSetting.Builder<TrapMode>()
-        .name("Trap Mode")
+        .name("trap-mode")
         .description("Where should the blocks be placed at.")
         .defaultValue(TrapMode.Both)
         .build()
     );
     private final Setting<Boolean> onlyHole = sgGeneral.add(new BoolSetting.Builder()
-        .name("Only Hole")
+        .name("only-hole")
         .description("Only places if enemy is in a hole.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> cevFriendly = sgGeneral.add(new BoolSetting.Builder()
-        .name("Cev Friendly")
+        .name("cev-friendly")
         .description("Doesn't place if there is a crystal on top of the block.")
         .defaultValue(true)
         .build()
@@ -82,19 +82,19 @@ public class AutoTrapPlus extends BlackOutModule {
 
     //--------------------Placing--------------------//
     private final Setting<Boolean> onlyConfirmed = sgPlacing.add(new BoolSetting.Builder()
-        .name("Only Confirmed")
+        .name("only-confirmed")
         .description("Only places on blocks the server has confirmed to exist.")
         .defaultValue(true)
         .build()
     );
     private final Setting<List<Block>> blocks = sgPlacing.add(new BlockListSetting.Builder()
-        .name("Blocks")
+        .name("blocks")
         .description("Blocks to use.")
         .defaultValue(Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.NETHERITE_BLOCK)
         .build()
     );
     private final Setting<Double> placeDelay = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Place Delay")
+        .name("place-delay")
         .description("Delay between places.")
         .defaultValue(0.1)
         .min(0)
@@ -102,7 +102,7 @@ public class AutoTrapPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> places = sgPlacing.add(new IntSetting.Builder()
-        .name("Places")
+        .name("places")
         .description("Blocks placed per place.")
         .defaultValue(1)
         .range(1, 10)
@@ -110,7 +110,7 @@ public class AutoTrapPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> delay = sgPlacing.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Delay between places at each spot. Should be at about 1.5x ping.")
         .defaultValue(0.3)
         .range(0, 10)
@@ -120,19 +120,19 @@ public class AutoTrapPlus extends BlackOutModule {
 
     //--------------------Toggle--------------------//
     private final Setting<Boolean> toggleMove = sgToggle.add(new BoolSetting.Builder()
-        .name("Toggle Move")
+        .name("toggle-move")
         .description("Toggles when you move horizontally.")
         .defaultValue(false)
         .build()
     );
     private final Setting<ToggleYMode> toggleY = sgToggle.add(new EnumSetting.Builder<ToggleYMode>()
-        .name("Toggle Y")
+        .name("toggle-y")
         .description("Toggles when you move vertically.")
         .defaultValue(ToggleYMode.Disabled)
         .build()
     );
     private final Setting<Boolean> toggleSneak = sgToggle.add(new BoolSetting.Builder()
-        .name("Toggle Sneak")
+        .name("toggle-sneak")
         .description("Toggles when you sneak.")
         .defaultValue(false)
         .build()
@@ -140,44 +140,44 @@ public class AutoTrapPlus extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> placeSwing = sgRender.add(new BoolSetting.Builder()
-        .name("Place Swing")
+        .name("place-swing")
         .description("Renders swing animation when placing a block.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> placeHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Place Hand")
+        .name("place-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(placeSwing::get)
         .build()
     );
     private final Setting<ShapeMode> shapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Shape Mode")
+        .name("shape-mode")
         .description("Which parts of the boxes should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> lineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Line Color")
+        .name("line-color")
         .description("Color of the outlines")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> sideColor = sgRender.add(new ColorSetting.Builder()
-        .name("Side Color")
+        .name("side-color")
         .description("Color of the sides.")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
     );
     private final Setting<SettingColor> supportLineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Support Line Color")
+        .name("support-line-color")
         .description("Color of the outlines for support blocks.")
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     private final Setting<SettingColor> supportSideColor = sgRender.add(new ColorSetting.Builder()
-        .name("Support Side Color")
+        .name("support-side-color")
         .description("Color of the sides for support blocks.")
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

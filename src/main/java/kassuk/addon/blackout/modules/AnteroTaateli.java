@@ -21,19 +21,19 @@ import java.util.Random;
 
 public class AnteroTaateli extends BlackOutModule {
     public AnteroTaateli() {
-        super(BlackOut.BLACKOUT, "Auto Andrew Tate", "What colour is your bugatti?");
+        super(BlackOut.BLACKOUT, "auto-andrew-tate", "What colour is your bugatti?");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> iFriends = sgGeneral.add(new BoolSetting.Builder()
-        .name("Ignore Friends")
+        .name("ignore-friends")
         .description("Doesn't send messages targeted to friends.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> delay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Tick delay between messages.")
         .defaultValue(50)
         .min(0)

@@ -33,19 +33,19 @@ import java.util.Objects;
 
 public class KillAuraPlus extends BlackOutModule {
     public KillAuraPlus() {
-        super(BlackOut.BLACKOUT, "Kill Aura+", "Better kill aura. Made for crystal pvp.");
+        super(BlackOut.BLACKOUT, "kill-aura+", "Better kill aura. Made for crystal pvp.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<TargetMode> targetMode = sgGeneral.add(new EnumSetting.Builder<TargetMode>()
-        .name("Target Mode")
+        .name("target-mode")
         .description("Which opponent should be targeted.")
         .defaultValue(TargetMode.Health)
         .build()
     );
     private final Setting<Integer> maxHp = sgGeneral.add(new IntSetting.Builder()
-        .name("Max HP")
+        .name("max-hp")
         .description("Target's health must be under this value.")
         .defaultValue(36)
         .min(0)
@@ -53,7 +53,7 @@ public class KillAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Double> delay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Delay that will be used for hits.")
         .defaultValue(0.500)
         .min(0)
@@ -61,31 +61,31 @@ public class KillAuraPlus extends BlackOutModule {
         .build()
     );
     private final Setting<RotationMode> rotationMode = sgGeneral.add(new EnumSetting.Builder<RotationMode>()
-        .name("Rotation mode")
+        .name("rotation-mode")
         .description("When should we rotate. Only active if attack rotations are enabled in rotation settings.")
         .defaultValue(RotationMode.OnHit)
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch mode")
+        .name("switch-mode")
         .description("Should be set to disabled.")
         .defaultValue(SwitchMode.Disabled)
         .build()
     );
     private final Setting<Boolean> onlyWeapon = sgGeneral.add(new BoolSetting.Builder()
-        .name("Only Weapon")
+        .name("only-weapon")
         .description("Only attacks with a weapon.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> swing = sgGeneral.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when attacking an entity.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> swingHand = sgGeneral.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(swing::get)

@@ -17,20 +17,20 @@ import net.minecraft.entity.effect.StatusEffects;
 
 public class WeakAlert extends BlackOutModule {
     public WeakAlert() {
-        super(BlackOut.BLACKOUT, "Weak Alert", "Alerts you if you get weakness.");
+        super(BlackOut.BLACKOUT, "weak-alert", "Alerts you if you get weakness.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> single = sgGeneral.add(new BoolSetting.Builder()
-        .name("Single")
+        .name("single")
         .description("Only sends the message once.")
         .defaultValue(false)
         .build()
     );
 
     private final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Tick delay between sending the message.")
         .defaultValue(5)
         .range(0, 60)

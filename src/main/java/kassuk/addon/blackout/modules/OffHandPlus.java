@@ -27,7 +27,7 @@ import java.util.function.Predicate;
 
 public class OffHandPlus extends BlackOutModule {
     public OffHandPlus() {
-        super(BlackOut.BLACKOUT, "Offhand+", "Better offhand.");
+        super(BlackOut.BLACKOUT, "offhand+", "Better offhand.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -35,39 +35,39 @@ public class OffHandPlus extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> onlyInInv = sgGeneral.add(new BoolSetting.Builder()
-        .name("Only in inventory")
+        .name("only-in-inventory")
         .description("Will only switch if you are in your inventory.")
         .defaultValue(false)
         .build()
     );
     private final Setting<ItemMode> itemMode = sgGeneral.add(new EnumSetting.Builder<ItemMode>()
-        .name("Item Mode")
+        .name("item-mode")
         .description("Which item should be held in offhand.")
         .defaultValue(ItemMode.Totem)
         .build()
     );
     private final Setting<GapMode> gapMode = sgGeneral.add(new EnumSetting.Builder<GapMode>()
-        .name("Gapple Mode")
+        .name("gapple-mode")
         .description("When should we hold golden apples.")
         .defaultValue(GapMode.Both)
         .build()
     );
     private final Setting<SwordMode> swordMode = sgGeneral.add(new EnumSetting.Builder<SwordMode>()
-        .name("Sword Mode")
+        .name("sword-mode")
         .description("When should we hold sword.")
         .defaultValue(SwordMode.Pressed)
         .visible(gapMode.get()::isSword)
         .build()
     );
     private final Setting<Boolean> safeSword = sgGeneral.add(new BoolSetting.Builder()
-        .name("Safe Sword")
+        .name("safe-sword")
         .description("Only sword gaps if you have enough health.")
         .defaultValue(false)
         .visible(gapMode.get()::isSword)
         .build()
     );
     private final Setting<Double> delay = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("Delay between switches.")
         .defaultValue(0.1)
         .range(0, 1)
@@ -75,7 +75,7 @@ public class OffHandPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> strict = sgGeneral.add(new BoolSetting.Builder()
-        .name("Strict Swap")
+        .name("strict-swap")
         .description("Uses pick silent and swap with offhand packets to bypass ncp inventory checks.")
         .defaultValue(false)
         .build()
@@ -83,7 +83,7 @@ public class OffHandPlus extends BlackOutModule {
 
     //--------------------Health--------------------//
     private final Setting<Integer> hp = sgHealth.add(new IntSetting.Builder()
-        .name("Health")
+        .name("health")
         .description("Switches to totem when health is under this value.")
         .defaultValue(14)
         .range(0, 36)
@@ -91,13 +91,13 @@ public class OffHandPlus extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> safety = sgHealth.add(new BoolSetting.Builder()
-        .name("Safety")
+        .name("safety")
         .description("Tries to prevent offhand fails by switching while in danger.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> safetyHealth = sgHealth.add(new IntSetting.Builder()
-        .name("Safety Health")
+        .name("safety-health")
         .description("Holds totem if you would have under this health after possible damages.")
         .defaultValue(0)
         .range(0, 36)

@@ -42,7 +42,7 @@ import java.util.Objects;
 
 public class PistonPush extends BlackOutModule {
     public PistonPush() {
-        super(BlackOut.BLACKOUT, "Piston Push", "Pushes people out of their safe holes.");
+        super(BlackOut.BLACKOUT, "piston-push", "Pushes people out of their safe holes.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -53,31 +53,31 @@ public class PistonPush extends BlackOutModule {
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = addPauseEat(sgGeneral);
     private final Setting<Redstone> redstone = sgGeneral.add(new EnumSetting.Builder<Redstone>()
-        .name("Redstone")
+        .name("redstone")
         .description("What kind of redstone to use.")
         .defaultValue(Redstone.Torch)
         .build()
     );
     private final Setting<Boolean> onlyHole = sgSwing.add(new BoolSetting.Builder()
-        .name("Only Hole")
+        .name("only-hole")
         .description("Toggles when enemy moves.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> toggleMove = sgSwing.add(new BoolSetting.Builder()
-        .name("Toggle Move")
+        .name("toggle-move")
         .description("Toggles when enemy moves.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwitchMode> pistonSwitch = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Piston Switch")
+        .name("piston-switch")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SwitchMode> redstoneSwitch = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Redstone Switch")
+        .name("redstone-switch")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
@@ -85,7 +85,7 @@ public class PistonPush extends BlackOutModule {
 
     //--------------------Delay--------------------//
     private final Setting<Double> prDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Piston > Redstone")
+        .name("piston->-redstone")
         .description("How many seconds to wait between placing piston and redstone.")
         .defaultValue(0)
         .min(0)
@@ -93,7 +93,7 @@ public class PistonPush extends BlackOutModule {
         .build()
     );
     private final Setting<Double> rmDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Redstone > Mine")
+        .name("redstone->-mine")
         .description("How many seconds to wait between placing redstone and starting to mine it.")
         .defaultValue(0.2)
         .min(0)
@@ -101,7 +101,7 @@ public class PistonPush extends BlackOutModule {
         .build()
     );
     private final Setting<Double> mpDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Mine > Piston")
+        .name("mine->-piston")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)
@@ -111,26 +111,26 @@ public class PistonPush extends BlackOutModule {
 
     //--------------------Swing--------------------//
     private final Setting<Boolean> pistonSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Piston Swing")
+        .name("piston-swing")
         .description("Renders swing animation when placing a piston.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> pistonHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Piston Swing Hand")
+        .name("piston-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(pistonSwing::get)
         .build()
     );
     private final Setting<Boolean> redstoneSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Piston Swing")
+        .name("piston-swing")
         .description("Renders swing animation when placing redstone.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> redstoneHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Redstone Swing Hand")
+        .name("redstone-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(redstoneSwing::get)
@@ -139,37 +139,37 @@ public class PistonPush extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<ShapeMode> pistonShape = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Piston Shape Mode")
+        .name("piston-shape-mode")
         .description("Which parts should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> psColor = sgRender.add(new ColorSetting.Builder()
-        .name("Piston Side Color")
+        .name("piston-side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 50))
         .build()
     );
     private final Setting<SettingColor> plColor = sgRender.add(new ColorSetting.Builder()
-        .name("Piston Line Color")
+        .name("piston-line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     private final Setting<ShapeMode> redstoneShape = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Redstone Shape Mode")
+        .name("redstone-shape-mode")
         .description("Which parts should be rendered.")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> rsColor = sgRender.add(new ColorSetting.Builder()
-        .name("Redstone Side Color")
+        .name("redstone-side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
     );
     private final Setting<SettingColor> rlColor = sgRender.add(new ColorSetting.Builder()
-        .name("Redstone Line Color")
+        .name("redstone-line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()

@@ -48,7 +48,7 @@ import java.util.Objects;
 
 public class PistonCrystal extends BlackOutModule {
     public PistonCrystal() {
-        super(BlackOut.BLACKOUT, "Piston Crystal", "Pushes crystals into your enemies to deal massive damage.");
+        super(BlackOut.BLACKOUT, "piston-crystal", "Pushes crystals into your enemies to deal massive damage.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -61,25 +61,25 @@ public class PistonCrystal extends BlackOutModule {
     //--------------------General--------------------//
     private final Setting<Boolean> pauseEat = addPauseEat(sgGeneral);
     private final Setting<Boolean> fire = sgGeneral.add(new BoolSetting.Builder()
-        .name("Fire")
+        .name("fire")
         .description("Uses fire to blow up the crystal.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Redstone> redstone = sgGeneral.add(new EnumSetting.Builder<Redstone>()
-        .name("Redstone")
+        .name("redstone")
         .description("What kind of redstone to use.")
         .defaultValue(Redstone.Torch)
         .build()
     );
     private final Setting<Boolean> alwaysAttack = sgGeneral.add(new BoolSetting.Builder()
-        .name("Always Attack")
+        .name("always-attack")
         .description("Attacks all crystals blocking crystal placing.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Double> attackSpeed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Attack Speed")
+        .name("attack-speed")
         .description("How many times to attack the crystal every second.")
         .defaultValue(4)
         .min(0)
@@ -89,7 +89,7 @@ public class PistonCrystal extends BlackOutModule {
 
     //--------------------Delay--------------------//
     private final Setting<Double> pcDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Piston > Crystal")
+        .name("piston->-crystal")
         .description("How many seconds to wait between placing piston and redstone.")
         .defaultValue(0)
         .min(0)
@@ -97,7 +97,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> cfDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Crystal > Fire")
+        .name("crystal->-fire")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)
@@ -105,7 +105,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> crDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Crystal > Redstone")
+        .name("crystal->-redstone")
         .description("How many seconds to wait between placing redstone and starting to mine it.")
         .defaultValue(0.2)
         .min(0)
@@ -113,7 +113,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> rmDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Redstone > Mine")
+        .name("redstone->-mine")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)
@@ -121,7 +121,7 @@ public class PistonCrystal extends BlackOutModule {
         .build()
     );
     private final Setting<Double> mpDelay = sgDelay.add(new DoubleSetting.Builder()
-        .name("Mine > Piston")
+        .name("mine->-piston")
         .description("How many seconds to wait after mining the redstone before starting a new cycle.")
         .defaultValue(0.2)
         .min(0)
@@ -131,25 +131,25 @@ public class PistonCrystal extends BlackOutModule {
 
     //--------------------Switch--------------------//
     private final Setting<SwitchMode> crystalSwitch = sgSwitch.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Crystal Switch")
+        .name("crystal-switch")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SwitchMode> pistonSwitch = sgSwitch.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Piston Switch")
+        .name("piston-switch")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SwitchMode> redstoneSwitch = sgSwitch.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Redstone Switch")
+        .name("redstone-switch")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<SwitchMode> fireSwitch = sgSwitch.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Fire Switch")
+        .name("fire-switch")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
@@ -158,13 +158,13 @@ public class PistonCrystal extends BlackOutModule {
     //--------------------Toggle--------------------//
     /*
     private final Setting<Boolean> toggleMove = sgToggle.add(new BoolSetting.Builder()
-        .name("Toggle Move")
+        .name("toggle-move")
         .description("Toggles when you move.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> toggleEnemyMove = sgToggle.add(new BoolSetting.Builder()
-        .name("Toggle Enemy Move")
+        .name("toggle-enemy-move")
         .description("Toggles when your target moves.")
         .defaultValue(false)
         .build()
@@ -173,65 +173,65 @@ public class PistonCrystal extends BlackOutModule {
 
     //--------------------Swing--------------------//
     private final Setting<Boolean> crystalSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Crystal Swing")
+        .name("crystal-swing")
         .description("Renders swing animation when placing a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> crystalHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Crystal Swing Hand")
+        .name("crystal-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(crystalSwing::get)
         .build()
     );
     private final Setting<Boolean> attackSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Attack Swing")
+        .name("attack-swing")
         .description("Renders swing animation when attacking a crystal.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> attackHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Attack Swing Hand")
+        .name("attack-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(attackSwing::get)
         .build()
     );
     private final Setting<Boolean> pistonSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Piston Swing")
+        .name("piston-swing")
         .description("Renders swing animation when placing a piston.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> pistonHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Piston Swing Hand")
+        .name("piston-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(pistonSwing::get)
         .build()
     );
     private final Setting<Boolean> redstoneSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Piston Swing")
+        .name("piston-swing")
         .description("Renders swing animation when placing redstone.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> redstoneHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Redstone Swing Hand")
+        .name("redstone-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(redstoneSwing::get)
         .build()
     );
     private final Setting<Boolean> fireSwing = sgSwing.add(new BoolSetting.Builder()
-        .name("Fire Swing")
+        .name("fire-swing")
         .description("Renders swing animation when placing fire.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> fireHand = sgSwing.add(new EnumSetting.Builder<SwingHand>()
-        .name("Fire Swing Hand")
+        .name("fire-swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(fireSwing::get)
@@ -240,76 +240,76 @@ public class PistonCrystal extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Double> crystalHeight = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Crystal Height")
+        .name("crystal-height")
         .description(".")
         .defaultValue(0.25)
         .sliderRange(-1, 1)
         .build()
     );
     private final Setting<ShapeMode> crystalShapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Crystal Shape Mode")
+        .name("crystal-shape-mode")
         .description(".")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> crystalLineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Crystal Line Color")
+        .name("crystal-line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> crystalColor = sgRender.add(new ColorSetting.Builder()
-        .name("Crystal Side Color")
+        .name("crystal-side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()
     );
     private final Setting<Double> pistonHeight = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Piston Height")
+        .name("piston-height")
         .description(".")
         .defaultValue(1)
         .sliderRange(-1, 1)
         .build()
     );
     private final Setting<ShapeMode> pistonShapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Piston Shape Mode")
+        .name("piston-shape-mode")
         .description(".")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> pistonLineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Piston Line Color")
+        .name("piston-line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 255))
         .build()
     );
     public final Setting<SettingColor> pistonColor = sgRender.add(new ColorSetting.Builder()
-        .name("Piston Side Color")
+        .name("piston-side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 255, 255, 50))
         .build()
     );
     private final Setting<Double> redstoneHeight = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Redstone Height")
+        .name("redstone-height")
         .description(".")
         .defaultValue(1)
         .sliderRange(-1, 1)
         .build()
     );
     private final Setting<ShapeMode> redstoneShapeMode = sgRender.add(new EnumSetting.Builder<ShapeMode>()
-        .name("Redstone Shape Mode")
+        .name("redstone-shape-mode")
         .description(".")
         .defaultValue(ShapeMode.Both)
         .build()
     );
     private final Setting<SettingColor> redstoneLineColor = sgRender.add(new ColorSetting.Builder()
-        .name("Redstone Line Color")
+        .name("redstone-line-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 255))
         .build()
     );
     public final Setting<SettingColor> redstoneColor = sgRender.add(new ColorSetting.Builder()
-        .name("Redstone Side Color")
+        .name("redstone-side-color")
         .description(BlackOut.COLOR)
         .defaultValue(new SettingColor(255, 0, 0, 50))
         .build()

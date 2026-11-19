@@ -16,19 +16,19 @@ import net.minecraft.client.gui.screen.DeathScreen;
 
 public class Suicide extends BlackOutModule {
     public Suicide() {
-        super(BlackOut.BLACKOUT, "Suicide", "Kills yourself. Recommended.");
+        super(BlackOut.BLACKOUT, "suicide", "Kills yourself. Recommended.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<Boolean> disableDeath = sgGeneral.add(new BoolSetting.Builder()
-        .name("Disable On Death")
+        .name("disable-on-death")
         .description("Disables the module on death.")
         .defaultValue(true)
         .build()
     );
     public final Setting<Boolean> enableCA = sgGeneral.add(new BoolSetting.Builder()
-        .name("Enable Auto Crystal")
+        .name("enable-auto-crystal")
         .description("Enables auto crystal when enabled.")
         .defaultValue(true)
         .build()

@@ -31,7 +31,7 @@ import java.util.Objects;
 
 public class AutoMend extends BlackOutModule {
     public AutoMend() {
-        super(BlackOut.BLACKOUT, "Auto Mend", "Automatically mends your armor with experience bottles.");
+        super(BlackOut.BLACKOUT, "auto-mend", "Automatically mends your armor with experience bottles.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -40,13 +40,13 @@ public class AutoMend extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> antiCharity = sgGeneral.add(new BoolSetting.Builder()
-        .name("Anti Charity")
+        .name("anti-charity")
         .description("Doesn't mend if any enemy is at same position.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Double> speed = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Throw Speed")
+        .name("throw-speed")
         .description("How many bottles to throw every second. 20 is recommended.")
         .defaultValue(20)
         .min(0)
@@ -54,7 +54,7 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> bottles = sgGeneral.add(new IntSetting.Builder()
-        .name("Bottles")
+        .name("bottles")
         .description("Amount of bottles to throw every time.")
         .defaultValue(1)
         .min(0)
@@ -62,13 +62,13 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<SwitchMode> switchMode = sgGeneral.add(new EnumSetting.Builder<SwitchMode>()
-        .name("Switch Mode")
+        .name("switch-mode")
         .description("Method of switching. Silent is the most reliable.")
         .defaultValue(SwitchMode.Silent)
         .build()
     );
     private final Setting<Integer> minDur = sgGeneral.add(new IntSetting.Builder()
-        .name("Min Durability")
+        .name("min-durability")
         .description("Uses experience if any armor piece is under this durability.")
         .defaultValue(60)
         .range(0, 100)
@@ -76,7 +76,7 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> antiWaste = sgGeneral.add(new IntSetting.Builder()
-        .name("Anti Waste")
+        .name("anti-waste")
         .description("Doesn't use experience if any armor piece is above this durability.")
         .defaultValue(90)
         .range(0, 100)
@@ -84,7 +84,7 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> forceMend = sgGeneral.add(new IntSetting.Builder()
-        .name("Force Mend")
+        .name("force-mend")
         .description("Ignores anti waste if any armor piece if under this durability.")
         .defaultValue(30)
         .range(0, 100)
@@ -94,13 +94,13 @@ public class AutoMend extends BlackOutModule {
 
     //--------------------Pause--------------------//
     private final Setting<Boolean> autoCrystal = sgPause.add(new BoolSetting.Builder()
-        .name("Auto Crystal Pause")
+        .name("auto-crystal-pause")
         .description("Only throws bottles if auto crystal isn't placing.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> autoCrystalTicks = sgPause.add(new IntSetting.Builder()
-        .name("Auto Crystal Ticks")
+        .name("auto-crystal-ticks")
         .description("How many ticks to wait after auto crystal places.")
         .defaultValue(20)
         .min(0)
@@ -109,13 +109,13 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> surroundPause = sgPause.add(new BoolSetting.Builder()
-        .name("Surround Pause")
+        .name("surround-pause")
         .description("Only throws bottles if surround is not placing.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> surroundTicks = sgPause.add(new IntSetting.Builder()
-        .name("Surround Ticks")
+        .name("surround-ticks")
         .description("How many ticks to wait after surround places.")
         .defaultValue(20)
         .min(0)
@@ -124,13 +124,13 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> selfTrapPause = sgPause.add(new BoolSetting.Builder()
-        .name("Self Trap Pause")
+        .name("self-trap-pause")
         .description("Only throws bottles if self trap is not placing.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> selfTrapTicks = sgPause.add(new IntSetting.Builder()
-        .name("Self Trap Ticks")
+        .name("self-trap-ticks")
         .description("How many ticks to wait after self trap places.")
         .defaultValue(20)
         .min(0)
@@ -139,13 +139,13 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> movePause = sgPause.add(new BoolSetting.Builder()
-        .name("Move Pause")
+        .name("move-pause")
         .description("Only throws bottles if you aren't moving")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> moveTicks = sgPause.add(new IntSetting.Builder()
-        .name("Move Ticks")
+        .name("move-ticks")
         .description("How many ticks to wait after moving.")
         .defaultValue(20)
         .min(0)
@@ -154,13 +154,13 @@ public class AutoMend extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> offGroundPause = sgPause.add(new BoolSetting.Builder()
-        .name("Off Ground Pause")
+        .name("off-ground-pause")
         .description("Only throws bottles if not on ground.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> offGroundTicks = sgPause.add(new IntSetting.Builder()
-        .name("Off Ground Ticks")
+        .name("off-ground-ticks")
         .description("How many ticks to wait after being off ground.")
         .defaultValue(20)
         .min(0)
@@ -171,13 +171,13 @@ public class AutoMend extends BlackOutModule {
 
     //--------------------Render--------------------//
     private final Setting<Boolean> swing = sgRender.add(new BoolSetting.Builder()
-        .name("Swing")
+        .name("swing")
         .description("Renders swing animation when throwing an exp bottle.")
         .defaultValue(true)
         .build()
     );
     private final Setting<SwingHand> swingHand = sgRender.add(new EnumSetting.Builder<SwingHand>()
-        .name("Swing Hand")
+        .name("swing-hand")
         .description("Which hand should be swung.")
         .defaultValue(SwingHand.RealHand)
         .visible(swing::get)

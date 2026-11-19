@@ -14,13 +14,13 @@ import meteordevelopment.orbit.EventHandler;
 
 public class CustomFOV extends BlackOutModule {
     public CustomFOV() {
-        super(BlackOut.BLACKOUT, "Custom FOV", "Allows more customisation to the FOV.");
+        super(BlackOut.BLACKOUT, "custom-fov", "Allows more customisation to the FOV.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Integer> FOV = sgGeneral.add(new IntSetting.Builder()
-        .name("FOV")
+        .name("fov")
         .description("What the FOV should be.")
         .defaultValue(120)
         .range(0, 358)

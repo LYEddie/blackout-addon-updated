@@ -22,25 +22,25 @@ import java.util.List;
 
 public class StepPlus extends BlackOutModule {
     public StepPlus() {
-        super(BlackOut.BLACKOUT, "Step+", "Step but works.");
+        super(BlackOut.BLACKOUT, "step+", "Step but works.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     public final Setting<Boolean> slow = sgGeneral.add(new BoolSetting.Builder()
-        .name("Slow")
+        .name("slow")
         .description("Moves up slowly to prevent lagbacks.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Boolean> strict = sgGeneral.add(new BoolSetting.Builder()
-        .name("Strict")
+        .name("strict")
         .description("Strict 2b2tpvp step.")
         .defaultValue(false)
         .build()
     );
     public final Setting<Double> height = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Height")
+        .name("height")
         .description("Starts stepping if target block can be reached in x movement ticks.")
         .defaultValue(2.5)
         .min(0.6)
@@ -49,7 +49,7 @@ public class StepPlus extends BlackOutModule {
         .build()
     );
     public final Setting<Double> cooldown = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Cooldown")
+        .name("cooldown")
         .description("Waits x seconds between steps.")
         .defaultValue(0.25)
         .min(0)

@@ -23,7 +23,7 @@ import java.util.Random;
 
 public class AutoEz extends BlackOutModule {
     public AutoEz() {
-        super(BlackOut.BLACKOUT, "Auto EZ", "Sends message after enemy dies (too EZ nn's).");
+        super(BlackOut.BLACKOUT, "auto-ez", "Sends message after enemy dies (too EZ nn's).");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -32,7 +32,7 @@ public class AutoEz extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Double> range = sgGeneral.add(new DoubleSetting.Builder()
-        .name("Enemy Range")
+        .name("enemy-range")
         .description("Only send message if enemy died inside this range.")
         .defaultValue(25)
         .min(0)
@@ -40,7 +40,7 @@ public class AutoEz extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> tickDelay = sgGeneral.add(new IntSetting.Builder()
-        .name("Delay")
+        .name("delay")
         .description("How many ticks to wait between sending messages.")
         .defaultValue(50)
         .min(0)
@@ -50,19 +50,19 @@ public class AutoEz extends BlackOutModule {
 
     //--------------------Kill--------------------//
     private final Setting<Boolean> kill = sgKill.add(new BoolSetting.Builder()
-        .name("Kill")
+        .name("kill")
         .description("Should we send a message when enemy dies")
         .defaultValue(true)
         .build()
     );
     private final Setting<MessageMode> killMsgMode = sgKill.add(new EnumSetting.Builder<MessageMode>()
-        .name("Kill Message Mode")
+        .name("kill-message-mode")
         .description("What kind of messages to send.")
         .defaultValue(MessageMode.Blackout)
         .build()
     );
     private final Setting<List<String>> killMessages = sgKill.add(new StringListSetting.Builder()
-        .name("Kill Messages")
+        .name("kill-messages")
         .description("Messages to send when killing an enemy with blackout message mode on")
         .defaultValue(List.of("Fucked by BlackOut!", "BlackOut on top", "BlackOut strong", "BlackOut gayming"))
         .visible(() -> killMsgMode.get() == MessageMode.Blackout)
@@ -71,13 +71,13 @@ public class AutoEz extends BlackOutModule {
 
     //--------------------Pop--------------------//
     private final Setting<Boolean> pop = sgPop.add(new BoolSetting.Builder()
-        .name("Pop")
+        .name("pop")
         .description("Should we send a message when enemy pops a totem")
         .defaultValue(true)
         .build()
     );
     private final Setting<List<String>> popMessages = sgPop.add(new StringListSetting.Builder()
-        .name("Pop Messages")
+        .name("pop-messages")
         .description("Messages to send when popping an enemy")
         .defaultValue(List.of("I love it when you pop <NAME>", "Music to my ears <NAME>", "Pop pop pop wont stop till you drop <NAME>"))
         .build()

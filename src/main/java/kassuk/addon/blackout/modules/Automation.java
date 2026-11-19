@@ -19,13 +19,13 @@ import net.minecraft.util.math.BlockPos;
 
 public class Automation extends BlackOutModule {
     public Automation() {
-        super(BlackOut.BLACKOUT, "Automation", "Automatically enables modules in certain situations.");
+        super(BlackOut.BLACKOUT, "automation", "Automatically enables modules in certain situations.");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
     private final Setting<Boolean> holeSurround = sgGeneral.add(new BoolSetting.Builder()
-        .name("Hole Surround")
+        .name("hole-surround")
         .description("Enables surround when you enter a hole.")
         .defaultValue(true)
         .build()

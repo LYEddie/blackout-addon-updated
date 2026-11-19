@@ -46,7 +46,7 @@ import java.util.function.Predicate;
 
 public class AutoPvp extends BlackOutModule {
     public AutoPvp() {
-        super(BlackOut.BLACKOUT, "Auto CC", "Follows people using baritone. Best for crystalpvp.cc");
+        super(BlackOut.BLACKOUT, "auto-cc", "Follows people using baritone. Best for crystalpvp.cc");
     }
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -60,19 +60,19 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> autoMessage = sgGeneral.add(new BoolSetting.Builder()
-        .name("Auto Message")
+        .name("auto-message")
         .description("Sends 'On Spawn' message when you respawn.")
         .defaultValue(false)
         .build()
     );
     private final Setting<String> onSpawn = sgGeneral.add(new StringSetting.Builder()
-        .name("On Spawn")
+        .name("on-spawn")
         .description("What message should be sent on respawn.")
         .defaultValue("/kit Blizzard")
         .build()
     );
     private final Setting<Integer> spawnRadius = sgTarget.add(new IntSetting.Builder()
-        .name("Spawn Radius")
+        .name("spawn-radius")
         .description("How far away you have to be to return to spawn if there is no target.")
         .defaultValue(50)
         .min(0)
@@ -80,7 +80,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> baritone = sgGeneral.add(new BoolSetting.Builder()
-        .name("Baritone")
+        .name("baritone")
         .description("Moves using baritone. Should be true.")
         .defaultValue(true)
         .build()
@@ -88,13 +88,13 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------General--------------------//
     private final Setting<Boolean> surround = sgSurround.add(new BoolSetting.Builder()
-        .name("Surround")
+        .name("surround")
         .description("Surrounds near the target.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> surroundMove = sgSurround.add(new BoolSetting.Builder()
-        .name("Surround Move")
+        .name("surround-move")
         .description("Moves inside your surround to.")
         .defaultValue(false)
         .build()
@@ -102,13 +102,13 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------Target--------------------//
     private final Setting<Boolean> antiCamp = sgTarget.add(new BoolSetting.Builder()
-        .name("Anti Camp")
+        .name("anti-camp")
         .description("Enables surround when close to target.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> antiCampSeconds = sgTarget.add(new IntSetting.Builder()
-        .name("Anti Camp Time (s)")
+        .name("anti-camp-time-(s)")
         .description("How many seconds a player has to stand still to get ignored.")
         .defaultValue(30)
         .min(0)
@@ -116,13 +116,13 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> antiBurrow = sgTarget.add(new BoolSetting.Builder()
-        .name("Anti Burrow")
+        .name("anti-burrow")
         .description("Doesn't fight with players that are inside blocks.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> underY = sgTarget.add(new IntSetting.Builder()
-        .name("Under Y")
+        .name("under-y")
         .description("Target has to be under this y.")
         .defaultValue(500)
         .min(0)
@@ -130,7 +130,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> yDiff = sgTarget.add(new IntSetting.Builder()
-        .name("Y Difference")
+        .name("y-difference")
         .description("Doesn't target players.")
         .defaultValue(500)
         .min(0)
@@ -140,13 +140,13 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------Suicide--------------------//
     private final Setting<Boolean> suicide = sgSuicide.add(new BoolSetting.Builder()
-        .name("Suicide")
+        .name("suicide")
         .description("Enables suicide when running out of items.")
         .defaultValue(false)
         .build()
     );
     private final Setting<Integer> totemAmount = sgSuicide.add(new IntSetting.Builder()
-        .name("Totem Amount")
+        .name("totem-amount")
         .description("Suicides if there is under x amount of crystals in inventory.")
         .defaultValue(0)
         .min(0)
@@ -154,7 +154,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> crystalAmount = sgSuicide.add(new IntSetting.Builder()
-        .name("Crystal Amount")
+        .name("crystal-amount")
         .description("Suicides if there is under x amount of crystals in inventory.")
         .defaultValue(0)
         .min(0)
@@ -162,7 +162,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> gappleAmount = sgSuicide.add(new IntSetting.Builder()
-        .name("Gapple Amount")
+        .name("gapple-amount")
         .description("Suicides if there is under x amount of crystals in inventory.")
         .defaultValue(0)
         .min(0)
@@ -170,7 +170,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> expAmount = sgSuicide.add(new IntSetting.Builder()
-        .name("Exp Amount")
+        .name("exp-amount")
         .description("Suicides if there is under x amount of experience bottles in inventory.")
         .defaultValue(0)
         .min(0)
@@ -178,7 +178,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> obsidianAmount = sgSuicide.add(new IntSetting.Builder()
-        .name("Obsidian Amount")
+        .name("obsidian-amount")
         .description("Suicides if there is under x amount of obsidian in inventory.")
         .defaultValue(0)
         .min(0)
@@ -186,7 +186,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> eChests = sgSuicide.add(new BoolSetting.Builder()
-        .name("Count E-Chests")
+        .name("count-e-chests")
         .description("Counts ender chests as 8 obsidian.")
         .defaultValue(true)
         .build()
@@ -194,7 +194,7 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------Rotations--------------------//
     private final Setting<Boolean> rotate = sgRotations.add(new BoolSetting.Builder()
-        .name("Rotate")
+        .name("rotate")
         .description("Stares at target enemy.")
         .defaultValue(true)
         .build()
@@ -202,13 +202,13 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------Eating--------------------//
     private final Setting<Boolean> goldenApple = sgEating.add(new BoolSetting.Builder()
-        .name("Golden Apple")
+        .name("golden-apple")
         .description("Eats golden apples when hp is under 'Gapple Health'.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> gappleHealth = sgEating.add(new IntSetting.Builder()
-        .name("Gapple Health")
+        .name("gapple-health")
         .description("Check 'Golden Apple' description.")
         .defaultValue(35)
         .min(0)
@@ -216,13 +216,13 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> chorus = sgEating.add(new BoolSetting.Builder()
-        .name("Chorus")
+        .name("chorus")
         .description("Eats a chorus fruit when stuck.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> chorusHealth = sgEating.add(new IntSetting.Builder()
-        .name("Chorus Health")
+        .name("chorus-health")
         .description("Only eats chorus fruit if above x hp.")
         .defaultValue(14)
         .min(0)
@@ -230,7 +230,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Integer> stuckTicks = sgEating.add(new IntSetting.Builder()
-        .name("Stuck Ticks")
+        .name("stuck-ticks")
         .description("Eats a chorus apple after being stuck for x ticks.")
         .defaultValue(100)
         .min(0)
@@ -238,13 +238,13 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Boolean> speedPotion = sgEating.add(new BoolSetting.Builder()
-        .name("Speed Potion")
+        .name("speed-potion")
         .description("Drinks a speed potion.")
         .defaultValue(true)
         .build()
     );
     private final Setting<Integer> speedHealth = sgEating.add(new IntSetting.Builder()
-        .name("Speed Health")
+        .name("speed-health")
         .description("Only allows drinking potions when above x hp.")
         .defaultValue(20)
         .min(0)
@@ -254,13 +254,13 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------Baritone--------------------//
     private final Setting<Boolean> assumeStep = sgBaritone.add(new BoolSetting.Builder()
-        .name("Baritone Step")
+        .name("baritone-step")
         .description(desc)
         .defaultValue(true)
         .build()
     );
     private final Setting<Boolean> parkour = sgBaritone.add(new BoolSetting.Builder()
-        .name("Baritone Parkour")
+        .name("baritone-parkour")
         .description(desc)
         .defaultValue(true)
         .build()
@@ -268,7 +268,7 @@ public class AutoPvp extends BlackOutModule {
 
     //--------------------Raksutone--------------------//
     private final Setting<Double> stepCooldown = sgRaksu.add(new DoubleSetting.Builder()
-        .name("Step Cooldown")
+        .name("step-cooldown")
         .description("How many seconds to wait between steps.")
         .defaultValue(0.1)
         .min(0)
@@ -276,7 +276,7 @@ public class AutoPvp extends BlackOutModule {
         .build()
     );
     private final Setting<Double> rStepCooldown = sgRaksu.add(new DoubleSetting.Builder()
-        .name("Reverse Step Cooldown")
+        .name("reverse-step-cooldown")
         .description("How many seconds to wait between reverse steps.")
         .defaultValue(0.1)
         .min(0)

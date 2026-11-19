@@ -16,7 +16,7 @@ import net.minecraft.util.Hand;
 
 public class SwingModifier extends BlackOutModule {
     public SwingModifier() {
-        super(BlackOut.BLACKOUT, "Swing Modifier", "Modifies swing rendering.");
+        super(BlackOut.BLACKOUT, "swing-modifier", "Modifies swing rendering.");
     }
 
     private final SettingGroup sgMainHand = settings.createGroup("Main Hand");
@@ -24,7 +24,7 @@ public class SwingModifier extends BlackOutModule {
 
     //--------------------Main-Hand--------------------//
     private final Setting<Double> mSpeed = sgMainHand.add(new DoubleSetting.Builder()
-        .name("Main Speed")
+        .name("main-speed")
         .description("Speed of swinging.")
         .defaultValue(1)
         .min(0)
@@ -32,35 +32,35 @@ public class SwingModifier extends BlackOutModule {
         .build()
     );
     private final Setting<Double> mStart = sgMainHand.add(new DoubleSetting.Builder()
-        .name("Main Start Progress")
+        .name("main-start-progress")
         .description("Starts swing at this progress.")
         .defaultValue(0)
         .sliderMax(10)
         .build()
     );
     private final Setting<Double> mEnd = sgMainHand.add(new DoubleSetting.Builder()
-        .name("Main End Progress")
+        .name("main-end-progress")
         .description("Swings until reaching this progress.")
         .defaultValue(1)
         .sliderMax(10)
         .build()
     );
     private final Setting<Double> myStart = sgMainHand.add(new DoubleSetting.Builder()
-        .name("Main Start Y")
+        .name("main-start-y")
         .description("Hand Y value in the beginning.")
         .defaultValue(0)
         .sliderRange(-10, 10)
         .build()
     );
     private final Setting<Double> myEnd = sgMainHand.add(new DoubleSetting.Builder()
-        .name("Main End Y")
+        .name("main-end-y")
         .description("Hand Y value in the end.")
         .defaultValue(0)
         .sliderRange(-10, 10)
         .build()
     );
     private final Setting<Boolean> mReset = sgMainHand.add(new BoolSetting.Builder()
-        .name("Reset")
+        .name("reset")
         .description("Resets swing when swinging again.")
         .defaultValue(false)
         .build()
@@ -68,7 +68,7 @@ public class SwingModifier extends BlackOutModule {
 
     //--------------------Off-Hand--------------------//
     private final Setting<Double> oSpeed = sgOffHand.add(new DoubleSetting.Builder()
-        .name("Off Speed")
+        .name("off-speed")
         .description("Speed of swinging for offhand")
         .defaultValue(1)
         .min(0)
@@ -76,35 +76,35 @@ public class SwingModifier extends BlackOutModule {
         .build()
     );
     private final Setting<Double> oStart = sgOffHand.add(new DoubleSetting.Builder()
-        .name("Off Start Progress")
+        .name("off-start-progress")
         .description("Starts swing at this progress.")
         .defaultValue(0)
         .sliderMax(10)
         .build()
     );
     private final Setting<Double> oEnd = sgOffHand.add(new DoubleSetting.Builder()
-        .name("Off End Progress")
+        .name("off-end-progress")
         .description("Swings until reaching this progress.")
         .defaultValue(1)
         .sliderMax(10)
         .build()
     );
     private final Setting<Double> oyStart = sgOffHand.add(new DoubleSetting.Builder()
-        .name("Off Start Y")
+        .name("off-start-y")
         .description("Start Y value for offhand.")
         .defaultValue(0)
         .sliderRange(-10, 10)
         .build()
     );
     private final Setting<Double> oyEnd = sgOffHand.add(new DoubleSetting.Builder()
-        .name("Off End Y")
+        .name("off-end-y")
         .description("End Y value for offhand.")
         .defaultValue(0)
         .sliderRange(-10, 10)
         .build()
     );
     private final Setting<Boolean> oReset = sgOffHand.add(new BoolSetting.Builder()
-        .name("Reset")
+        .name("reset")
         .description("Resets swing when swinging again.")
         .defaultValue(false)
         .build()
