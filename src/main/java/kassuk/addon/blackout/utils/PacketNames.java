@@ -7,7 +7,6 @@
 package kassuk.addon.blackout.utils;
 
 import com.mojang.authlib.properties.Property;
-import kassuk.addon.blackout.mixins.accessor.NbtCompoundAccessor;
 import kassuk.addon.blackout.mixins.accessor.PlayerInteractEntityC2SPacketAccessor;
 import net.minecraft.advancement.AdvancementEntry;
 import net.minecraft.item.ItemStack;
@@ -86,14 +85,7 @@ public class PacketNames {
         });
         c2s(ButtonClickC2SPacket.class, "ButtonClick", packet -> "syncId: " + packet.syncId() + " buttonId: " + packet.buttonId());
         c2s(ChatMessageC2SPacket.class, "ChatMessage", packet -> "chatMessage: " + packet.chatMessage() + " timeStamp: " + packet.timestamp().toString() + " acknowledgementOffset: " + packet.acknowledgment().offset() + " signature: " + Objects.requireNonNull(packet.signature()) + " salt: " + packet.salt());
-        c2s(ClickSlotC2SPacket.class, "ClickSlot", packet -> {
-            StringBuilder builder = new StringBuilder("syncId: " + packet.getSyncId() + " slot: " + packet.getSlot() + " button: " + packet.getButton() + " action: " + packet.getActionType().name() + " revision: " + packet.getRevision());
-            builder.append(" modified: {");
-            packet.getModifiedStacks().forEach((i, stack) -> builder.append("\nslot ").append(i).append(": ").append(stack.getName().getString()).append(" ").append(stack.getCount()));
-            builder.append("\n} stack: ");
-            builder.append(packet.getStack().getName().getString()).append(" ").append(packet.getStack().getCount());
-            return builder.toString();
-        });
+        c2s(ClickSlotC2SPacket.class, "ClickSlot", Object::toString);
         c2s(ClientCommandC2SPacket.class, "ClientCommand", packet -> "entityId: " + packet.getEntityId() + " mountJumpTime: " + packet.getMountJumpHeight() + " mode: " + packet.getMode().name());
         c2s(ClientStatusC2SPacket.class, "ClientStatus", packet -> "mode: " + packet.getMode().name());
         c2s(CloseHandledScreenC2SPacket.class, "CloseHandledScreen", packet -> "syncId: " + packet.getSyncId());
@@ -103,7 +95,7 @@ public class PacketNames {
         c2s(HandSwingC2SPacket.class, "HandSwing", packet -> "hand: " + packet.getHand().name());
         c2s(JigsawGeneratingC2SPacket.class, "JigsawGenerating", packet -> "pos: " + packet.getPos().toShortString() + " maxDepth: " + packet.getMaxDepth() + " shouldKeepJigsaws: " + packet.shouldKeepJigsaws());
         c2s(MessageAcknowledgmentC2SPacket.class, "MessageAcknowledgment", packet -> "offset: " + packet.offset());
-        c2s(PlayerActionC2SPacket.class, "PlayerAction", packet -> "action: " + packet.getAction().name() + "pos: " + packet.getPos().toShortString() + " direction: " + packet.getDirection().getName() + " sequence: " + packet.getSequence());
+        c2s(PlayerActionC2SPacket.class, "PlayerAction", packet -> "action: " + packet.getAction().name() + "pos: " + packet.getPos().toShortString() + " direction: " + packet.getDirection().asString() + " sequence: " + packet.getSequence());
         c2s(PlayerInputC2SPacket.class, "PlayerInput", Object::toString);
         c2s(PlayerInteractBlockC2SPacket.class, "PlayerInteractBlock", packet -> "hand: " + packet.getHand().name() + " blockPos: " + packet.getBlockHitResult().getBlockPos().toShortString() + " pos: " + packet.getBlockHitResult().getPos().toString() + " side: " + packet.getBlockHitResult().getSide() + " isInsideBlock: " + packet.getBlockHitResult().isInsideBlock() + " type: " + packet.getBlockHitResult().getType().name() + " sequence: " + packet.getSequence());
         c2s(PlayerInteractEntityC2SPacket.class, "PlayerInteractEntity", packet -> "id: " + ((PlayerInteractEntityC2SPacketAccessor) packet).blackoutAddon$getId() + " type: " + ((PlayerInteractEntityC2SPacketAccessor) packet).blackoutAddon$getType().getType().name() + " isPlayerSneaking: " + packet.isPlayerSneaking());
@@ -247,7 +239,7 @@ public class PacketNames {
             builder.append(packet.getBlockEntityType().getRegistryEntry().getIdAsString());
             builder.append(" nbt: {");
             if (packet.getNbt() == null) builder.append("null");
-            else ((NbtCompoundAccessor) packet.getNbt()).blackoutAddon$getEntries().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.asString()));
+            else packet.getNbt().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.toString()));
             builder.append("\n}");
             return builder.toString();
         });
@@ -365,30 +357,12 @@ public class PacketNames {
         });
         s2c(EntityVelocityUpdateS2CPacket.class, "EntityVelocityUpdate", packet -> "entityId: " + packet.getEntityId() + " velocityX: " + packet.getVelocityX() + " velocityY: " + packet.getVelocityY() + " velocityZ: " + packet.getVelocityZ());
         s2c(ExperienceBarUpdateS2CPacket.class, "ExperienceBarUpdate", packet -> "experience: " + packet.getExperience() + " barProgress: " + packet.getBarProgress() + " experienceLevel: " + packet.getExperienceLevel());
-        s2c(ExperienceOrbSpawnS2CPacket.class, "ExperienceOrbSpawn", packet -> "entityId: " + packet.getEntityId() + " experience: " + packet.getExperience() + " x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ());
         s2c(ExplosionS2CPacket.class, "Explosion", Object::toString);
-        s2c(GameJoinS2CPacket.class, "GameJoin", packet -> {
-            StringBuilder builder = new StringBuilder("playerEntityId: " + packet.playerEntityId() + " maxPlayers: " + packet.maxPlayers() + " viewDistance: " + packet.viewDistance() + " simulationDistance: " + packet.simulationDistance() + " doLimitedCrafting: " + packet.doLimitedCrafting() + " enforcesSecureChat: " + packet.enforcesSecureChat() + " hardcore: " + packet.hardcore() + " showDeathScreen: " + packet.showDeathScreen() + " reducedDebugInfo: " + packet.reducedDebugInfo() + " commonPlayerSpawnInfoGameMode: " + packet.commonPlayerSpawnInfo().gameMode() + " commonPlayerSpawnInfoIsFlat: " + packet.commonPlayerSpawnInfo().isFlat() + " commonPlayerSpawnInfoPrevGameMode: " + packet.commonPlayerSpawnInfo().prevGameMode() + " commonPlayerSpawnInfoSeed: " + packet.commonPlayerSpawnInfo().seed() + " commonPlayerSpawnInfoPortalCooldown: " + packet.commonPlayerSpawnInfo().portalCooldown());
-            builder.append(" commonPlayerSpawnInfoDimension: ").append(packet.commonPlayerSpawnInfo().dimension().getValue().toString());
-            builder.append(" commonPlayerSpawnInfoDimensionType: ").append(packet.commonPlayerSpawnInfo().dimensionType().getIdAsString());
-            builder.append(" commonPlayerSpawnInfoLastDeathPos: ").append(packet.commonPlayerSpawnInfo().lastDeathLocation().isPresent() ? packet.commonPlayerSpawnInfo().lastDeathLocation().get().toString() : "null");
-            builder.append(" dimensionIds: {");
-            packet.dimensionIds().forEach(key -> builder.append("\n  ").append(key.getValue().toString()));
-            builder.append("\n}");
-            return builder.toString();
-        });
+        s2c(GameJoinS2CPacket.class, "GameJoin", Object::toString);
         s2c(GameMessageS2CPacket.class, "GameMessage", packet -> "content: " + packet.content().getString() + " overlay: " + packet.overlay());
         s2c(GameStateChangeS2CPacket.class, "GameStateChange", packet -> "value: " + packet.getValue());
         s2c(HealthUpdateS2CPacket.class, "HealthUpdate", packet -> "health: " + packet.getHealth() + " food: " + packet.getFood() + " saturation: " + packet.getSaturation());
-        s2c(InventoryS2CPacket.class, "Inventory", packet -> {
-            StringBuilder builder = new StringBuilder("syncId: " + packet.getSyncId() + " revision: " + packet.getRevision() + "cursorStackItem: " + packet.getCursorStack().getItem().getName().getString() + " cursorStackCount:" + packet.getCursorStack().getCount() + " contents: {");
-            for (int i = 0; i < packet.getContents().size(); i++) {
-                ItemStack stack = packet.getContents().get(i);
-                builder.append("\n  slot: ").append(i).append(" item: ").append(stack.getItem().getName().getString()).append(" count: ").append(stack.getCount());
-            }
-            builder.append("\n}");
-            return builder.toString();
-        });
+        s2c(InventoryS2CPacket.class, "Inventory", Object::toString);
         s2c(ItemPickupAnimationS2CPacket.class, "ItemPickupAnimation", packet -> "entityId: " + packet.getEntityId() + " collectorEntityId: " + packet.getCollectorEntityId() + " stackAmount: " + packet.getStackAmount());
         s2c(LightUpdateS2CPacket.class, "LightUpdate", packet -> "chunkX: " + packet.getChunkX() + " chunkZ: " + packet.getChunkZ() + " blockNibblesSize: " + packet.getData().getBlockNibbles().size() + " skyNibblesSize: " + packet.getData().getSkyNibbles().size());
         s2c(LookAtS2CPacket.class, "LookAt");
@@ -430,7 +404,7 @@ public class PacketNames {
             StringBuilder builder = new StringBuilder("transactionId: " + packet.getTransactionId());
             builder.append(" nbt: {");
             if (packet.getNbt() == null) builder.append("null");
-            else ((NbtCompoundAccessor) packet.getNbt()).blackoutAddon$getEntries().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.asString()));
+            else packet.getNbt().forEach((string, element) -> builder.append("\n  ").append(string).append(" ").append(element.toString()));
             builder.append("\n}");
             return builder.toString();
         });
@@ -460,7 +434,7 @@ public class PacketNames {
             builder.append("\n}");
             return builder.toString();
         });
-        s2c(PlayerRespawnS2CPacket.class, "PlayerRespawn", packet -> "flag: " + Integer.toBinaryString(packet.flag()) + " commonPlayerSpawnInfoGameMode: " + packet.commonPlayerSpawnInfo().gameMode() + " commonPlayerSpawnInfoIsFlat: " + packet.commonPlayerSpawnInfo().isFlat() + " commonPlayerSpawnInfoPrevGameMode: " + packet.commonPlayerSpawnInfo().prevGameMode() + " commonPlayerSpawnInfoSeed: " + packet.commonPlayerSpawnInfo().seed() + " commonPlayerSpawnInfoPortalCooldown: " + packet.commonPlayerSpawnInfo().portalCooldown() + " commonPlayerSpawnInfoDimension: " + packet.commonPlayerSpawnInfo().dimension().getValue().toString() + " commonPlayerSpawnInfoDimensionType: " + packet.commonPlayerSpawnInfo().dimensionType().getIdAsString() + " commonPlayerSpawnInfoLastDeathPos: " + (packet.commonPlayerSpawnInfo().lastDeathLocation().isPresent() ? packet.commonPlayerSpawnInfo().lastDeathLocation().get().toString() : "null"));
+        s2c(PlayerRespawnS2CPacket.class, "PlayerRespawn", Object::toString);
         s2c(PlayerSpawnPositionS2CPacket.class, "PlayerSpawnPosition", packet -> "pos: " + packet.getPos().toShortString() + " angle: " + packet.getAngle());
         s2c(PlaySoundFromEntityS2CPacket.class, "PlaySoundFromEntity", packet -> "entityId: " + packet.getEntityId() + " pitch: " + packet.getPitch() + " volume: " + packet.getVolume() + " seed: " + packet.getSeed() + " category: " + packet.getCategory().getName() + " sound: " + packet.getSound().getIdAsString());
         s2c(PlaySoundS2CPacket.class, "PlaySound", packet -> "x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ() + " pitch: " + packet.getPitch() + " volume: " + packet.getVolume() + " seed: " + packet.getSeed() + " category: " + packet.getCategory().getName() + " sound: " + packet.getSound().getIdAsString());
@@ -515,10 +489,10 @@ public class PacketNames {
             if (packet.getTeam().isPresent()) {
                 TeamS2CPacket.SerializableTeam v = packet.getTeam().get();
                 displayName = v.getDisplayName().getString();
-                collisionRule =  v.getCollisionRule();
+                collisionRule =  v.getCollisionRule().toString();
                 color = v.getColor().getName();
                 friendlyFlagsBitwise = String.valueOf(v.getFriendlyFlagsBitwise());
-                nameTagVisibilityRule = v.getNameTagVisibilityRule();
+                nameTagVisibilityRule = v.getNameTagVisibilityRule().toString();
                 prefix = v.getPrefix().getString();
                 suffix = v.getSuffix().getString();
             } else {

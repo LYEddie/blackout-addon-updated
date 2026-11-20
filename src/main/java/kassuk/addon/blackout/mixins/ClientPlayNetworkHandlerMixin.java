@@ -12,16 +12,16 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-    @Redirect(method = "onExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;playSound(DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FFZ)V"))
+    @Redirect(method = "onExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/world/ClientWorld;playSoundClient(DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FFZ)V"))
     private void redirect(ClientWorld instance, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch, boolean useDistance) {
         SoundModifier m = Modules.get().get(SoundModifier.class);
 
         if (m != null && m.isActive()) {
             if (m.expSound.get()) {
-                instance.playSound(x, y, z, sound, category, (float) (volume * m.explosionVolume.get()), (float) (pitch * m.explosionPitch.get()), useDistance);
+                instance.playSoundClient(x, y, z, sound, category, (float) (volume * m.explosionVolume.get()), (float) (pitch * m.explosionPitch.get()), useDistance);
             }
             return;
         }
-        instance.playSound(x, y, z, sound, category, volume, pitch, useDistance);
+        instance.playSoundClient(x, y, z, sound, category, volume, pitch, useDistance);
     }
 }

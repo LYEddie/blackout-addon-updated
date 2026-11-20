@@ -1,6 +1,7 @@
 package kassuk.addon.blackout.modules.impl;
 
 import kassuk.addon.blackout.BlackOut;
+import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.RotationType;
 import kassuk.addon.blackout.enums.SwingHand;
@@ -306,7 +307,7 @@ public class AutoMend extends BlackOutModule {
     private boolean shouldMend() {
         List<ItemStack> armors = new ArrayList<>();
 
-        for (int i = 0; i < 4; i++) armors.add(mc.player.getInventory().getArmorStack(i));
+        for (int i = 0; i < 4; i++) armors.add(OLEPOSSUtils.armorStack(mc.player, i));
 
         float max = -1;
         float lowest = 500;

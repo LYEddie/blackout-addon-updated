@@ -7,6 +7,8 @@ import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EquipmentSlot;
+import java.util.List;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,12 +26,22 @@ import static meteordevelopment.meteorclient.MeteorClient.mc;
  */
 
 public class OLEPOSSUtils {
+    private static final List<EquipmentSlot> ARMOR_SLOTS = List.of(
+        EquipmentSlot.FEET, EquipmentSlot.LEGS, EquipmentSlot.CHEST, EquipmentSlot.HEAD);
+
+    public static ItemStack armorStack(LivingEntity entity, int index) {
+        return entity.getEquippedStack(ARMOR_SLOTS.get(index));
+    }
+
+    public static List<ItemStack> armorItems(LivingEntity entity) {
+        return ARMOR_SLOTS.stream().map(entity::getEquippedStack).toList();
+    }
     public static Vec3d feet(Box box) {
         return new Vec3d((box.minX + box.maxX) / 2, box.minY, (box.minZ + box.maxZ) / 2);
     }
 
     public static boolean hasAquaAffinity(LivingEntity entity) {
-        for (ItemStack stack : entity.getArmorItems()) {
+        for (ItemStack stack : OLEPOSSUtils.armorItems(entity)) {
             if (hasEnchantment(Enchantments.AQUA_AFFINITY, stack)) return true;
         }
         return false;

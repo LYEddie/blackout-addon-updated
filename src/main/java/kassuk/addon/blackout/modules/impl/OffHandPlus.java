@@ -1,6 +1,7 @@
 package kassuk.addon.blackout.modules.impl;
 
 import kassuk.addon.blackout.BlackOut;
+import net.minecraft.registry.tag.ItemTags;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.managers.Managers;
 import kassuk.addon.blackout.utils.BOInvUtils;
@@ -159,7 +160,7 @@ public class OffHandPlus extends BlackOutModule {
     }
 
     private Item getItem() {
-        if (mc.player.getMainHandStack().getItem() instanceof SwordItem && (!safeSword.get() || !inDanger())) {
+        if (mc.player.getMainHandStack().isIn(ItemTags.SWORDS) && (!safeSword.get() || !inDanger())) {
             if (gapMode.get().sword) {
                 switch (swordMode.get()) {
                     case Always -> {

@@ -1,6 +1,7 @@
 package kassuk.addon.blackout.hud;
 
 import kassuk.addon.blackout.BlackOut;
+import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.RoundedRenderer2D;
 import com.mojang.blaze3d.systems.RenderSystem;
 import meteordevelopment.meteorclient.renderer.Renderer2D;
@@ -222,7 +223,7 @@ public class TargetHud extends HudElement {
         renderer.text(Math.round(renderPing) + "ms", 60, 30, textColor.get(), false, fontScale(0.5));
         String health = String.valueOf(Math.round(renderHealth * 10) / 10f);
         renderer.text(health, 20, 81 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
-        float barAnimation = MathHelper.lerp(mc.getRenderTickCounter().getTickDelta(true) / 10, lastHp, renderHealth);
+        float barAnimation = MathHelper.lerp(mc.getRenderTickCounter().getTickProgress(true) / 10, lastHp, renderHealth);
         double barStart = Math.max(renderer.textWidth(health, false, fontScale(0.5)), renderer.textWidth("36.0", false, fontScale(0.5))) + 28;
         if (barAnimation > 0) {
             RoundedRenderer2D.quadRounded(Renderer2D.COLOR, barStart - 3, 77,
@@ -267,7 +268,7 @@ public class TargetHud extends HudElement {
         }
         // DrawContext items follow the batched backgrounds and text.
         for (int i = 0; i < 4; i++) {
-            ItemStack item = target.getInventory().armor.get(i);
+            ItemStack item = OLEPOSSUtils.armorStack(target, i);
             int itemX = (int) (((3 - i) * 20 + 42) * 1.35f);
             renderer.post(() -> renderer.item(item, itemX, 34, 1.35f, false));
         }

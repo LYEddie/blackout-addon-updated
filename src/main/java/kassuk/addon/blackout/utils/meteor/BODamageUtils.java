@@ -149,7 +149,7 @@ public class BODamageUtils {
     }
 
     public static double applyProtection(LivingEntity entity, double damage, boolean explosions) {
-        int i = getProtectionAmount(entity.getArmorItems(), explosions);
+        int i = getProtectionAmount(OLEPOSSUtils.armorItems(entity), explosions);
         if (i > 0)
             damage *= (1 - MathHelper.clamp(i, 0f, 20f) / 25);
 

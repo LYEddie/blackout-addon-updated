@@ -1,6 +1,7 @@
 package kassuk.addon.blackout.hud;
 
 import kassuk.addon.blackout.BlackOut;
+import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.RoundedRenderer2D;
 import meteordevelopment.meteorclient.renderer.Renderer2D;
 import meteordevelopment.meteorclient.settings.*;
@@ -80,7 +81,7 @@ public class ArmorHudPlus extends HudElement {
                 bgColor.get(), rounding.get() * 0.14 * renderScale, true);
         }
         for (int i = 3; i >= 0; i--) {
-            ItemStack item = mc.player.getInventory().armor.get(i);
+            ItemStack item = OLEPOSSUtils.armorStack(mc.player, i);
             int itemX = (int) (x + (i * 20 + 12) * renderScale);
             int itemY = (int) (y + (durMode.get() == DurMode.Top ? 10 : 0) * renderScale);
             renderer.post(() -> renderer.item(item, itemX, itemY, (float) renderScale, false));

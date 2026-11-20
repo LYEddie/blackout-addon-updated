@@ -94,11 +94,12 @@ public class RoundedRenderer2D {
     public static void circlePart(Renderer2D mb, double x, double y, double r, double startAngle, double angle, Color color) {
         int cirDepth = getCirDepth(r, angle);
         double cirPart = angle / cirDepth;
+        mb.triangles.ensureCapacity(cirDepth + 2, cirDepth * 3);
         int center = mb.triangles.vec2(x, y).color(color).next();
         int prev = vecOnCircle(mb, x, y, r, startAngle, color);
         for (int i = 1; i < cirDepth + 1; i++) {
             int next = vecOnCircle(mb, x, y, r, startAngle + cirPart * i, color);
-            mb.triangles.quad(prev, center, next, next);
+            mb.triangles.triangle(prev, center, next);
             prev = next;
         }
     }
@@ -110,6 +111,7 @@ public class RoundedRenderer2D {
         }
         int cirDepth = getCirDepth(r, angle);
         double cirPart = angle / cirDepth;
+        mb.triangles.ensureCapacity((cirDepth + 1) * 2, cirDepth * 6);
         int innerPrev = vecOnCircle(mb, x, y, r - outlineWidth, startAngle, color);
         int outerPrev = vecOnCircle(mb, x, y, r, startAngle, color);
         for (int i = 1; i < cirDepth + 1; i++) {

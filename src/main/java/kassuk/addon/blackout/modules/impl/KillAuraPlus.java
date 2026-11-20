@@ -20,7 +20,7 @@ import meteordevelopment.orbit.EventHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.SwordItem;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
@@ -107,7 +107,7 @@ public class KillAuraPlus extends BlackOutModule {
         boolean switched = false;
         switch (switchMode.get()) {
             case Disabled ->
-                switched = !onlyWeapon.get() || mc.player.getMainHandStack().getItem() instanceof SwordItem || mc.player.getMainHandStack().getItem() instanceof AxeItem;
+                switched = !onlyWeapon.get() || mc.player.getMainHandStack().isIn(ItemTags.SWORDS) || mc.player.getMainHandStack().getItem() instanceof AxeItem;
             case Normal -> {
                 int slot = bestSlot(false);
                 if (slot >= 0) {
@@ -194,7 +194,7 @@ public class KillAuraPlus extends BlackOutModule {
         double dmg;
         for (int i = 0; i < (inventory ? mc.player.getInventory().size() + 1 : 9); i++) {
             ItemStack stack = mc.player.getInventory().getStack(i);
-            if (onlyWeapon.get() && !(stack.getItem() instanceof SwordItem) && !(stack.getItem() instanceof AxeItem)) {
+            if (onlyWeapon.get() && !(stack.isIn(ItemTags.SWORDS)) && !(stack.getItem() instanceof AxeItem)) {
                 continue;
             }
 

@@ -1,6 +1,7 @@
 package kassuk.addon.blackout.hud;
 
 import kassuk.addon.blackout.BlackOut;
+import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.hud.HudElement;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
@@ -89,7 +90,7 @@ public class GearHud extends HudElement {
         double rur = 0;
         if (mc.player != null) {
             for (int i = 0; i < 4; i++) {
-                rur += mc.player.getInventory().armor.get(i).getMaxDamage();
+                rur += OLEPOSSUtils.armorStack(mc.player, i).getMaxDamage();
             }
         }
         return rur;

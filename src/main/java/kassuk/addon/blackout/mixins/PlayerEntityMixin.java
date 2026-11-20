@@ -31,8 +31,8 @@ public abstract class PlayerEntityMixin {
         blackoutAddon$attackEntity = target;
     }
 
-    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/player/PlayerEntity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
-    private void modifyCrystalHitSound(World instance, PlayerEntity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/Entity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
+    private void modifyCrystalHitSound(World instance, Entity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
         SoundModifier m = Modules.get().get(SoundModifier.class);
 
         if ((Object) this == mc.player && blackoutAddon$attackEntity instanceof EndCrystalEntity && m != null && m.isActive()) {

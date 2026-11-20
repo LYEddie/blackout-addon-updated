@@ -87,8 +87,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     @Override
     public GlobalSettingsConfig fromTag(NbtCompound tag) {
         for (Section section : sections) {
-            if (tag.contains(key(section), NbtElement.COMPOUND_TYPE)) {
-                section.settings.fromTag(tag.getCompound(key(section)));
+            if (tag.getCompound(key(section)).isPresent()) {
+                section.settings.fromTag(tag.getCompoundOrEmpty(key(section)));
             }
         }
         return this;
@@ -109,11 +109,11 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             NbtCompound tag = NbtIo.read(legacy.toPath());
             if (tag == null) return;
             boolean migrated = false;
-            for (NbtElement element : tag.getList("modules", NbtElement.COMPOUND_TYPE)) {
-                NbtCompound module = (NbtCompound) element;
+            for (NbtElement element : tag.getListOrEmpty("modules")) {
+                if (!(element instanceof NbtCompound module)) continue;
                 for (Section section : sections) {
-                    if (module.getString("name").equalsIgnoreCase(section.name)) {
-                        section.settings.fromTag(module.getCompound("settings"));
+                    if (module.getString("name", "").equalsIgnoreCase(section.name)) {
+                        section.settings.fromTag(module.getCompoundOrEmpty("settings"));
                         migrated = true;
                     }
                 }
