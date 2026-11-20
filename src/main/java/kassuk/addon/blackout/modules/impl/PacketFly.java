@@ -12,7 +12,7 @@ import meteordevelopment.orbit.EventHandler;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
-import net.minecraft.entity.player.PlayerPosition;
+import net.minecraft.entity.EntityPosition;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.*;
@@ -265,7 +265,7 @@ public class PacketFly extends BlackOutModule {
 
             offset = offset.add(strictVertical.get() && yOffset != 0 ? 0 : x, yOffset, strictVertical.get() && yOffset != 0 ? 0 : z);
 
-            send(offset.add(mc.player.getPos()), getBounds(), getOnGround());
+            send(offset.add(mc.player.getEntityPos()), getBounds(), getOnGround());
 
             if (x == 0 && z == 0 && y == 0) {
                 break;
@@ -296,7 +296,7 @@ public class PacketFly extends BlackOutModule {
             if (debugID.get()) {
                 debug("id: " + packet.teleportId());
             }
-            Vec3d vec = PlayerPosition.apply(PlayerPosition.fromEntity(mc.player), packet.change(), packet.relatives()).position();
+            Vec3d vec = EntityPosition.apply(EntityPosition.fromEntity(mc.player), packet.change(), packet.relatives()).position();
 
             if (validPos.containsKey(packet.teleportId()) && validPos.get(packet.teleportId()).equals(vec)) {
                 if (debugID.get()) {

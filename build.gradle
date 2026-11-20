@@ -1,5 +1,5 @@
 plugins {
-    id "fabric-loom" version "1.10.5"
+    id "fabric-loom" version "1.14-SNAPSHOT"
 }
 
 java {
@@ -8,7 +8,7 @@ java {
     targetCompatibility = JavaVersion.VERSION_21
 }
 
-archivesBaseName = project.archives_base_name
+base { archivesName = project.archives_base_name }
 version = project.mod_version
 group = project.maven_group
 
@@ -43,8 +43,8 @@ dependencies {
 
     // Meteor
     modImplementation "meteordevelopment:meteor-client:${project.meteor_version}"
-    modImplementation "meteordevelopment:baritone:${project.minecraft_version}-SNAPSHOT"
-    baritoneBundle "meteordevelopment:baritone:${project.minecraft_version}-SNAPSHOT"
+    modImplementation "meteordevelopment:baritone:${project.baritone_version}"
+    baritoneBundle "meteordevelopment:baritone:${project.baritone_version}"
 
     // Loom removes nested-JAR declarations when remapping Baritone for development.
     // Use its bundled Pathfinder on the runtime classpath, including IntelliJ runs.

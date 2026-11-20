@@ -577,7 +577,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         Box pBB = mc.player.getBoundingBox();
         if (from == null) {
             from = mc.player.getEyePos();
-            Vec3d pPos = mc.player.getPos();
+            Vec3d pPos = mc.player.getEntityPos();
             switch (rangePlaceRangeFrom.get()) {
                 case Middle ->
                     ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
@@ -634,7 +634,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             switch (rangeAttackRangeFrom.get()) {
                 case Middle ->
                     ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
-                case Feet -> from = mc.player.getPos();
+                case Feet -> from = mc.player.getEntityPos();
             }
         } else {
             switch (rangeAttackRangeFrom.get()) {
@@ -737,7 +737,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
     public double rangeMiningRangeTo(BlockPos pos, Vec3d from) {
         Box pBB = mc.player.getBoundingBox();
-        Vec3d pPos = mc.player.getPos();
+        Vec3d pPos = mc.player.getEntityPos();
         if (from == null) {
             from = mc.player.getEyePos();
             switch (rangeMiningRangeFrom.get()) {

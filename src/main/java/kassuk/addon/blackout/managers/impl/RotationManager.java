@@ -72,7 +72,7 @@ public class RotationManager {
             onPreRotate();
 
             if (updateShouldRotate()) {
-                setEyePos(mc.player.getPos());
+                setEyePos(mc.player.getEntityPos());
                 updateNextRotation();
 
                 if (rotated) {
@@ -143,7 +143,7 @@ public class RotationManager {
             return packet;
         }
 
-        setEyePos(mc.player.getPos());
+        setEyePos(mc.player.getEntityPos());
         updateNextRotation();
 
         if (rotated) {
@@ -164,7 +164,7 @@ public class RotationManager {
             return packet;
         }
 
-        setEyePos(mc.player.getPos());
+        setEyePos(mc.player.getEntityPos());
         updateNextRotation();
 
         if (rotated) {

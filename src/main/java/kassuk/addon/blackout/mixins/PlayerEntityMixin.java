@@ -31,7 +31,7 @@ public abstract class PlayerEntityMixin {
         blackoutAddon$attackEntity = target;
     }
 
-    @Redirect(method = "attack", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/Entity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
+    @Redirect(method = "playAttackSound", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;playSound(Lnet/minecraft/entity/Entity;DDDLnet/minecraft/sound/SoundEvent;Lnet/minecraft/sound/SoundCategory;FF)V"))
     private void modifyCrystalHitSound(World instance, Entity except, double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
         SoundModifier m = Modules.get().get(SoundModifier.class);
 
@@ -42,6 +42,11 @@ public abstract class PlayerEntityMixin {
             return;
         }
         instance.playSound(except, x, y, z, sound, category, volume, pitch);
+    }
+
+    @Inject(method = "attack", at = @At("RETURN"))
+    private void blackoutAddon$clearAttackEntity(Entity target, CallbackInfo ci) {
+        blackoutAddon$attackEntity = null;
     }
 
     @Inject(method = "canChangeIntoPose", at = @At("RETURN"), cancellable = true)

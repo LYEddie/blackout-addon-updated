@@ -184,8 +184,8 @@ public class PacketNames {
         s2c(LoginHelloS2CPacket.class, "LoginHello", packet -> "serverId: " + packet.getServerId() + " nonce: " + byteArrToString(packet.getNonce()));
         s2c(LoginQueryRequestS2CPacket.class, "LoginQueryRequest", packet -> "queryId: " + packet.queryId() + " payloadId: " + packet.payload().id());
         s2c(LoginSuccessS2CPacket.class, "LoginSuccess", packet -> {
-            StringBuilder builder = new StringBuilder("name: " + packet.profile().getName() + " id: " + packet.profile().getId().toString() + " newNetworkState: " + packet.getPacketType().id().toString() + " properties: {");
-            packet.profile().getProperties().asMap().forEach((str, collection) -> {
+            StringBuilder builder = new StringBuilder("name: " + packet.profile().name() + " id: " + packet.profile().id().toString() + " newNetworkState: " + packet.getPacketType().id().toString() + " properties: {");
+            packet.profile().properties().asMap().forEach((str, collection) -> {
                 builder.append("\n").append(str);
                 for (Property v : collection) {
                     builder.append("\n  ").append(v.name()).append(" ").append(v.value()).append(" ").append(v.signature());
@@ -343,7 +343,7 @@ public class PacketNames {
         s2c(EntityPositionS2CPacket.class, "EntityPosition", Object::toString);
         s2c(EntityS2CPacket.class, "Entity", packet -> "deltaX: " + packet.getDeltaX() + " deltaY: " + packet.getDeltaY() + " deltaZ: " + packet.getDeltaZ() + " yaw: " + packet.getYaw() + " pitch: " + packet.getPitch() + " hasRotation: " + packet.hasRotation() + " isPositionChanged: " + packet.isPositionChanged() + " isOnGround: " + packet.isOnGround());
         s2c(EntitySetHeadYawS2CPacket.class, "EntitySetHeadYaw", packet -> "headYaw: " + packet.getHeadYaw());
-        s2c(EntitySpawnS2CPacket.class, "EntitySpawn", packet -> "entityId: " + packet.getEntityId() + " entityData: " + packet.getEntityData() + " entityType: " + packet.getEntityType().getName() + " uuid: " + packet.getUuid().toString() + " x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ() + " yaw: " + packet.getYaw() + " pitch: " + packet.getPitch() + " headYaw: " + packet.getHeadYaw() + " velocityX: " + packet.getVelocityX() + " velocityY: " + packet.getVelocityY() + " velocityZ: " + packet.getVelocityZ());
+        s2c(EntitySpawnS2CPacket.class, "EntitySpawn", packet -> "entityId: " + packet.getEntityId() + " entityData: " + packet.getEntityData() + " entityType: " + packet.getEntityType().getName() + " uuid: " + packet.getUuid().toString() + " x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ() + " yaw: " + packet.getYaw() + " pitch: " + packet.getPitch() + " headYaw: " + packet.getHeadYaw() + " velocityX: " + packet.getVelocity().x + " velocityY: " + packet.getVelocity().y + " velocityZ: " + packet.getVelocity().z);
         s2c(EntityStatusEffectS2CPacket.class, "EntityStatusEffect", packet -> {
             String effect = packet.getEffectId().getIdAsString();
             return "effectId: " + effect + " entityId: " + packet.getEntityId() + " amplifier: " + packet.getAmplifier() + " duration: " + packet.getDuration() + " isAmbient: " + packet.isAmbient() + " shouldShowIcon: " + packet.shouldShowIcon() + " shouldShowParticles: " + packet.shouldShowParticles();
@@ -355,7 +355,7 @@ public class PacketNames {
             builder.append("\n}");
             return builder.toString();
         });
-        s2c(EntityVelocityUpdateS2CPacket.class, "EntityVelocityUpdate", packet -> "entityId: " + packet.getEntityId() + " velocityX: " + packet.getVelocityX() + " velocityY: " + packet.getVelocityY() + " velocityZ: " + packet.getVelocityZ());
+        s2c(EntityVelocityUpdateS2CPacket.class, "EntityVelocityUpdate", packet -> "entityId: " + packet.getEntityId() + " velocityX: " + packet.getVelocity().x + " velocityY: " + packet.getVelocity().y + " velocityZ: " + packet.getVelocity().z);
         s2c(ExperienceBarUpdateS2CPacket.class, "ExperienceBarUpdate", packet -> "experience: " + packet.getExperience() + " barProgress: " + packet.getBarProgress() + " experienceLevel: " + packet.getExperienceLevel());
         s2c(ExplosionS2CPacket.class, "Explosion", Object::toString);
         s2c(GameJoinS2CPacket.class, "GameJoin", Object::toString);
@@ -408,7 +408,7 @@ public class PacketNames {
             builder.append("\n}");
             return builder.toString();
         });
-        s2c(OpenHorseScreenS2CPacket.class, "OpenHorseScreen", packet -> "syncId: " + packet.getSyncId() + " horseId: " + packet.getHorseId() + " slotColumnCount: " + packet.getSlotColumnCount());
+        s2c(OpenMountScreenS2CPacket.class, "OpenMountScreen", packet -> "syncId: " + packet.getSyncId() + " mountId: " + packet.getMountId() + " slotColumnCount: " + packet.getSlotColumnCount());
         s2c(OpenScreenS2CPacket.class, "OpenScreen", packet -> "name: " + packet.getName().getString() + " syncId: " + packet.getSyncId() + " screenHandlerType: " + packet.getScreenHandlerType());
         s2c(OpenWrittenBookS2CPacket.class, "OpenWrittenBook", packet -> "hand: " + packet.getHand().name());
         s2c(OverlayMessageS2CPacket.class, "OverlayMessage", packet -> "text: " + packet.text().getString());
@@ -419,9 +419,9 @@ public class PacketNames {
         s2c(PlayerListS2CPacket.class, "PlayerList", packet -> {
             StringBuilder builder = new StringBuilder("entries: {");
 
-            packet.getEntries().forEach(entry -> builder.append("\n  displayName: ").append(entry.displayName()).append(" profileId: ").append(entry.profileId()).append(" gameProfileName: ").append(entry.profile() == null ? "null" : entry.profile().getName()).append(" gameProfileId: ").append(entry.profile() == null ? "null" : entry.profile().getId()).append(" listed: ").append(entry.listed()).append(" gameMode: ").append(entry.gameMode()).append(" latency: ").append(entry.latency()).append(" chatSessionId: ").append(entry.chatSession() == null ? "null" : entry.chatSession().sessionId().toString()).append(" isExpired: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().isExpired()).append(" expiresAt: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().expiresAt().toString()).append(" keySignature: ").append(entry.chatSession() == null ? "null" : byteArrToString(entry.chatSession().publicKeyData().keySignature())));
+            packet.getEntries().forEach(entry -> builder.append("\n  displayName: ").append(entry.displayName()).append(" profileId: ").append(entry.profileId()).append(" gameProfileName: ").append(entry.profile() == null ? "null" : entry.profile().name()).append(" gameProfileId: ").append(entry.profile() == null ? "null" : entry.profile().id()).append(" listed: ").append(entry.listed()).append(" gameMode: ").append(entry.gameMode()).append(" latency: ").append(entry.latency()).append(" chatSessionId: ").append(entry.chatSession() == null ? "null" : entry.chatSession().sessionId().toString()).append(" isExpired: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().isExpired()).append(" expiresAt: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().expiresAt().toString()).append(" keySignature: ").append(entry.chatSession() == null ? "null" : byteArrToString(entry.chatSession().publicKeyData().keySignature())));
             builder.append("\n} playerAdditionEntries: {");
-            packet.getPlayerAdditionEntries().forEach(entry -> builder.append("\n  displayName: ").append(entry.displayName()).append(" profileId: ").append(entry.profileId()).append(" gameProfileName: ").append(entry.profile() == null ? "null" : entry.profile().getName()).append(" gameProfileId: ").append(entry.profile() == null ? "null" : entry.profile().getId()).append(" listed: ").append(entry.listed()).append(" gameMode: ").append(entry.gameMode()).append(" latency: ").append(entry.latency()).append(" chatSessionId: ").append(entry.chatSession() == null ? "null" : entry.chatSession().sessionId().toString()).append(" isExpired: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().isExpired()).append(" expiresAt: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().expiresAt().toString()).append(" keySignature: ").append(entry.chatSession() == null ? "null" : byteArrToString(entry.chatSession().publicKeyData().keySignature())));
+            packet.getPlayerAdditionEntries().forEach(entry -> builder.append("\n  displayName: ").append(entry.displayName()).append(" profileId: ").append(entry.profileId()).append(" gameProfileName: ").append(entry.profile() == null ? "null" : entry.profile().name()).append(" gameProfileId: ").append(entry.profile() == null ? "null" : entry.profile().id()).append(" listed: ").append(entry.listed()).append(" gameMode: ").append(entry.gameMode()).append(" latency: ").append(entry.latency()).append(" chatSessionId: ").append(entry.chatSession() == null ? "null" : entry.chatSession().sessionId().toString()).append(" isExpired: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().isExpired()).append(" expiresAt: ").append(entry.chatSession() == null ? "null" : entry.chatSession().publicKeyData().expiresAt().toString()).append(" keySignature: ").append(entry.chatSession() == null ? "null" : byteArrToString(entry.chatSession().publicKeyData().keySignature())));
             builder.append("\n} actions: {");
             packet.getActions().forEach(action -> builder.append("\n  ").append(action.name()));
             builder.append("\n}");
@@ -435,7 +435,7 @@ public class PacketNames {
             return builder.toString();
         });
         s2c(PlayerRespawnS2CPacket.class, "PlayerRespawn", Object::toString);
-        s2c(PlayerSpawnPositionS2CPacket.class, "PlayerSpawnPosition", packet -> "pos: " + packet.getPos().toShortString() + " angle: " + packet.getAngle());
+        s2c(PlayerSpawnPositionS2CPacket.class, "PlayerSpawnPosition", Object::toString);
         s2c(PlaySoundFromEntityS2CPacket.class, "PlaySoundFromEntity", packet -> "entityId: " + packet.getEntityId() + " pitch: " + packet.getPitch() + " volume: " + packet.getVolume() + " seed: " + packet.getSeed() + " category: " + packet.getCategory().getName() + " sound: " + packet.getSound().getIdAsString());
         s2c(PlaySoundS2CPacket.class, "PlaySound", packet -> "x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ() + " pitch: " + packet.getPitch() + " volume: " + packet.getVolume() + " seed: " + packet.getSeed() + " category: " + packet.getCategory().getName() + " sound: " + packet.getSound().getIdAsString());
         s2c(ProfilelessChatMessageS2CPacket.class, "ProfilelessChatMessage", packet -> "message: " + packet.message() + " chatTypeName: " + packet.chatType().name() + " chatTypeTargetName: " + packet.chatType().targetName().orElse(Text.of("null")).getString() + " chatTypeType: " + packet.chatType().type().getIdAsString());
@@ -558,7 +558,7 @@ public class PacketNames {
                 ServerMetadata.Players players = v2.get();
 
                 builder.append(" maxPlayers: ").append(players.max()).append(" online: ").append(players.online()).append(" players: {");
-                players.sample().forEach(profile -> builder.append("\n  profileName: ").append(profile.getName()).append(" profileId: ").append(profile.getId().toString()).append(" propertiesSize: ").append(profile.getProperties().size()));
+                players.sample().forEach(profile -> builder.append("\n  profileName: ").append(profile.name()).append(" profileId: ").append(profile.id().toString()));
             } else {
                 builder.append(" maxPlayers: null online: null players: {");
             }
