@@ -1,13 +1,14 @@
 package kassuk.addon.blackout.hud;
 
 import kassuk.addon.blackout.BlackOut;
-import kassuk.addon.blackout.utils.RenderUtils;
+import kassuk.addon.blackout.utils.RoundedRenderer2D;
+import meteordevelopment.meteorclient.renderer.Renderer2D;
 import meteordevelopment.meteorclient.settings.*;
+import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudElement;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
@@ -69,41 +70,31 @@ public class ArmorHudPlus extends HudElement {
 
     @Override
     public void render(HudRenderer renderer) {
-        if (mc.player == null) {return;}
-
-        setSize(100 * scale.get() * 2, 28 * scale.get() * 2);
-        MatrixStack stack = new MatrixStack();
-
-        stack.translate(x, y, 0);
-        stack.scale((float)(scale.get() * 2), (float)(scale.get() * 2), 1);
+        if (mc.player == null) return;
+        double renderScale = scale.get() * 2;
+        setSize(100 * renderScale, 28 * renderScale);
+        if (renderScale <= 0) return;
 
         if (bg.get()) {
-            RenderUtils.rounded(stack, rounding.get() * 0.14f, rounding.get() * 0.14f, 100 - rounding.get() * 0.28f, 28 - rounding.get() * 0.28f, rounding.get() * 0.14f, 10, bgColor.get().getPacked());
+            RoundedRenderer2D.quadRounded(Renderer2D.COLOR, x, y, getWidth(), getHeight(),
+                bgColor.get(), rounding.get() * 0.14 * renderScale, true);
         }
-
-        MatrixStack drawStack = renderer.drawContext.getMatrices();
-        drawStack.push();
-
-        drawStack.translate(x, y, 0);
-        drawStack.scale((float)(scale.get() * 2), (float)(scale.get() * 2), 1);
-
         for (int i = 3; i >= 0; i--) {
-            ItemStack itemStack = mc.player.getInventory().armor.get(i);
-
-            renderer.drawContext.drawItem(itemStack, i * 20 + 12, durMode.get() == DurMode.Top ? 10 : 0);
-
-            if (itemStack.isEmpty()) {continue;}
-
-            centeredText(stack,
-                String.valueOf(Math.round(100 - (float) itemStack.getDamage() / itemStack.getMaxDamage() * 100f)),
-                i * 20 + 20, durMode.get() == DurMode.Top ? 3 : 17, durColor.get().getPacked());
+            ItemStack item = mc.player.getInventory().armor.get(i);
+            int itemX = (int) (x + (i * 20 + 12) * renderScale);
+            int itemY = (int) (y + (durMode.get() == DurMode.Top ? 10 : 0) * renderScale);
+            renderer.post(() -> renderer.item(item, itemX, itemY, (float) renderScale, false));
+            if (item.isEmpty()) continue;
+            String durability = String.valueOf(Math.round(100 - (float) item.getDamage() / item.getMaxDamage() * 100f));
+            double vanillaScale = renderScale / 2;
+            double textScale = Hud.get().hasCustomFont() ? Math.sqrt(vanillaScale) : vanillaScale;
+            renderer.text(durability,
+                x + (i * 20 + 20) * renderScale - renderer.textWidth(durability, false, textScale) / 2,
+                y + (durMode.get() == DurMode.Top ? 3 : 17) * renderScale,
+                durColor.get(), false, textScale);
         }
-        drawStack.pop();
     }
 
-    private void centeredText(MatrixStack stack, String text, int x, int y, int color) {
-        RenderUtils.text(text, stack, x - mc.textRenderer.getWidth(text) / 2f, y, color);
-    }
 
     public enum DurMode {
         Top, // 3, 10

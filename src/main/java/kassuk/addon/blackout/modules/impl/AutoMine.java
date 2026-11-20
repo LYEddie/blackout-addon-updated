@@ -6,7 +6,7 @@ import kassuk.addon.blackout.enums.RotationType;
 import kassuk.addon.blackout.enums.SwingHand;
 import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
-import kassuk.addon.blackout.utils.globalsettings.SwingSettings;
+import kassuk.addon.blackout.utils.meteor.GlobalSettingsConfig;
 import kassuk.addon.blackout.managers.Managers;
 import kassuk.addon.blackout.utils.BOInvUtils;
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
@@ -534,7 +534,7 @@ public class AutoMine extends BlackOutModule {
 
                 sendSequenced(s -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, target.pos, dir == null ? Direction.UP : dir, s));
 
-                SettingUtils.mineSwing(SwingSettings.MiningSwingState.Start);
+                SettingUtils.mineSwing(GlobalSettingsConfig.MiningSwingState.Start);
 
                 mined = false;
                 if (mineStartSwing.get()) clientSwing(mineHand.get(), Hand.MAIN_HAND);
@@ -606,7 +606,7 @@ public class AutoMine extends BlackOutModule {
         sendSequenced(s -> new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK, target.pos, dir, s));
 
         mined = true;
-        SettingUtils.mineSwing(SwingSettings.MiningSwingState.End);
+        SettingUtils.mineSwing(GlobalSettingsConfig.MiningSwingState.End);
         if (mineEndSwing.get()) clientSwing(mineHand.get(), Hand.MAIN_HAND);
 
         if (target.civ) {

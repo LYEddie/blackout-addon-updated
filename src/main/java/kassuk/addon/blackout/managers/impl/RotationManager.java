@@ -3,7 +3,7 @@ package kassuk.addon.blackout.managers.impl;
 import kassuk.addon.blackout.enums.RotationType;
 import kassuk.addon.blackout.events.PreRotationEvent;
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.utils.globalsettings.RotationSettings;
+import kassuk.addon.blackout.utils.meteor.GlobalSettingsConfig;
 import kassuk.addon.blackout.utils.NCPRaytracer;
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.RotationUtils;
@@ -13,7 +13,6 @@ import meteordevelopment.meteorclient.events.entity.player.SendMovementPacketsEv
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
@@ -39,7 +38,7 @@ public class RotationManager {
     public final float[] lastDir = new float[2];
 
     private double priority = 1000;
-    private RotationSettings settings = null;
+    private GlobalSettingsConfig settings = null;
     private boolean unsent = false;
     public static final List<Rotation> history = new ArrayList<>();
     boolean shouldRotate = false;
@@ -86,7 +85,7 @@ public class RotationManager {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onRender(Render3DEvent event) {
         if (mc.player == null) return;
-        if (settings == null) settings = Modules.get().get(RotationSettings.class);
+        if (settings == null) settings = GlobalSettingsConfig.get();
 
         timer -= event.frameTime;
         if (timer > 0 && target != null && lastDir != null) {
@@ -187,9 +186,9 @@ public class RotationManager {
         if (shouldRotate) {
             if (target instanceof BoxTarget) {
                 ((BoxTarget) target).vec = getTargetPos();
-                next = new float[]{RotationUtils.nextYaw(lastDir[0], RotationUtils.getYaw(eyePos, ((BoxTarget) target).vec), settings.yawStep(((BoxTarget) target).type)), RotationUtils.nextPitch(lastDir[1], RotationUtils.getPitch(eyePos, ((BoxTarget) target).vec), settings.pitchStep(((BoxTarget) target).type))};
+                next = new float[]{RotationUtils.nextYaw(lastDir[0], RotationUtils.getYaw(eyePos, ((BoxTarget) target).vec), settings.rotationYawStep(((BoxTarget) target).type)), RotationUtils.nextPitch(lastDir[1], RotationUtils.getPitch(eyePos, ((BoxTarget) target).vec), settings.rotationPitchStep(((BoxTarget) target).type))};
             } else {
-                next = new float[]{RotationUtils.nextYaw(lastDir[0], ((AngleTarget) target).yaw, settings.yawStep(((AngleTarget) target).type)), RotationUtils.nextPitch(lastDir[1], ((AngleTarget) target).pitch, settings.pitchStep(((AngleTarget) target).type))};
+                next = new float[]{RotationUtils.nextYaw(lastDir[0], ((AngleTarget) target).yaw, settings.rotationYawStep(((AngleTarget) target).type)), RotationUtils.nextPitch(lastDir[1], ((AngleTarget) target).pitch, settings.rotationPitchStep(((AngleTarget) target).type))};
             }
 
             rotated = Math.abs(RotationUtils.yawAngle(next[0], lastDir[0])) > 0 || Math.abs(next[1] - lastDir[1]) > 0;
@@ -253,7 +252,7 @@ public class RotationManager {
             priority = p;
 
             target = new AngleTarget(yaw, pitch, type);
-            timer = settings.time(type);
+            timer = settings.rotationTime(type);
         }
 
         return lastDir[0] == yaw && lastDir[1] == pitch;
@@ -273,7 +272,7 @@ public class RotationManager {
 
             this.key = key;
             target = pos != null ? new BoxTarget(pos, vec != null ? vec : OLEPOSSUtils.getMiddle(box), p, type) : new BoxTarget(box, vec != null ? vec : OLEPOSSUtils.getMiddle(box), p, type);
-            timer = settings.time(type);
+            timer = settings.rotationTime(type);
         }
 
         return alreadyRotated;
@@ -312,7 +311,7 @@ public class RotationManager {
     public Vec3d getTargetPos() {
         BoxTarget t = (BoxTarget) target;
 
-        if (settings.mode(t.type) != RotationSettings.RotationCheckMode.StrictRaytrace ||
+        if (settings.rotationMode(t.type) != GlobalSettingsConfig.RotationCheckMode.StrictRaytrace ||
             NCPRaytracer.raytrace(mc.player.getEyePos(), t.targetVec, t.box)) {
             return new Vec3d(MathHelper.clamp(t.targetVec.x + (Math.random() - 0.5) * 0.05, t.box.minX, t.box.maxX), MathHelper.clamp(t.targetVec.y + (Math.random() - 0.5) * 0.05, t.box.minY, t.box.maxY), MathHelper.clamp(t.targetVec.z + (Math.random() - 0.5) * 0.05, t.box.minZ, t.box.maxZ));
         }

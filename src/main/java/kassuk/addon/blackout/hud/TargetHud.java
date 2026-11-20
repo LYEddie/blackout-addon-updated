@@ -1,12 +1,16 @@
 package kassuk.addon.blackout.hud;
 
 import kassuk.addon.blackout.BlackOut;
-import kassuk.addon.blackout.utils.RenderUtils;
+import kassuk.addon.blackout.utils.RoundedRenderer2D;
+import com.mojang.blaze3d.systems.RenderSystem;
+import meteordevelopment.meteorclient.renderer.Renderer2D;
+import net.minecraft.client.gui.DrawContext;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.friends.Friends;
+import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudElement;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
@@ -16,14 +20,12 @@ import meteordevelopment.orbit.EventHandler;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
 
 import java.util.*;
 
@@ -169,194 +171,126 @@ public class TargetHud extends HudElement {
 
     @Override
     public void render(HudRenderer renderer) {
-        if (mode.get() == Mode.Blackout) {
-            int height = 100;
-            int width = 200;
+        boolean blackout = mode.get() == Mode.Blackout;
+        int width = blackout ? 200 : mode.get() == Mode.ExhibitionOld ? 240 : 190;
+        int height = blackout ? 100 : 60;
+        setSize(width * scale.get(), height * scale.get());
+        updateTarget();
+        if (renderName == null || mc.player == null || scale.get() <= 0 || (!blackout && target == null)) return;
 
-            setSize(width * scale.get(), height * scale.get());
-
-            updateTarget();
-            if (renderName == null) {
-                return;
-            }
-
-            MatrixStack stack = new MatrixStack();
-
+        double animation = 1;
+        float tilt = 0;
+        if (blackout) {
             scaleProgress = MathHelper.clamp(scaleProgress + (target == null ? -renderer.delta : renderer.delta), 0, 1);
-
-            float scaleAnimation = (float) (scaleProgress * scaleProgress * scaleProgress);
-
-            stack.translate(x + (1 - scaleAnimation) * getWidth() / 2f, y + (1 - scaleAnimation) * getHeight() / 2f, 0);
-            stack.scale((float) (scaleAnimation * scale.get()), (float) (scaleAnimation * scale.get()), 1);
-
-            // Damage tilt
-            float tilt = (float) (Math.max(0, 500 - System.currentTimeMillis() + damageTime) / 500f * damageTilt.get());
-            stack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees((tilt)));
-
-            // Background
-            RenderUtils.rounded(stack, 15, 15, width - 30, height - 30, 15, 10, bgColor.get().getPacked());
-
-            // Face
-            drawFace(renderer, scaleAnimation * scale.get().floatValue(), x + (1 - scaleAnimation) * getWidth() / 2f, y + (1 - scaleAnimation) * getHeight() / 2f, tilt);
-
-            // Name
-            RenderUtils.text(renderName, stack, 60, 20, textColor.get().getPacked());
-
-            // Ping
-            RenderUtils.text(Math.round(renderPing) + "ms", stack, 60, 30, textColor.get().getPacked());
-
-            // Health
-            RenderUtils.text(String.valueOf(Math.round((renderHealth) * 10) / 10f), stack, 20, 81 - mc.textRenderer.fontHeight / 2f, textColor.get().getPacked());
-
-            float barAnimation = MathHelper.lerp(mc.getRenderTickCounter().getTickDelta(true) / 10, lastHp, renderHealth);
-
-            float barStart = Math.max(mc.textRenderer.getWidth(String.valueOf(Math.round((renderHealth) * 10) / 10f)),
-                mc.textRenderer.getWidth("36.0")) + 28;
-
-            // Health Bar
-            if (barAnimation > 0) {
-                RenderUtils.rounded(stack, barStart, 80, MathHelper.clamp(barAnimation / 20, 0, 1) * (width - 30 - barStart), 2, 3, 10, healthColor.get().getPacked());
-            }
-            if (barAnimation > 20) {
-                RenderUtils.rounded(stack, barStart, 80, MathHelper.clamp((barAnimation - 20) / 16, 0, 1) * (width - 30 - barStart), 2, 3, 10, absorptionColor.get().getPacked());
-            }
+            animation = scaleProgress * scaleProgress * scaleProgress;
+            tilt = (float) (Math.max(0, 500 - System.currentTimeMillis() + damageTime) / 500f * damageTilt.get());
         }
-        if (mode.get() == Mode.ExhibitionOld) {
-            int height = 60;
-            int width = 240;
-            setSize(width * scale.get(), height * scale.get());
+        if (animation <= 0) return;
 
-            updateTarget();
-            MatrixStack stack = new MatrixStack();
-
-            if (target == null || renderName == null) {
-                return;
+        // Flush HUD batches at transform boundaries to isolate this element's animation.
+        DrawContext context = renderer.drawContext;
+        renderer.end();
+        context.draw();
+        var matrices = RenderSystem.getModelViewStack();
+        matrices.pushMatrix();
+        matrices.translate((float) (x + (1 - animation) * getWidth() / 2),
+            (float) (y + (1 - animation) * getHeight() / 2), 0);
+        matrices.scale((float) (animation * scale.get()), (float) (animation * scale.get()), 1);
+        matrices.rotateZ((float) Math.toRadians(tilt));
+        RenderSystem.applyModelViewMatrix();
+        renderer.begin(context);
+        try {
+            switch (mode.get()) {
+                case Blackout -> renderBlackout(renderer, width, height);
+                case ExhibitionOld -> renderExhibitionOld(renderer, width, height);
+                case Exhibition -> renderExhibition(renderer, width, height);
             }
-
-            stack.translate(x, y, 0);
-            stack.scale((float) (scale.get() * 1f), (float) (scale.get() * 1f), 1);
-
-
-            // Background
-            RenderUtils.quad(stack, 0, 0, width, height, bgColor.get().getPacked());
-
-            // Face
-            RenderUtils.quad(stack, 1, 1, 58, 58, new Color(102, 102, 102, 255).getPacked());
-
-            drawFace(renderer, scale.get().floatValue(), x, y, 0);
-
-            // Name
-            stack.scale(2.0f,2.0f,1);
-            RenderUtils.text(renderName, stack, 33, 2, textColor.get().getPacked());
-
-            // Health
-            stack.scale(0.5f,0.5f,1);
-            RenderUtils.text(Math.round((renderHealth) * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f, stack, 66, 35 - mc.textRenderer.fontHeight / 2f, textColor.get().getPacked());
-
-            // Bar
-            stack.scale(2, 2, 1);
-
-            int progress = (int) (Math.ceil(MathHelper.clamp(renderHealth, 0, 20)));
-
-            for (int i = 0; i < 10; i++) {
-                RenderUtils.quad(stack, 33 + i * 8, 11, 3 * Math.min(progress, 2), 3, new Color(204, 204, 0, 255).getPacked());
-                progress -= 2;
-
-                if (progress <= 0) {
-                    break;
-                }
+        } finally {
+            try {
+                renderer.end();
+                context.draw();
+            } finally {
+                matrices.popMatrix();
+                RenderSystem.applyModelViewMatrix();
+                renderer.begin(context);
             }
-
-            stack.scale(0.5f,0.5f,1);
-            // Misc info
-            RenderUtils.text("Yaw: " + Math.round((target.getYaw()) * 10) / 10f + " Pitch: " + Math.round(target.getPitch() * 10) / 10f + " BodyYaw: " + Math.round((target.getBodyYaw()) * 10) / 10f , stack, 66, 45 - mc.textRenderer.fontHeight / 2f, textColor.get().getPacked());
-            RenderUtils.text("TOG: " + (tog.getOrDefault(target, 0)) + " HURT: " + ((target.hurtTime) * 10) / 10f + " TE: " + target.age, stack, 66, 55 - mc.textRenderer.fontHeight / 2f, textColor.get().getPacked());
-        }
-        if (mode.get() == Mode.Exhibition){
-            int height = 60;
-            int width = 190;
-            setSize(width * scale.get(), height * scale.get());
-
-            updateTarget();
-            MatrixStack stack = new MatrixStack();
-
-            if (target == null || renderName == null) {
-                return;
-            }
-
-            stack.translate(x, y, 0);
-            stack.scale((float) (scale.get() * 1f), (float) (scale.get() * 1f), 1);
-
-            // Background
-            RenderUtils.quad(stack, -2, -2, width + 4, height + 4, new Color(52, 52, 52, 255).getPacked());
-            RenderUtils.quad(stack, -1, -1, width + 2, height + 2, new Color(32, 32, 32, 255).getPacked());
-            RenderUtils.quad(stack, 0, 0, width, height, new Color(52, 52, 52, 255).getPacked());
-
-            //PlayerModel
-
-            // Name
-            stack.scale(1.5f,1.5f,1);
-            RenderUtils.text(renderName, stack, 41, 2, textColor.get().getPacked());
-
-            // Health and Distance
-            stack.scale(0.5f,0.5f,1);
-            RenderUtils.text(Math.round((renderHealth) * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f, stack, 83, 40 - mc.textRenderer.fontHeight / 2f, textColor.get().getPacked());
-
-            // Bar
-            stack.scale(2, 2, 1);
-
-            int progress = (int) (Math.ceil(MathHelper.clamp(renderHealth, 0, 20)));
-
-            for (int i = 0; i < 10; i++) {
-                RenderUtils.quad(stack, 41 + i * 8, 12, 3 * Math.min(progress, 2), 3, new Color(204, 204, 0, 255).getPacked());
-                progress -= 2;
-
-                if (progress <= 0) {
-                    break;
-                }
-            }
-
-            //Armor
-            stack.scale(0.9f,0.9f,1);
-            MatrixStack drawStack = renderer.drawContext.getMatrices();
-            drawStack.push();
-
-            drawStack.translate(x, y, 0);
-            drawStack.scale(scale.get().floatValue() * 1.35f, scale.get().floatValue() * 1.35f, 1);
-
-            for (int i = 0; i < 4; i++) {
-                ItemStack itemStack = target.getInventory().armor.get(i);
-
-                renderer.drawContext.drawItem(itemStack, (3 - i) * 20 + 42, 25);
-            }
-
-            //Item
-            ItemStack itemStack = target.getMainHandStack();
-
-            renderer.drawContext.drawItem(itemStack, 122, 25);
-
-            drawStack.pop();
-            // gayer model
         }
     }
 
-    private void drawFace(HudRenderer renderer, float scale, double x, double y, float tilt) {
-        MatrixStack drawStack = renderer.drawContext.getMatrices();
-
-        drawStack.push();
-
-        drawStack.translate(x, y, 0);
-        drawStack.scale(scale, scale, 1);
-        drawStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(tilt));
-
-        PlayerSkinDrawer.draw(renderer.drawContext, renderSkin,20, 18, 32, false, false);
-
-        drawStack.pop();
+    private void renderBlackout(HudRenderer renderer, int width, int height) {
+        RoundedRenderer2D.quadRounded(Renderer2D.COLOR, 0, 0, width, height, bgColor.get(), 15, true);
+        drawFace(renderer);
+        renderer.text(renderName, 60, 20, textColor.get(), false, fontScale(0.5));
+        renderer.text(Math.round(renderPing) + "ms", 60, 30, textColor.get(), false, fontScale(0.5));
+        String health = String.valueOf(Math.round(renderHealth * 10) / 10f);
+        renderer.text(health, 20, 81 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
+        float barAnimation = MathHelper.lerp(mc.getRenderTickCounter().getTickDelta(true) / 10, lastHp, renderHealth);
+        double barStart = Math.max(renderer.textWidth(health, false, fontScale(0.5)), renderer.textWidth("36.0", false, fontScale(0.5))) + 28;
+        if (barAnimation > 0) {
+            RoundedRenderer2D.quadRounded(Renderer2D.COLOR, barStart - 3, 77,
+                MathHelper.clamp(barAnimation / 20, 0, 1) * (width - 30 - barStart) + 6,
+                8, healthColor.get(), 3, true);
+        }
+        if (barAnimation > 20) {
+            RoundedRenderer2D.quadRounded(Renderer2D.COLOR, barStart - 3, 77,
+                MathHelper.clamp((barAnimation - 20) / 16, 0, 1) * (width - 30 - barStart) + 6,
+                8, absorptionColor.get(), 3, true);
+        }
     }
+
+    private void renderExhibitionOld(HudRenderer renderer, int width, int height) {
+        renderer.quad(0, 0, width, height, bgColor.get());
+        renderer.quad(1, 1, 58, 58, new Color(102, 102, 102, 255));
+        drawFace(renderer);
+        renderer.text(renderName, 66, 4, textColor.get(), false, fontScale(1));
+        renderer.text(Math.round(renderHealth * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f,
+            66, 35 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
+        int progress = (int) Math.ceil(MathHelper.clamp(renderHealth, 0, 20));
+        for (int i = 0; i < 10 && progress > 0; i++, progress -= 2) {
+            renderer.quad(66 + i * 16, 22, 6 * Math.min(progress, 2), 6, new Color(204, 204, 0, 255));
+        }
+        renderer.text("Yaw: " + Math.round(target.getYaw() * 10) / 10f + " Pitch: " + Math.round(target.getPitch() * 10) / 10f
+                + " BodyYaw: " + Math.round(target.getBodyYaw() * 10) / 10f,
+            66, 45 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
+        renderer.text("TOG: " + tog.getOrDefault(target, 0) + " HURT: " + (float) target.hurtTime + " TE: " + target.age,
+            66, 55 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
+    }
+
+    private void renderExhibition(HudRenderer renderer, int width, int height) {
+        renderer.quad(-2, -2, width + 4, height + 4, new Color(52, 52, 52, 255));
+        renderer.quad(-1, -1, width + 2, height + 2, new Color(32, 32, 32, 255));
+        renderer.quad(0, 0, width, height, new Color(52, 52, 52, 255));
+        renderer.text(renderName, 61.5, 3, textColor.get(), false, fontScale(0.75));
+        renderer.text(Math.round(renderHealth * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f,
+            62.25, (40 - renderer.textHeight(false, fontScale(0.5)) / 2) * 0.75, textColor.get(), false, fontScale(0.375));
+        int progress = (int) Math.ceil(MathHelper.clamp(renderHealth, 0, 20));
+        for (int i = 0; i < 10 && progress > 0; i++, progress -= 2) {
+            renderer.quad(61.5 + i * 12, 18, 4.5 * Math.min(progress, 2), 4.5, new Color(204, 204, 0, 255));
+        }
+        // DrawContext items follow the batched backgrounds and text.
+        for (int i = 0; i < 4; i++) {
+            ItemStack item = target.getInventory().armor.get(i);
+            int itemX = (int) (((3 - i) * 20 + 42) * 1.35f);
+            renderer.post(() -> renderer.item(item, itemX, 34, 1.35f, false));
+        }
+        ItemStack item = target.getMainHandStack();
+        renderer.post(() -> renderer.item(item, 165, 34, 1.35f, false));
+    }
+
+    private double fontScale(double vanillaScale) {
+        // Meteor scales custom fonts both when choosing their resolution and drawing.
+        return Hud.get().hasCustomFont() ? Math.sqrt(vanillaScale) : vanillaScale;
+    }
+
+    private void drawFace(HudRenderer renderer) {
+        Identifier skin = renderSkin;
+        renderer.post(() -> PlayerSkinDrawer.draw(renderer.drawContext, skin, 20, 18, 32, false, false));
+    }
+
 
     private void updateTarget() {
         target = null;
-        if (mc.world == null) {return;}
+        if (mc.world == null || mc.player == null) {return;}
 
         AbstractClientPlayerEntity closest = null;
         double distance = Double.MAX_VALUE;

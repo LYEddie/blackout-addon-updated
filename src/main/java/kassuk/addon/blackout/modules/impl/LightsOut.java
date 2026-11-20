@@ -3,7 +3,7 @@ package kassuk.addon.blackout.modules.impl;
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.SwingHand;
-import kassuk.addon.blackout.utils.globalsettings.SwingSettings;
+import kassuk.addon.blackout.utils.meteor.GlobalSettingsConfig;
 import kassuk.addon.blackout.utils.SettingUtils;
 import meteordevelopment.meteorclient.events.render.Render3DEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
@@ -57,14 +57,14 @@ public class LightsOut extends BlackOutModule {
         if (block != null && timer >= delay.get()) {
             timer = 0;
 
-            SettingUtils.mineSwing(SwingSettings.MiningSwingState.Start);
+            SettingUtils.mineSwing(GlobalSettingsConfig.MiningSwingState.Start);
 
             mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.START_DESTROY_BLOCK,
                 block, Direction.UP));
             mc.getNetworkHandler().sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.STOP_DESTROY_BLOCK,
                 block, Direction.UP));
 
-            SettingUtils.mineSwing(SwingSettings.MiningSwingState.End);
+            SettingUtils.mineSwing(GlobalSettingsConfig.MiningSwingState.End);
             if (swing.get()) clientSwing(swingHand.get(), Hand.MAIN_HAND);
         }
     }

@@ -68,17 +68,7 @@ public class GearHud extends HudElement {
 
         for (int i = 0; i < items.get().size(); i++) {
             int posY = (int) Math.round(y + i * 20 * scale.get() * scale.get());
-
-            MatrixStack drawStack = renderer.drawContext.getMatrices();
-            drawStack.push();
-
-            drawStack.translate(x, y, 0);
-            drawStack.scale((float)(scale.get() * scale.get()), (float)(scale.get() * scale.get()), 1);
-
-            renderer.drawContext.drawItem(items.get().get(i).getDefaultStack(), x, posY);
-
-            drawStack.pop();
-
+            renderer.item(items.get().get(i).getDefaultStack(), x, posY, scale.get().floatValue() * 2, false);
             renderer.text(getText(items.get().get(i).asItem()), x + 25 * scale.get() * scale.get(), posY, color.get(), shadow.get(), scale.get());
         }
     }

@@ -2,7 +2,6 @@ package kassuk.addon.blackout;
 
 import com.mojang.logging.LogUtils;
 import kassuk.addon.blackout.commands.*;
-import kassuk.addon.blackout.utils.globalsettings.*;
 import kassuk.addon.blackout.hud.*;
 import kassuk.addon.blackout.modules.impl.*;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
@@ -26,7 +25,6 @@ public class BlackOut extends MeteorAddon {
     public static final Logger LOG = LogUtils.getLogger();
 
     public static final Category BLACKOUT = new Category("BlackOut", Items.END_CRYSTAL.getDefaultStack());
-    public static final Category SETTINGS = new Category("Settings", Items.OBSIDIAN.getDefaultStack());
     public static final HudGroup HUD_BLACKOUT = new HudGroup("BlackOut");
     public static final String BLACKOUT_NAME = "BlackOut";
     public static final String BLACKOUT_VERSION = "1.0.1";
@@ -37,7 +35,6 @@ public class BlackOut extends MeteorAddon {
         LOG.info("Initializing Blackout");
         ChatUtils.registerCustomPrefix(getPackage(), () -> Text.literal("[BlackOut] ").formatted(Formatting.DARK_RED));
         initializeModules(Modules.get());
-        initializeSettings(Modules.get());
         initializeCommands();
         initializeHud(Hud.get());
     }
@@ -96,15 +93,6 @@ public class BlackOut extends MeteorAddon {
         modules.add(new WeakAlert());
     }
 
-    private void initializeSettings(Modules modules) {
-        modules.add(new FacingSettings());
-        modules.add(new RangeSettings());
-        modules.add(new RaytraceSettings());
-        modules.add(new RotationSettings());
-        modules.add(new ServerSettings());
-        modules.add(new SwingSettings());
-    }
-
     private void initializeCommands() {
         Commands.add(new BlackoutGit());
         Commands.add(new Coords());
@@ -133,7 +121,6 @@ public class BlackOut extends MeteorAddon {
     @Override
     public void onRegisterCategories() {
         Modules.registerCategory(BLACKOUT);
-        Modules.registerCategory(SETTINGS);
     }
 
     @Override
