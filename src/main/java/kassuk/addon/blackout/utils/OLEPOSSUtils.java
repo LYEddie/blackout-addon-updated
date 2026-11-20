@@ -121,6 +121,6 @@ public class OLEPOSSUtils {
     }
 
     public static boolean collidable(BlockPos block) {
-        return ((AbstractBlockAccessor) mc.world.getBlockState(block).getBlock()).isCollidable();
+        return ((AbstractBlockAccessor) mc.world.getBlockState(block).getBlock()).meteor$isCollidable();
     }
 }

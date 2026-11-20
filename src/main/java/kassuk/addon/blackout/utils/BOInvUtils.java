@@ -77,6 +77,6 @@ public class BOInvUtils {
         ((IClientPlayerInteractionManager) mc.interactionManager).meteor$syncSelected();
     }
     private static ItemStackHash hash(ItemStack stack) {
-        return ItemStackHash.fromItemStack(stack, mc.getNetworkHandler().method_68823());
+        return ItemStackHash.fromItemStack(stack, mc.getNetworkHandler().getComponentHasher());
     }
 }

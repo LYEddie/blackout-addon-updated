@@ -11,8 +11,8 @@ such as a CrystalAura, BedAura, PacketFly and a lot more of new things to push y
 As october of 2026, the original devs seems to be gone 
 
 ### How to use Blackout:
- - Install Minecraft 1.21.5 with Fabric Loader 0.17.3 or newer and Java 21.
- - Download Meteor Client for Minecraft 1.21.5 and put it in your mod's folder.
+ - Install Minecraft 1.21.8 with Fabric Loader 0.17.3 or newer and Java 21.
+ - Download Meteor Client for Minecraft 1.21.8 and put it in your mod's folder.
  - Put Blackout in your "mods" folder with Meteor.
  - Run Fabric.
  - Enjoy the addon.

@@ -4,7 +4,8 @@ import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
-import net.minecraft.client.render.FogShape;
+import org.joml.Vector4f;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 /**
  * @author OLEPOSSU
@@ -54,11 +55,21 @@ public class Fog extends BlackOutModule {
         .build()
     );
 
-    public net.minecraft.client.render.Fog modifyFog() {
+    public void modifyFog(Args args) {
         SettingColor fogColor = color.get();
         float alpha = (float) Math.min(1, fogColor.a / 255.0 * thickness.get() / 100.0);
-        return new net.minecraft.client.render.Fog(distance.get().floatValue(),
-            (float) (distance.get() + fading.get()), shape.get(),
-            fogColor.r / 255f, fogColor.g / 255f, fogColor.b / 255f, alpha);
+        args.set(2, new Vector4f(fogColor.r / 255f, fogColor.g / 255f, fogColor.b / 255f, alpha));
+        float start = distance.get().floatValue();
+        float end = (float) (distance.get() + fading.get());
+        boolean spherical = shape.get() == FogShape.SPHERE;
+        args.set(3, spherical ? start : Float.MAX_VALUE);
+        args.set(4, spherical ? end : Float.MAX_VALUE);
+        args.set(5, spherical ? Float.MAX_VALUE : start);
+        args.set(6, spherical ? Float.MAX_VALUE : end);
+    }
+
+    public enum FogShape {
+        SPHERE,
+        CYLINDER
     }
 }

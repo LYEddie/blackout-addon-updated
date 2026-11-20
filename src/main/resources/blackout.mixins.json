@@ -15,7 +15,7 @@
     "accessor.RaycastContextAccessor",
     "accessor.SetCameraEntityS2CPacketAccessor",
     "accessor.SpectatorTeleportC2SPacketAccessor",
-    "BackgroundRendererMixin",
+    "FogRendererMixin",
     "ClientCommonNetworkHandlerMixin",
     "ClientPlayerEntityMixin",
     "ClientPlayerInteractionManagerMixin",

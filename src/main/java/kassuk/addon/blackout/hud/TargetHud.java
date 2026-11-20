@@ -191,13 +191,21 @@ public class TargetHud extends HudElement {
         // Flush HUD batches at transform boundaries to isolate this element's animation.
         DrawContext context = renderer.drawContext;
         renderer.end();
-        context.draw();
         var matrices = RenderSystem.getModelViewStack();
         matrices.pushMatrix();
         matrices.translate((float) (x + (1 - animation) * getWidth() / 2),
             (float) (y + (1 - animation) * getHeight() / 2), 0);
         matrices.scale((float) (animation * scale.get()), (float) (animation * scale.get()), 1);
         matrices.rotateZ((float) Math.toRadians(tilt));
+        // DrawContext records GUI commands now; capture the same transform in its
+        // 2D matrix for faces and items rather than relying on a later GL flush.
+        var guiMatrices = context.getMatrices();
+        guiMatrices.pushMatrix();
+        float guiScale = mc.getWindow().getScaleFactor();
+        guiMatrices.translate((float) (x + (1 - animation) * getWidth() / 2) / guiScale,
+            (float) (y + (1 - animation) * getHeight() / 2) / guiScale);
+        guiMatrices.scale((float) (animation * scale.get()));
+        guiMatrices.rotate((float) Math.toRadians(tilt));
         renderer.begin(context);
         try {
             switch (mode.get()) {
@@ -208,8 +216,8 @@ public class TargetHud extends HudElement {
         } finally {
             try {
                 renderer.end();
-                context.draw();
             } finally {
+                guiMatrices.popMatrix();
                 matrices.popMatrix();
                 renderer.begin(context);
             }
@@ -283,7 +291,16 @@ public class TargetHud extends HudElement {
 
     private void drawFace(HudRenderer renderer) {
         Identifier skin = renderSkin;
-        renderer.post(() -> PlayerSkinDrawer.draw(renderer.drawContext, skin, 20, 18, 32, false, false, -1));
+        renderer.post(() -> {
+            var matrices = renderer.drawContext.getMatrices();
+            matrices.pushMatrix();
+            try {
+                matrices.scale(1f / mc.getWindow().getScaleFactor());
+                PlayerSkinDrawer.draw(renderer.drawContext, skin, 20, 18, 32, false, false, -1);
+            } finally {
+                matrices.popMatrix();
+            }
+        });
     }
 
 
