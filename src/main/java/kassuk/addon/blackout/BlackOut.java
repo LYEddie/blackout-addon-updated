@@ -7,13 +7,13 @@ import kassuk.addon.blackout.modules.impl.*;
 import meteordevelopment.meteorclient.addons.MeteorAddon;
 import meteordevelopment.meteorclient.commands.Commands;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Items;
 import meteordevelopment.meteorclient.systems.hud.Hud;
 import meteordevelopment.meteorclient.systems.hud.HudGroup;
 import meteordevelopment.meteorclient.systems.modules.Category;
 import meteordevelopment.meteorclient.systems.modules.Modules;
-import net.minecraft.item.Items;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 
 /**
@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 public class BlackOut extends MeteorAddon {
     public static final Logger LOG = LogUtils.getLogger();
 
-    public static final Category BLACKOUT = new Category("BlackOut", Items.END_CRYSTAL.getDefaultStack());
+    public static final Category BLACKOUT = new Category("BlackOut", Items.END_CRYSTAL.getDefaultInstance());
     public static final HudGroup HUD_BLACKOUT = new HudGroup("BlackOut");
     public static final String BLACKOUT_NAME = "BlackOut";
     public static final String BLACKOUT_VERSION = "1.0.1";
@@ -33,7 +33,7 @@ public class BlackOut extends MeteorAddon {
     @Override
     public void onInitialize() {
         LOG.info("Initializing Blackout");
-        ChatUtils.registerCustomPrefix(getPackage(), () -> Text.literal("[BlackOut] ").formatted(Formatting.DARK_RED));
+        ChatUtils.registerCustomPrefix(getPackage(), () -> Component.literal("[BlackOut] ").withStyle(ChatFormatting.DARK_RED));
         initializeModules(Modules.get());
         initializeCommands();
         initializeHud(Hud.get());

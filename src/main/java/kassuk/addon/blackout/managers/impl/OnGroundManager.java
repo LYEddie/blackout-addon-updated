@@ -4,7 +4,7 @@ import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
-import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
+import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 
 /**
  * @author OLEPOSSU
@@ -22,9 +22,9 @@ public class OnGroundManager {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onPacket(PacketEvent.Send event) {
-        if (event.packet instanceof PlayerMoveC2SPacket) {
-            onGround = ((PlayerMoveC2SPacket) event.packet).isOnGround();
-            horizontalCollision = ((PlayerMoveC2SPacket) event.packet).horizontalCollision();
+        if (event.packet instanceof ServerboundMovePlayerPacket) {
+            onGround = ((ServerboundMovePlayerPacket) event.packet).isOnGround();
+            horizontalCollision = ((ServerboundMovePlayerPacket) event.packet).horizontalCollision();
         }
     }
 

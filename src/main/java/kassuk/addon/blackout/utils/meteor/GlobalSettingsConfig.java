@@ -10,7 +10,7 @@ import kassuk.addon.blackout.enums.RotationType;
 import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
 import kassuk.addon.blackout.managers.impl.RotationManager;
-import kassuk.addon.blackout.mixins.accessor.RaycastContextAccessor;
+import kassuk.addon.blackout.mixins.accessor.ClipContextAccessor;
 import kassuk.addon.blackout.utils.*;
 import meteordevelopment.meteorclient.mixininterface.IVec3d;
 import meteordevelopment.meteorclient.settings.BoolSetting;
@@ -22,25 +22,25 @@ import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.settings.Settings;
 import meteordevelopment.meteorclient.systems.System;
-import net.minecraft.block.AirBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.block.StairsBlock;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
-import net.minecraft.network.packet.c2s.play.HandSwingC2SPacket;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec2f;
-import net.minecraft.world.RaycastContext;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.protocol.game.ServerboundSwingPacket;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.block.AirBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec2;
+import net.minecraft.world.phys.Vec3;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
@@ -76,8 +76,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     }
 
     @Override
-    public NbtCompound toTag() {
-        NbtCompound tag = new NbtCompound();
+    public CompoundTag toTag() {
+        CompoundTag tag = new CompoundTag();
         for (Section section : sections) {
             tag.put(key(section), section.settings.toTag());
         }
@@ -85,7 +85,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     }
 
     @Override
-    public GlobalSettingsConfig fromTag(NbtCompound tag) {
+    public GlobalSettingsConfig fromTag(CompoundTag tag) {
         for (Section section : sections) {
             if (tag.getCompound(key(section)).isPresent()) {
                 section.settings.fromTag(tag.getCompoundOrEmpty(key(section)));
@@ -106,13 +106,13 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         File legacy = new File(file.getParentFile(), "modules.nbt");
         if (!legacy.exists()) return;
         try {
-            NbtCompound tag = NbtIo.read(legacy.toPath());
+            CompoundTag tag = NbtIo.read(legacy.toPath());
             if (tag == null) return;
             boolean migrated = false;
-            for (NbtElement element : tag.getListOrEmpty("modules")) {
-                if (!(element instanceof NbtCompound module)) continue;
+            for (Tag element : tag.getListOrEmpty("modules")) {
+                if (!(element instanceof CompoundTag module)) continue;
                 for (Section section : sections) {
-                    if (module.getString("name", "").equalsIgnoreCase(section.name)) {
+                    if (module.getStringOr("name", "").equalsIgnoreCase(section.name)) {
                         section.settings.fromTag(module.getCompoundOrEmpty("settings"));
                         migrated = true;
                     }
@@ -164,7 +164,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return new PlaceData(null, null, false);
         }
         Direction best = null;
-        if (mc.world != null && mc.player != null) {
+        if (mc.level != null && mc.player != null) {
             if (facingAirPlace.get()) {
                 return new PlaceData(pos, Direction.UP, true);
             } else {
@@ -172,27 +172,27 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (Direction dir : Direction.values()) {
 
                     // Doesn't place on top of max height
-                    if (facingHeightCheck(pos.offset(dir))) {
+                    if (facingHeightCheck(pos.relative(dir))) {
                         continue;
                     }
 
                     // Checks if block is an entity (chests, shulkers)
-                    if (ignoreContainers && mc.world.getBlockState(pos.offset(dir)).hasBlockEntity()) {
+                    if (ignoreContainers && mc.level.getBlockState(pos.relative(dir)).hasBlockEntity()) {
                         continue;
                     }
 
                     // Test if there is block in the side and if predicate is valid
-                    if (!OLEPOSSUtils.solid(pos.offset(dir)) && (predicate != null && !predicate.test(pos.offset(dir)))) {
+                    if (!OLEPOSSUtils.solid(pos.relative(dir)) && (predicate != null && !predicate.test(pos.relative(dir)))) {
                         continue;
                     }
 
                     // Strict dir check (checks if face is on opposite side of the block to player)
-                    if (facingStrictDir.get() && !OLEPOSSUtils.strictDir(pos.offset(dir), dir.getOpposite())) {
+                    if (facingStrictDir.get() && !OLEPOSSUtils.strictDir(pos.relative(dir), dir.getOpposite())) {
                         continue;
                     }
 
                     // Only accepts if closer than previous accepted direction
-                    double facingDist = SettingUtils.placeRangeTo(pos.offset(dir));
+                    double facingDist = SettingUtils.placeRangeTo(pos.relative(dir));
                     if (facingDist >= 0 && (cDist < 0 || facingDist < cDist)) {
                         best = dir;
                         cDist = facingDist;
@@ -200,7 +200,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
         }
-        return best == null ? new PlaceData(null, null, false) : new PlaceData(pos.offset(best), best.getOpposite(), true);
+        return best == null ? new PlaceData(null, null, false) : new PlaceData(pos.relative(best), best.getOpposite(), true);
     }
 
     public PlaceData facingGetPlaceDataAND(BlockPos pos, Predicate<Direction> predicate, Predicate<BlockPos> predicatePos, boolean ignoreContainers) {
@@ -208,7 +208,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return new PlaceData(null, null, false);
         }
         Direction best = null;
-        if (mc.world != null && mc.player != null) {
+        if (mc.level != null && mc.player != null) {
             if (facingAirPlace.get()) {
                 return new PlaceData(pos, Direction.UP, true);
             } else {
@@ -216,27 +216,27 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (Direction dir : Direction.values()) {
 
                     // Doesn't place on top of max height
-                    if (facingHeightCheck(pos.offset(dir))) {
+                    if (facingHeightCheck(pos.relative(dir))) {
                         continue;
                     }
 
                     // Checks if block is an entity (chests, shulkers)
-                    if (ignoreContainers && mc.world.getBlockState(pos.offset(dir)).hasBlockEntity()) {
+                    if (ignoreContainers && mc.level.getBlockState(pos.relative(dir)).hasBlockEntity()) {
                         continue;
                     }
 
                     // Test if there is block in the side and if predicate is valid
-                    if (!OLEPOSSUtils.solid(pos.offset(dir)) || (predicate != null && !predicate.test(dir)) || (predicatePos != null && !predicatePos.test(pos.offset(dir)))) {
+                    if (!OLEPOSSUtils.solid(pos.relative(dir)) || (predicate != null && !predicate.test(dir)) || (predicatePos != null && !predicatePos.test(pos.relative(dir)))) {
                         continue;
                     }
 
                     // Strict dir check (checks if face is on opposite side of the block to player)
-                    if (facingStrictDir.get() && !OLEPOSSUtils.strictDir(pos.offset(dir), dir.getOpposite())) {
+                    if (facingStrictDir.get() && !OLEPOSSUtils.strictDir(pos.relative(dir), dir.getOpposite())) {
                         continue;
                     }
 
                     // Only accepts if closer than previous accepted direction
-                    double facingDist = SettingUtils.placeRangeTo(pos.offset(dir));
+                    double facingDist = SettingUtils.placeRangeTo(pos.relative(dir));
                     if (facingDist >= 0 && (cDist < 0 || facingDist < cDist)) {
                         best = dir;
                         cDist = facingDist;
@@ -244,7 +244,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
         }
-        return best == null ? new PlaceData(null, null, false) : new PlaceData(pos.offset(best), best.getOpposite(), true);
+        return best == null ? new PlaceData(null, null, false) : new PlaceData(pos.relative(best), best.getOpposite(), true);
     }
 
     public PlaceData facingGetPlaceData(BlockPos pos, boolean ignoreContainers) {
@@ -252,7 +252,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return new PlaceData(null, null, false);
         }
         Direction best = null;
-        if (mc.world != null && mc.player != null) {
+        if (mc.level != null && mc.player != null) {
             if (facingAirPlace.get()) {
                 return new PlaceData(pos, Direction.UP, true);
             } else {
@@ -260,27 +260,27 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (Direction dir : Direction.values()) {
 
                     // Doesn't place on top of max height
-                    if (facingHeightCheck(pos.offset(dir))) {
+                    if (facingHeightCheck(pos.relative(dir))) {
                         continue;
                     }
 
                     // Checks if block is an entity (chests, shulkers)
-                    if (ignoreContainers && mc.world.getBlockState(pos.offset(dir)).hasBlockEntity() ) {
+                    if (ignoreContainers && mc.level.getBlockState(pos.relative(dir)).hasBlockEntity() ) {
                         continue;
                     }
 
                     // Test if there is block in the side and if predicate is valid
-                    if (!OLEPOSSUtils.solid(pos.offset(dir))) {
+                    if (!OLEPOSSUtils.solid(pos.relative(dir))) {
                         continue;
                     }
 
                     // Strict dir check (checks if face is on opposite side of the block to player)
-                    if (facingStrictDir.get() && !OLEPOSSUtils.strictDir(pos.offset(dir), dir.getOpposite())) {
+                    if (facingStrictDir.get() && !OLEPOSSUtils.strictDir(pos.relative(dir), dir.getOpposite())) {
                         continue;
                     }
 
                     // Only accepts if closer than previous accepted direction
-                    double facingDist = SettingUtils.placeRangeTo(pos.offset(dir));
+                    double facingDist = SettingUtils.placeRangeTo(pos.relative(dir));
                     if (facingDist >= 0 && (cDist < 0 || facingDist < cDist)) {
                         best = dir;
                         cDist = facingDist;
@@ -288,7 +288,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
         }
-        return best == null ? new PlaceData(null, null, false) : new PlaceData(pos.offset(best), best.getOpposite(), true);
+        return best == null ? new PlaceData(null, null, false) : new PlaceData(pos.relative(best), best.getOpposite(), true);
     }
 
     public Direction facingGetPlaceOnDirection(BlockPos pos) {
@@ -296,17 +296,17 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return null;
         }
         Direction best = null;
-        if (mc.world != null && mc.player != null) {
+        if (mc.level != null && mc.player != null) {
             double cDist = -1;
             for (Direction dir : Direction.values()) {
 
                 // Doesn't place on top of max height
-                if (facingHeightCheck(pos.offset(dir))) {
+                if (facingHeightCheck(pos.relative(dir))) {
                     continue;
                 }
 
                 // Unblocked check (mostly for autocrystal placement facings)
-                if (facingUnblocked.get() && !(facingGetBlock(pos.offset(dir)) instanceof AirBlock)) {
+                if (facingUnblocked.get() && !(facingGetBlock(pos.relative(dir)) instanceof AirBlock)) {
                     continue;
                 }
 
@@ -339,14 +339,14 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return 0;
         }
 
-        Vec3d vec = new Vec3d(pos.getX() + dir.getOffsetX() / 2f, pos.getY() + dir.getOffsetY() / 2f, pos.getZ() + dir.getOffsetZ() / 2f);
-        Vec3d facingDist = mc.player.getEyePos().add(-vec.x, -vec.y, -vec.z);
+        Vec3 vec = new Vec3(pos.getX() + dir.getStepX() / 2f, pos.getY() + dir.getStepY() / 2f, pos.getZ() + dir.getStepZ() / 2f);
+        Vec3 facingDist = mc.player.getEyePosition().add(-vec.x, -vec.y, -vec.z);
 
         return Math.sqrt(facingDist.x * facingDist.x + facingDist.y * facingDist.y + facingDist.z * facingDist.z);
     }
 
     private Block facingGetBlock(BlockPos pos) {
-        return mc.world.getBlockState(pos).getBlock();
+        return mc.level.getBlockState(pos).getBlock();
     }
 
     public enum MaxHeight {
@@ -555,7 +555,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     public double rangeRangeMulti = 0;
 
     // Place Range Checks
-    public boolean rangeInPlaceRange(BlockPos pos, Vec3d from) {
+    public boolean rangeInPlaceRange(BlockPos pos, Vec3 from) {
         if (mc.player == null) {
             return false;
         }
@@ -564,7 +564,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return dist >= 0 && dist <= (SettingUtils.placeTrace(pos) ? rangePlaceRange.get() : rangePlaceRangeWalls.get());
     }
 
-    public boolean rangeInPlaceRangeNoTrace(BlockPos pos, Vec3d from) {
+    public boolean rangeInPlaceRangeNoTrace(BlockPos pos, Vec3 from) {
         if (mc.player == null) {
             return false;
         }
@@ -573,11 +573,11 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return dist >= 0 && dist <= Math.max(rangePlaceRange.get(), rangePlaceRangeWalls.get());
     }
 
-    public double rangePlaceRangeTo(BlockPos pos, Vec3d from) {
-        Box pBB = mc.player.getBoundingBox();
+    public double rangePlaceRangeTo(BlockPos pos, Vec3 from) {
+        AABB pBB = mc.player.getBoundingBox();
         if (from == null) {
-            from = mc.player.getEyePos();
-            Vec3d pPos = mc.player.getEntityPos();
+            from = mc.player.getEyePosition();
+            Vec3 pPos = mc.player.position();
             switch (rangePlaceRangeFrom.get()) {
                 case Middle ->
                     ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
@@ -585,7 +585,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             }
         }
 
-        Vec3d feet = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        Vec3 feet = new Vec3(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         switch (rangePlaceRangeMode.get()) {
             case NCP -> {
                 return rangeGetRange(from, feet.add(0, 0.5, 0));
@@ -594,21 +594,21 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 return rangeGetRange(from, feet.add(0, rangePlaceHeight.get(), 0));
             }
             case Vanilla -> {
-                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePos(), feet, 1, 1));
+                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePosition(), feet, 1, 1));
             }
             case CustomBox -> {
-                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePos(), feet, rangeBlockWidth.get(), rangeBlockHeight.get()));
+                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePosition(), feet, rangeBlockWidth.get(), rangeBlockHeight.get()));
             }
         }
         return -1;
     }
 
     // Attack Range Chesks
-    public boolean rangeInAttackRange(Box bb, Vec3d from) {
+    public boolean rangeInAttackRange(AABB bb, Vec3 from) {
         return rangeInAttackRange(bb, rangeGetFeet(bb), from);
     }
 
-    public boolean rangeInAttackRange(Box bb, Vec3d feet, Vec3d from) {
+    public boolean rangeInAttackRange(AABB bb, Vec3 feet, Vec3 from) {
         if (mc.player == null) {
             return false;
         }
@@ -619,7 +619,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return rangeAttackRangeTo(bb, feet, from, false) < rangeAttackRangeWalls.get();
     }
 
-    public boolean rangeInAttackRangeNoTrace(Box bb, Vec3d feet, Vec3d from) {
+    public boolean rangeInAttackRangeNoTrace(AABB bb, Vec3 feet, Vec3 from) {
         if (mc.player == null) {
             return false;
         }
@@ -627,14 +627,14 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return rangeAttackRangeTo(bb, feet, from, true) <= Math.max(rangeAttackRange.get(), rangeAttackRangeWalls.get());
     }
 
-    public double rangeAttackRangeTo(Box bb, Vec3d feet, Vec3d from, boolean countReduce) {
-        Box pBB = mc.player.getBoundingBox();
+    public double rangeAttackRangeTo(AABB bb, Vec3 feet, Vec3 from, boolean countReduce) {
+        AABB pBB = mc.player.getBoundingBox();
         if (from == null) {
-            from = mc.player.getEyePos();
+            from = mc.player.getEyePosition();
             switch (rangeAttackRangeFrom.get()) {
                 case Middle ->
                     ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
-                case Feet -> from = mc.player.getEntityPos();
+                case Feet -> from = mc.player.position();
             }
         } else {
             switch (rangeAttackRangeFrom.get()) {
@@ -647,27 +647,27 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
         double dist = switch (rangeAttackRangeMode.get()) {
             case Height -> rangeGetRange(from, feet.add(0, rangeAttackHeight.get(), 0));
-            case NCP -> rangeGetRange(from, new Vec3d(feet.x, Math.min(Math.max(from.getY(), bb.minY), bb.maxY), feet.z));
+            case NCP -> rangeGetRange(from, new Vec3(feet.x, Math.min(Math.max(from.y(), bb.minY), bb.maxY), feet.z));
 
             case Vanilla ->
-                rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePos(), feet, Math.abs(bb.minX - bb.maxX), Math.abs(bb.minY - bb.maxY)));
+                rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePosition(), feet, Math.abs(bb.minX - bb.maxX), Math.abs(bb.minY - bb.maxY)));
 
             case Middle ->
-                rangeGetRange(from, new Vec3d((bb.minX + bb.maxX) / 2, (bb.minY + bb.maxY) / 2, (bb.minZ + bb.maxZ) / 2));
+                rangeGetRange(from, new Vec3((bb.minX + bb.maxX) / 2, (bb.minY + bb.maxY) / 2, (bb.minZ + bb.maxZ) / 2));
 
             case CustomBox ->
-                rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePos(), feet, Math.abs(bb.minX - bb.maxX) * rangeClosestAttackWidth.get(), Math.abs(bb.minY - bb.maxY) * rangeClosestAttackHeight.get()));
+                rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePosition(), feet, Math.abs(bb.minX - bb.maxX) * rangeClosestAttackWidth.get(), Math.abs(bb.minY - bb.maxY) * rangeClosestAttackHeight.get()));
 
             case UpdatedNCP ->
-                rangeGetRange(from, new Vec3d(feet.x, Math.min(Math.max(from.getY(), bb.minY), bb.maxY), feet.z)) - rangeGetDistFromCenter(bb, feet, from);
+                rangeGetRange(from, new Vec3(feet.x, Math.min(Math.max(from.y(), bb.minY), bb.maxY), feet.z)) - rangeGetDistFromCenter(bb, feet, from);
         };
 
         return dist * (countReduce && rangeReduce.get() ? rangeRangeMulti : 1);
     }
 
-    public double rangeGetDistFromCenter(Box bb, Vec3d feet, Vec3d from) {
-        Vec3d startPos = new Vec3d(feet.x, Math.min(Math.max(from.getY(), bb.minY), bb.maxY), feet.z);
-        Vec3d rangePos = new Vec3d(feet.x, Math.min(Math.max(from.getY(), bb.minY), bb.maxY), feet.z);
+    public double rangeGetDistFromCenter(AABB bb, Vec3 feet, Vec3 from) {
+        Vec3 startPos = new Vec3(feet.x, Math.min(Math.max(from.y(), bb.minY), bb.maxY), feet.z);
+        Vec3 rangePos = new Vec3(feet.x, Math.min(Math.max(from.y(), bb.minY), bb.maxY), feet.z);
 
         double halfWidth = Math.abs(bb.minX - bb.maxX) / 2f;
 
@@ -675,23 +675,23 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return 0;
         }
 
-        Vec3d dist = new Vec3d(from.x - rangePos.x, 0, from.z - rangePos.z);
+        Vec3 dist = new Vec3(from.x - rangePos.x, 0, from.z - rangePos.z);
 
         if (rangeGetDistXZ(dist) < halfWidth * Math.sqrt(2)) {
             return 0;
         }
 
-        if (dist.getZ() > 0.0) {
+        if (dist.z() > 0.0) {
             ((IVec3d) rangePos).meteor$setXZ(rangePos.x, rangePos.z + halfWidth);
-        } else if (dist.getZ() < 0.0) {
+        } else if (dist.z() < 0.0) {
             ((IVec3d) rangePos).meteor$setXZ(rangePos.x, rangePos.z - halfWidth);
-        } else if (dist.getX() > 0.0) {
+        } else if (dist.x() > 0.0) {
             ((IVec3d) rangePos).meteor$setXZ(rangePos.x + halfWidth, rangePos.z);
         } else ((IVec3d) rangePos).meteor$setXZ(rangePos.x - halfWidth, rangePos.z);
 
 
-        Vec3d vec2 = rangePos.subtract(startPos);
-        double angle = RotationUtils.radAngle(new Vec2f((float) dist.x, (float) dist.z), new Vec2f((float) vec2.x, (float) vec2.z));
+        Vec3 vec2 = rangePos.subtract(startPos);
+        double angle = RotationUtils.radAngle(new Vec2((float) dist.x, (float) dist.z), new Vec2((float) vec2.x, (float) vec2.z));
 
         if (angle > Math.PI / 4) {
             angle = Math.PI / 2 - angle;
@@ -704,7 +704,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         }
     }
 
-    private double rangeGetRange(Vec3d from, Vec3d to) {
+    private double rangeGetRange(Vec3 from, Vec3 to) {
         double x = Math.abs(from.x - to.x);
         double y = Math.abs(from.y - to.y);
         double z = Math.abs(from.z - to.z);
@@ -712,8 +712,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    private Vec3d rangeGetFeet(Box bb) {
-        return new Vec3d((bb.minX + bb.maxX) / 2, bb.minY, (bb.minZ + bb.maxZ) / 2);
+    private Vec3 rangeGetFeet(AABB bb) {
+        return new Vec3((bb.minX + bb.maxX) / 2, bb.minY, (bb.minZ + bb.maxZ) / 2);
     }
 
     // Mining Range Checks
@@ -735,11 +735,11 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return dist >= 0 && dist <= Math.max(rangeMiningRange.get(), rangeMiningRangeWalls.get());
     }
 
-    public double rangeMiningRangeTo(BlockPos pos, Vec3d from) {
-        Box pBB = mc.player.getBoundingBox();
-        Vec3d pPos = mc.player.getEntityPos();
+    public double rangeMiningRangeTo(BlockPos pos, Vec3 from) {
+        AABB pBB = mc.player.getBoundingBox();
+        Vec3 pPos = mc.player.position();
         if (from == null) {
-            from = mc.player.getEyePos();
+            from = mc.player.getEyePosition();
             switch (rangeMiningRangeFrom.get()) {
                 case Middle ->
                     ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minX + pBB.maxX) / 2);
@@ -747,7 +747,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             }
         }
 
-        Vec3d feet = new Vec3d(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+        Vec3 feet = new Vec3(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         switch (rangeMiningRangeMode.get()) {
             case NCP -> {
                 return rangeGetRange(from, feet.add(0, 0.5, 0));
@@ -756,20 +756,20 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 return rangeGetRange(from, feet.add(0, rangeMiningHeight.get(), 0));
             }
             case Vanilla -> {
-                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePos(), feet, 1, 1));
+                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePosition(), feet, 1, 1));
             }
             case CustomBox -> {
-                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePos(), feet, rangeClosestMiningWidth.get(), rangeClosestMiningHeight.get()));
+                return rangeGetRange(from, OLEPOSSUtils.getClosest(mc.player.getEyePosition(), feet, rangeClosestMiningWidth.get(), rangeClosestMiningHeight.get()));
             }
         }
         return -1;
     }
 
-    private double rangeGetDistXZ(Vec3d vec) {
+    private double rangeGetDistXZ(Vec3 vec) {
         return Math.sqrt(vec.x * vec.x + vec.z * vec.z);
     }
 
-    public void rangeRegisterAttack(Box bb) {
+    public void rangeRegisterAttack(AABB bb) {
         if (rangeAttackRangeTo(bb, rangeGetFeet(bb), null, false) <= rangeAttackRange.get() - rangeReduceAmount.get()) {
             rangeRangeMulti = Math.min(rangeRangeMulti + rangeReduceStep.get(), 1);
         } else {
@@ -921,8 +921,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         Any
     }
 
-    private final Vec3d raytraceVec = new Vec3d(0, 0, 0);
-    public RaycastContext raytraceRaycastContext;
+    private final Vec3 raytraceVec = new Vec3(0, 0, 0);
+    public ClipContext raytraceRaycastContext;
     public BlockHitResult raytraceResult;
     public int raytraceHit = 0;
 
@@ -936,20 +936,20 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
         switch (raytracePlaceMode.get()) {
             case SinglePoint -> {
-                ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + raytracePlaceHeight.get(), pos.getZ() + 0.5));
+                ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(new Vec3(pos.getX() + 0.5, pos.getY() + raytracePlaceHeight.get(), pos.getZ() + 0.5));
 
                 raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                 return raytraceResult.getBlockPos().equals(pos);
             }
             case DoublePoint -> {
-                ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + raytracePlaceHeight1.get(), pos.getZ() + 0.5));
+                ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(new Vec3(pos.getX() + 0.5, pos.getY() + raytracePlaceHeight1.get(), pos.getZ() + 0.5));
 
                 raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                 if (raytraceResult.getBlockPos().equals(pos)) {
                     return true;
                 }
 
-                ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(new Vec3d(pos.getX() + 0.5, pos.getY() + raytracePlaceHeight2.get(), pos.getZ() + 0.5));
+                ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(new Vec3(pos.getX() + 0.5, pos.getY() + raytracePlaceHeight2.get(), pos.getZ() + 0.5));
 
                 raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                 return raytraceResult.getBlockPos().equals(pos);
@@ -957,7 +957,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             case Sides -> {
                 ((IVec3d) raytraceVec).meteor$set(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 for (Direction dir : Direction.values()) {
-                    ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(dir.getOffsetX() / 2f, dir.getOffsetY() / 2f, dir.getOffsetZ() / 2f));
+                    ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(dir.getStepX() / 2f, dir.getStepY() / 2f, dir.getStepZ() / 2f));
 
                     raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                     if (raytraceResult.getBlockPos().equals(pos)) {
@@ -972,7 +972,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
+                            ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
 
                             raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                             if (raytraceResult.getBlockPos().equals(pos)) {
@@ -992,7 +992,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
+                            ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(0.1 + x * 0.4, 0.1 + y * 0.4, 0.1 + z * 0.4));
 
                             raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                             if (raytraceResult.getBlockPos().equals(pos)) {
@@ -1006,7 +1006,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return false;
     }
 
-    public boolean raytraceAttackTrace(Box box) {
+    public boolean raytraceAttackTrace(AABB box) {
         if (!raytraceAttackTrace.get()) {
             return true;
         }
@@ -1015,17 +1015,17 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
         switch (raytraceAttackMode.get()) {
             case SinglePoint -> {
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
 
                 return BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK;
             }
             case DoublePoint -> {
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight1.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight1.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
                 if (BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK) {
                     return true;
                 }
 
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight2.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight2.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
                 return BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK;
             }
             case Exposure -> {
@@ -1038,7 +1038,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(MathHelper.lerp(x / 2f, 0.1, xw - 0.1), MathHelper.lerp(y / 2f, 0.0, yh - 0.1), MathHelper.lerp(z / 2f, 0.1, zw - 0.1)));
+                            ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(Mth.lerp(x / 2f, 0.1, xw - 0.1), Mth.lerp(y / 2f, 0.0, yh - 0.1), Mth.lerp(z / 2f, 0.1, zw - 0.1)));
 
                             raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                             if (raytraceResult.getType() != HitResult.Type.BLOCK) {
@@ -1060,7 +1060,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 for (int x = 0; x <= 2; x += 1) {
                     for (int y = 0; y <= 2; y += 1) {
                         for (int z = 0; z <= 2; z += 1) {
-                            ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(MathHelper.lerp(x / 2f, 0.1, xw - 0.1), MathHelper.lerp(y / 2f, 0.0, yh - 0.1), MathHelper.lerp(z / 2f, 0.1, zw - 0.1)));
+                            ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(Mth.lerp(x / 2f, 0.1, xw - 0.1), Mth.lerp(y / 2f, 0.0, yh - 0.1), Mth.lerp(z / 2f, 0.1, zw - 0.1)));
 
                             raytraceResult = BODamageUtils.raycast(raytraceRaycastContext);
                             if (raytraceResult.getType() != HitResult.Type.BLOCK) {
@@ -1076,9 +1076,9 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
     private void raytraceUpdateContext() {
         if (raytraceRaycastContext == null) {
-            raytraceRaycastContext = new RaycastContext(mc.player.getEyePos(), null, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.ANY, mc.player);
+            raytraceRaycastContext = new ClipContext(mc.player.getEyePosition(), null, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, mc.player);
         } else {
-            ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setStart(mc.player.getEyePos());
+            ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setStart(mc.player.getEyePosition());
         }
     }
 
@@ -1202,9 +1202,9 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         return sg.add(new IntSetting.Builder().name(type.toLowerCase(java.util.Locale.ROOT).replace(' ', '-') + "-memory").description("Accepts rotation if looked at it x packets earlier.").defaultValue(1).range(1, 20).sliderRange(1, 20).build());
     }
 
-    public final Vec3d rotationVec = new Vec3d(0, 0, 0);
+    public final Vec3 rotationVec = new Vec3(0, 0, 0);
 
-    public boolean rotationRotationCheck(Box box, RotationType type) {
+    public boolean rotationRotationCheck(AABB box, RotationType type) {
         List<RotationManager.Rotation> history = RotationManager.history;
         if (box == null) return false;
 
@@ -1226,7 +1226,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
                     double range = 7;
 
-                    Vec3d end = new Vec3d(
+                    Vec3 end = new Vec3(
                         range * Math.cos(Math.toRadians(rot.yaw() + 90)) * Math.abs(Math.cos(Math.toRadians(rot.pitch()))),
                         range * -Math.sin(Math.toRadians(rot.pitch())),
                         range * Math.sin(Math.toRadians(rot.yaw() + 90)) * Math.abs(Math.cos(Math.toRadians(rot.pitch()))))
@@ -1323,14 +1323,14 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         };
     }
 
-    public boolean rotationAngleCheck(Vec3d pos, double y, double p, Box box, RotationType type) {
+    public boolean rotationAngleCheck(Vec3 pos, double y, double p, AABB box, RotationType type) {
         return RotationUtils.yawAngle(y, RotationUtils.getYaw(pos, box.getCenter())) <= rotationYawAngle(type) && Math.abs(p - RotationUtils.getPitch(pos, box.getCenter())) <= rotationPitchAngle(type);
     }
 
-    public boolean rotationRaytraceCheck(Vec3d pos, double y, double p, Box box) {
+    public boolean rotationRaytraceCheck(Vec3 pos, double y, double p, AABB box) {
         double range = pos.distanceTo(OLEPOSSUtils.getMiddle(box)) + 3;
 
-        Vec3d end = new Vec3d(range * Math.cos(Math.toRadians(y + 90)) * Math.abs(Math.cos(Math.toRadians(p))),
+        Vec3 end = new Vec3(range * Math.cos(Math.toRadians(y + 90)) * Math.abs(Math.cos(Math.toRadians(p))),
             range * -Math.sin(Math.toRadians(p)),
             range * Math.sin(Math.toRadians(y + 90)) * Math.abs(Math.cos(Math.toRadians(p)))).add(pos);
 
@@ -1346,11 +1346,11 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
     public boolean rotationValidForCheck(BlockPos pos, BlockState state) {
         if (state.isSolid()) return true;
-        if (state.getBlock() instanceof FluidBlock) return false;
-        if (state.getBlock() instanceof StairsBlock) return false;
+        if (state.getBlock() instanceof LiquidBlock) return false;
+        if (state.getBlock() instanceof StairBlock) return false;
         if (state.hasBlockEntity()) return false;
 
-        return state.isFullCube(mc.world, pos);
+        return state.isCollisionShapeFullBlock(mc.level, pos);
     }
 
     public boolean rotationEndMineRot() {
@@ -1451,7 +1451,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         .build()
     );
 
-    public void swingSwing(SwingState state, SwingType type, Hand hand) {
+    public void swingSwing(SwingState state, SwingType type, InteractionHand hand) {
         if (mc.player == null) {
             return;
         }
@@ -1487,7 +1487,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return;
         }
 
-        swingSwing(true, Hand.MAIN_HAND);
+        swingSwing(true, InteractionHand.MAIN_HAND);
     }
 
     private SwingState swingGetState(SwingType type) {
@@ -1500,12 +1500,12 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         };
     }
 
-    private void swingSwing(boolean shouldSwing, Hand hand) {
+    private void swingSwing(boolean shouldSwing, InteractionHand hand) {
         if (mc.player == null) {
             return;
         }
 
-        if (shouldSwing) mc.player.networkHandler.sendPacket(new HandSwingC2SPacket(hand));
+        if (shouldSwing) mc.player.connection.send(new ServerboundSwingPacket(hand));
     }
 
     public enum MiningSwingState {

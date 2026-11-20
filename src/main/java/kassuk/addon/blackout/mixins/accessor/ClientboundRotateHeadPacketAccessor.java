@@ -1,11 +1,11 @@
 package kassuk.addon.blackout.mixins.accessor;
 
-import net.minecraft.network.packet.s2c.play.SetCameraEntityS2CPacket;
+import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(SetCameraEntityS2CPacket.class)
-public interface SetCameraEntityS2CPacketAccessor {
+@Mixin(ClientboundRotateHeadPacket.class)
+public interface ClientboundRotateHeadPacketAccessor {
     @Accessor("entityId")
     int blackoutAddon$getId();
 }

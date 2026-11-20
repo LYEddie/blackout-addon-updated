@@ -7,11 +7,10 @@ import meteordevelopment.meteorclient.events.world.TickEvent;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
-import net.minecraft.network.ClientConnection;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.c2s.common.CommonPongC2SPacket;
-import net.minecraft.network.packet.c2s.common.KeepAliveC2SPacket;
-
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.common.ServerboundKeepAlivePacket;
+import net.minecraft.network.protocol.common.ServerboundPongPacket;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -29,16 +28,16 @@ public class PingSpoofManager {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onTick(TickEvent.Pre event) {
-        var handler = mc.getNetworkHandler();
+        var handler = mc.getConnection();
         if (handler == null) {
             delayed.clear();
             return;
         }
 
-        ClientConnection connection = handler.getConnection();
+        Connection connection = handler.getConnection();
         long now = System.currentTimeMillis();
         delayed.removeIf(d -> {
-            if (d.connection != connection || !d.connection.isOpen()) return true;
+            if (d.connection != connection || !d.connection.isConnected()) return true;
             if (now < d.time) return false;
             d.connection.send(d.packet);
             return true;
@@ -50,18 +49,18 @@ public class PingSpoofManager {
         delayed.clear();
     }
 
-    public void addKeepAlive(ClientConnection connection, long id) {
-        add(connection, new KeepAliveC2SPacket(id));
+    public void addKeepAlive(Connection connection, long id) {
+        add(connection, new ServerboundKeepAlivePacket(id));
     }
 
-    public void addPong(ClientConnection connection, int id) {
-        add(connection, new CommonPongC2SPacket(id));
+    public void addPong(Connection connection, int id) {
+        add(connection, new ServerboundPongPacket(id));
     }
 
-    private void add(ClientConnection connection, Packet<?> packet) {
+    private void add(Connection connection, Packet<?> packet) {
         delayed.add(new DelayedPacket(connection, packet,
             System.currentTimeMillis() + Modules.get().get(PingSpoof.class).ping.get()));
     }
 
-    private record DelayedPacket(ClientConnection connection, Packet<?> packet, long time) {}
+    private record DelayedPacket(Connection connection, Packet<?> packet, long time) {}
 }

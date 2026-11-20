@@ -2,6 +2,8 @@ plugins {
     id "fabric-loom" version "1.14-SNAPSHOT"
 }
 
+apply from: 'gradle/meteor-mojang.gradle'
+
 java {
     toolchain.languageVersion = JavaLanguageVersion.of(21)
     sourceCompatibility = JavaVersion.VERSION_21
@@ -38,7 +40,7 @@ configurations {
 dependencies {
     // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Meteor

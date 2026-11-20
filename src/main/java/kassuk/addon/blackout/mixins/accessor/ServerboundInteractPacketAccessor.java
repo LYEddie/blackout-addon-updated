@@ -1,13 +1,13 @@
 package kassuk.addon.blackout.mixins.accessor;
 
-import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-@Mixin(PlayerInteractEntityC2SPacket.class)
-public interface PlayerInteractEntityC2SPacketAccessor {
+@Mixin(ServerboundInteractPacket.class)
+public interface ServerboundInteractPacketAccessor {
     @Accessor("entityId")
     @Final
     @Mutable
@@ -16,7 +16,7 @@ public interface PlayerInteractEntityC2SPacketAccessor {
     @Accessor("entityId")
     int blackoutAddon$getId();
 
-    @Accessor("type")
-    PlayerInteractEntityC2SPacket.InteractTypeHandler blackoutAddon$getType();
+    @Accessor("action")
+    ServerboundInteractPacket.Action blackoutAddon$getType();
 }
 

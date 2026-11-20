@@ -10,10 +10,9 @@ import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.utils.network.PacketUtils;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.Packet;
 import java.util.*;
 
 /**
@@ -48,7 +47,7 @@ public class PacketLogger extends BlackOutModule {
             String message = packetMessage(packet);
 
             if (message == null) return;
-            log(Formatting.AQUA + "Send: " + Formatting.GRAY + message);
+            log(ChatFormatting.AQUA + "Send: " + ChatFormatting.GRAY + message);
         }
     }
 
@@ -58,12 +57,12 @@ public class PacketLogger extends BlackOutModule {
             String message = packetMessage(event.packet);
 
             if (message == null) return;
-            log(Formatting.LIGHT_PURPLE + "Receive: " + Formatting.GRAY + message);
+            log(ChatFormatting.LIGHT_PURPLE + "Receive: " + ChatFormatting.GRAY + message);
         }
     }
 
     private void log(String string) {
-        sendMessage(Text.of(string), 0);
+        sendMessage(Component.nullToEmpty(string), 0);
     }
 
     // this was not fun

@@ -5,30 +5,30 @@
   "client": [
     "SystemsMixin",
     "TabsMixin",
-    "accessor.MinecraftClientAccessor",
-    "accessor.AbstractBlockSettingsAccessor",
-    "accessor.EntityS2CPacketAccessor",
-    "accessor.EntitySetHeadYawS2CPacketAccessor",
-    "accessor.EntityStatusS2CPacketAccessor",
-    "accessor.PlayerInteractEntityC2SPacketAccessor",
-    "accessor.PlayerMoveC2SPacketAccessor",
-    "accessor.RaycastContextAccessor",
-    "accessor.SetCameraEntityS2CPacketAccessor",
-    "accessor.SpectatorTeleportC2SPacketAccessor",
+    "accessor.MinecraftAccessor",
+    "accessor.BlockBehaviourPropertiesAccessor",
+    "accessor.ClientboundMoveEntityPacketAccessor",
+    "accessor.ClientboundRotateHeadPacketAccessor",
+    "accessor.ClientboundEntityEventPacketAccessor",
+    "accessor.ServerboundInteractPacketAccessor",
+    "accessor.ServerboundMovePlayerPacketAccessor",
+    "accessor.ClipContextAccessor",
+    "accessor.ClientboundSetCameraPacketAccessor",
+    "accessor.ServerboundTeleportToEntityPacketAccessor",
     "FogRendererMixin",
-    "ClientCommonNetworkHandlerMixin",
-    "ClientPlayerEntityMixin",
-    "ClientPlayerInteractionManagerMixin",
+    "ClientCommonPacketListenerImplMixin",
+    "LocalPlayerMixin",
+    "MultiPlayerGameModeMixin",
     "EntityMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "HeldItemRendererMixin",
+    "ClientPacketListenerMixin",
+    "ItemInHandRendererMixin",
     "LivingEntityRendererMixin",
-    "PlayerEntityMixin"
+    "PlayerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "mixins": [
-    "ClientConnectionMixin"
+    "ConnectionMixin"
   ]
 }

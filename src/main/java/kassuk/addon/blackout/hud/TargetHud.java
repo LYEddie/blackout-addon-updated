@@ -5,7 +5,6 @@ import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.RoundedRenderer2D;
 import com.mojang.blaze3d.systems.RenderSystem;
 import meteordevelopment.meteorclient.renderer.Renderer2D;
-import net.minecraft.client.gui.DrawContext;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
@@ -18,16 +17,16 @@ import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.client.gui.PlayerSkinDrawer;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.network.PlayerListEntry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.s2c.play.EntityStatusS2CPacket;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
-
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.player.AbstractClientPlayer;
+import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import java.util.*;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
@@ -96,7 +95,7 @@ public class TargetHud extends HudElement {
         MeteorClient.EVENT_BUS.subscribe(this);
     }
 
-    private AbstractClientPlayerEntity target;
+    private AbstractClientPlayer target;
     private String renderName = null;
     private Identifier renderSkin = null;
     private float renderHealth;
@@ -109,18 +108,18 @@ public class TargetHud extends HudElement {
     private float lastHp = 0;
     private boolean popped = false;
 
-    private final Map<AbstractClientPlayerEntity, Integer> tog = new HashMap<>();
+    private final Map<AbstractClientPlayer, Integer> tog = new HashMap<>();
 
     @EventHandler(priority = 10000)
     private void onTick(TickEvent.Pre event) {
-        if (mc.world == null || mc.player == null) {
+        if (mc.level == null || mc.player == null) {
             return;
         }
 
-        List<AbstractClientPlayerEntity> toRemove = new ArrayList<>();
+        List<AbstractClientPlayer> toRemove = new ArrayList<>();
 
-        for (Map.Entry<AbstractClientPlayerEntity, Integer> entry : tog.entrySet()) {
-            if (mc.world.getPlayers().contains(entry.getKey()) && !entry.getKey().isSpectator() && entry.getKey().getHealth() > 0) {
+        for (Map.Entry<AbstractClientPlayer, Integer> entry : tog.entrySet()) {
+            if (mc.level.players().contains(entry.getKey()) && !entry.getKey().isSpectator() && entry.getKey().getHealth() > 0) {
                 continue;
             }
 
@@ -129,8 +128,8 @@ public class TargetHud extends HudElement {
 
         toRemove.forEach(tog::remove);
 
-        mc.world.getPlayers().forEach(player -> {
-            if (player.isOnGround()) {
+        mc.level.players().forEach(player -> {
+            if (player.onGround()) {
                 if (tog.containsKey(player)) {
                     tog.replace(player, tog.get(player) + 1);
                 } else {
@@ -140,14 +139,14 @@ public class TargetHud extends HudElement {
         });
 
         if (target != null) {
-            if (target.getUuid().equals(lastTarget)) {
+            if (target.getUUID().equals(lastTarget)) {
                 float diff = Math.max(lastHp - target.getHealth() - target.getAbsorptionAmount(), 0);
 
                 if (diff > 1) {
                     damageTime = System.currentTimeMillis();
                 }
             }
-            lastTarget = target.getUuid();
+            lastTarget = target.getUUID();
             lastHp = popped ? 0 : target.getHealth() + target.getAbsorptionAmount();
             popped = false;
         } else {
@@ -159,13 +158,13 @@ public class TargetHud extends HudElement {
 
     @EventHandler(priority = 10000)
     private void onReceive(PacketEvent.Receive event) {
-        if (!(event.packet instanceof EntityStatusS2CPacket packet)) {return;}
+        if (!(event.packet instanceof ClientboundEntityEventPacket packet)) {return;}
 
-        if (packet.getStatus() != 35) {return;}
+        if (packet.getEventId() != 35) {return;}
 
-        Entity entity = packet.getEntity(mc.world);
+        Entity entity = packet.getEntity(mc.level);
 
-        if (entity instanceof PlayerEntity player && player == target) {
+        if (entity instanceof Player player && player == target) {
             popped = true;
         }
     }
@@ -182,14 +181,14 @@ public class TargetHud extends HudElement {
         double animation = 1;
         float tilt = 0;
         if (blackout) {
-            scaleProgress = MathHelper.clamp(scaleProgress + (target == null ? -renderer.delta : renderer.delta), 0, 1);
+            scaleProgress = Mth.clamp(scaleProgress + (target == null ? -renderer.delta : renderer.delta), 0, 1);
             animation = scaleProgress * scaleProgress * scaleProgress;
             tilt = (float) (Math.max(0, 500 - System.currentTimeMillis() + damageTime) / 500f * damageTilt.get());
         }
         if (animation <= 0) return;
 
         // Flush HUD batches at transform boundaries to isolate this element's animation.
-        DrawContext context = renderer.drawContext;
+        GuiGraphics context = renderer.drawContext;
         renderer.end();
         var matrices = RenderSystem.getModelViewStack();
         matrices.pushMatrix();
@@ -199,9 +198,9 @@ public class TargetHud extends HudElement {
         matrices.rotateZ((float) Math.toRadians(tilt));
         // DrawContext records GUI commands now; capture the same transform in its
         // 2D matrix for faces and items rather than relying on a later GL flush.
-        var guiMatrices = context.getMatrices();
+        var guiMatrices = context.pose();
         guiMatrices.pushMatrix();
-        float guiScale = mc.getWindow().getScaleFactor();
+        float guiScale = mc.getWindow().getGuiScale();
         guiMatrices.translate((float) (x + (1 - animation) * getWidth() / 2) / guiScale,
             (float) (y + (1 - animation) * getHeight() / 2) / guiScale);
         guiMatrices.scale((float) (animation * scale.get()));
@@ -231,16 +230,16 @@ public class TargetHud extends HudElement {
         renderer.text(Math.round(renderPing) + "ms", 60, 30, textColor.get(), false, fontScale(0.5));
         String health = String.valueOf(Math.round(renderHealth * 10) / 10f);
         renderer.text(health, 20, 81 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
-        float barAnimation = MathHelper.lerp(mc.getRenderTickCounter().getTickProgress(true) / 10, lastHp, renderHealth);
+        float barAnimation = Mth.lerp(mc.getDeltaTracker().getGameTimeDeltaPartialTick(true) / 10, lastHp, renderHealth);
         double barStart = Math.max(renderer.textWidth(health, false, fontScale(0.5)), renderer.textWidth("36.0", false, fontScale(0.5))) + 28;
         if (barAnimation > 0) {
             RoundedRenderer2D.quadRounded(Renderer2D.COLOR, barStart - 3, 77,
-                MathHelper.clamp(barAnimation / 20, 0, 1) * (width - 30 - barStart) + 6,
+                Mth.clamp(barAnimation / 20, 0, 1) * (width - 30 - barStart) + 6,
                 8, healthColor.get(), 3, true);
         }
         if (barAnimation > 20) {
             RoundedRenderer2D.quadRounded(Renderer2D.COLOR, barStart - 3, 77,
-                MathHelper.clamp((barAnimation - 20) / 16, 0, 1) * (width - 30 - barStart) + 6,
+                Mth.clamp((barAnimation - 20) / 16, 0, 1) * (width - 30 - barStart) + 6,
                 8, absorptionColor.get(), 3, true);
         }
     }
@@ -252,14 +251,14 @@ public class TargetHud extends HudElement {
         renderer.text(renderName, 66, 4, textColor.get(), false, fontScale(1));
         renderer.text(Math.round(renderHealth * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f,
             66, 35 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
-        int progress = (int) Math.ceil(MathHelper.clamp(renderHealth, 0, 20));
+        int progress = (int) Math.ceil(Mth.clamp(renderHealth, 0, 20));
         for (int i = 0; i < 10 && progress > 0; i++, progress -= 2) {
             renderer.quad(66 + i * 16, 22, 6 * Math.min(progress, 2), 6, new Color(204, 204, 0, 255));
         }
-        renderer.text("Yaw: " + Math.round(target.getYaw() * 10) / 10f + " Pitch: " + Math.round(target.getPitch() * 10) / 10f
-                + " BodyYaw: " + Math.round(target.getBodyYaw() * 10) / 10f,
+        renderer.text("Yaw: " + Math.round(target.getYRot() * 10) / 10f + " Pitch: " + Math.round(target.getXRot() * 10) / 10f
+                + " BodyYaw: " + Math.round(target.getVisualRotationYInDegrees() * 10) / 10f,
             66, 45 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
-        renderer.text("TOG: " + tog.getOrDefault(target, 0) + " HURT: " + (float) target.hurtTime + " TE: " + target.age,
+        renderer.text("TOG: " + tog.getOrDefault(target, 0) + " HURT: " + (float) target.hurtTime + " TE: " + target.tickCount,
             66, 55 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
     }
 
@@ -270,7 +269,7 @@ public class TargetHud extends HudElement {
         renderer.text(renderName, 61.5, 3, textColor.get(), false, fontScale(0.75));
         renderer.text(Math.round(renderHealth * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f,
             62.25, (40 - renderer.textHeight(false, fontScale(0.5)) / 2) * 0.75, textColor.get(), false, fontScale(0.375));
-        int progress = (int) Math.ceil(MathHelper.clamp(renderHealth, 0, 20));
+        int progress = (int) Math.ceil(Mth.clamp(renderHealth, 0, 20));
         for (int i = 0; i < 10 && progress > 0; i++, progress -= 2) {
             renderer.quad(61.5 + i * 12, 18, 4.5 * Math.min(progress, 2), 4.5, new Color(204, 204, 0, 255));
         }
@@ -280,7 +279,7 @@ public class TargetHud extends HudElement {
             int itemX = (int) (((3 - i) * 20 + 42) * 1.35f);
             renderer.post(() -> renderer.item(item, itemX, 34, 1.35f, false));
         }
-        ItemStack item = target.getMainHandStack();
+        ItemStack item = target.getMainHandItem();
         renderer.post(() -> renderer.item(item, 165, 34, 1.35f, false));
     }
 
@@ -292,11 +291,11 @@ public class TargetHud extends HudElement {
     private void drawFace(HudRenderer renderer) {
         Identifier skin = renderSkin;
         renderer.post(() -> {
-            var matrices = renderer.drawContext.getMatrices();
+            var matrices = renderer.drawContext.pose();
             matrices.pushMatrix();
             try {
-                matrices.scale(1f / mc.getWindow().getScaleFactor());
-                PlayerSkinDrawer.draw(renderer.drawContext, skin, 20, 18, 32, false, false, -1);
+                matrices.scale(1f / mc.getWindow().getGuiScale());
+                PlayerFaceRenderer.draw(renderer.drawContext, skin, 20, 18, 32, false, false, -1);
             } finally {
                 matrices.popMatrix();
             }
@@ -306,12 +305,12 @@ public class TargetHud extends HudElement {
 
     private void updateTarget() {
         target = null;
-        if (mc.world == null || mc.player == null) {return;}
+        if (mc.level == null || mc.player == null) {return;}
 
-        AbstractClientPlayerEntity closest = null;
+        AbstractClientPlayer closest = null;
         double distance = Double.MAX_VALUE;
 
-        for (AbstractClientPlayerEntity player : mc.world.getPlayers()) {
+        for (AbstractClientPlayer player : mc.level.players()) {
             if (player == mc.player) {continue;}
             if (Friends.get().isFriend(player)) {continue;}
 
@@ -333,7 +332,7 @@ public class TargetHud extends HudElement {
             renderSkin = target.getSkin().body().texturePath();
             renderHealth = target.getHealth() + target.getAbsorptionAmount();
 
-            PlayerListEntry playerListEntry = mc.getNetworkHandler().getPlayerListEntry(target.getUuid());
+            PlayerInfo playerListEntry = mc.getConnection().getPlayerInfo(target.getUUID());
             renderPing = playerListEntry == null ? -1 : playerListEntry.getLatency();
         }
     }

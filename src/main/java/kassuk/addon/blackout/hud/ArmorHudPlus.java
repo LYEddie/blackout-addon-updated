@@ -10,7 +10,7 @@ import meteordevelopment.meteorclient.systems.hud.HudElement;
 import meteordevelopment.meteorclient.systems.hud.HudElementInfo;
 import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
@@ -86,7 +86,7 @@ public class ArmorHudPlus extends HudElement {
             int itemY = (int) (y + (durMode.get() == DurMode.Top ? 10 : 0) * renderScale);
             renderer.post(() -> renderer.item(item, itemX, itemY, (float) renderScale, false));
             if (item.isEmpty()) continue;
-            String durability = String.valueOf(Math.round(100 - (float) item.getDamage() / item.getMaxDamage() * 100f));
+            String durability = String.valueOf(Math.round(100 - (float) item.getDamageValue() / item.getMaxDamage() * 100f));
             double vanillaScale = renderScale / 2;
             double textScale = Hud.get().hasCustomFont() ? Math.sqrt(vanillaScale) : vanillaScale;
             renderer.text(durability,

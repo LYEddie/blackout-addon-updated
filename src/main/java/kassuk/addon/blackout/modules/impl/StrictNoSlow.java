@@ -10,11 +10,11 @@ import meteordevelopment.meteorclient.settings.IntSetting;
 import meteordevelopment.meteorclient.settings.Setting;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
-import net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket;
-import net.minecraft.util.Hand;
+import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 
 /**
  * @author OLEPOSSU
@@ -53,8 +53,8 @@ public class StrictNoSlow extends BlackOutModule {
 
     @EventHandler
     private void onSend(PacketEvent.Sent event) {
-        if (mc.player != null && event.packet instanceof PlayerInteractItemC2SPacket packet) {
-            if (shouldSend(packet.getHand() == Hand.MAIN_HAND ? Managers.HOLDING.getStack() : mc.player.getOffHandStack())) {
+        if (mc.player != null && event.packet instanceof ServerboundUseItemPacket packet) {
+            if (shouldSend(packet.getHand() == InteractionHand.MAIN_HAND ? Managers.HOLDING.getStack() : mc.player.getOffhandItem())) {
                 send();
                 timer = 0;
             }
@@ -63,7 +63,7 @@ public class StrictNoSlow extends BlackOutModule {
 
     @EventHandler
     private void onMove(PlayerMoveEvent event) {
-        if (mc.player == null || !mc.player.isUsingItem() || !shouldSend(mc.player.getActiveItem())) {
+        if (mc.player == null || !mc.player.isUsingItem() || !shouldSend(mc.player.getUseItem())) {
             timer = 0;
             return;
         }
@@ -75,11 +75,11 @@ public class StrictNoSlow extends BlackOutModule {
     }
 
     private void send() {
-        sendPacket(new UpdateSelectedSlotC2SPacket(Managers.HOLDING.slot));
+        sendPacket(new ServerboundSetCarriedItemPacket(Managers.HOLDING.slot));
     }
 
     private boolean shouldSend(ItemStack stack) {
         return mc.player != null && stack != null && !stack.isEmpty()
-            && (!onlyGap.get() || stack.isOf(Items.ENCHANTED_GOLDEN_APPLE) || stack.isOf(Items.GOLDEN_APPLE));
+            && (!onlyGap.get() || stack.is(Items.ENCHANTED_GOLDEN_APPLE) || stack.is(Items.GOLDEN_APPLE));
     }
 }

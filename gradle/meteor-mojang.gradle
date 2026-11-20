@@ -1,0 +1,80 @@
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath 'org.ow2.asm:asm-tree:9.9' }
+}
+
+import org.gradle.api.artifacts.transform.TransformAction
+import org.gradle.api.artifacts.transform.TransformOutputs
+import org.gradle.api.artifacts.transform.TransformParameters
+import org.gradle.api.artifacts.transform.InputArtifact
+import org.gradle.api.attributes.Attribute
+import org.gradle.api.file.FileSystemLocation
+import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.tree.ClassNode
+import java.util.zip.ZipFile
+import java.util.zip.ZipOutputStream
+import java.util.zip.ZipEntry
+
+// Meteor 1.21.11 uses an unqualified intermediary selector here. Mojang maps
+// both CrashReport methods to getDetails. Keep the descriptor in either namespace.
+abstract class QualifyMeteorMixin implements TransformAction<TransformParameters.None> {
+    @InputArtifact
+    @PathSensitive(PathSensitivity.NAME_ONLY)
+    abstract Provider<FileSystemLocation> getInputArtifact()
+
+    void transform(TransformOutputs outputs) {
+        File input = inputArtifact.get().asFile
+        new ZipFile(input).withCloseable { zip ->
+            String path = 'meteordevelopment/meteorclient/mixin/CrashReportMixin.class'
+            def entry = zip.getEntry(path)
+            if (entry == null) {
+                outputs.file(input)
+                return
+            }
+            def node = new ClassNode()
+            new ClassReader(zip.getInputStream(entry).bytes).accept(node, 0)
+            node.methods.findAll { it.name == 'onAddDetails' }.each { method ->
+                (method.visibleAnnotations ?: []).each { annotation ->
+                    if (annotation.desc == 'Lorg/spongepowered/asm/mixin/injection/Inject;') {
+                        int index = annotation.values.indexOf('method')
+                        if (index >= 0) {
+                            annotation.values[index + 1] = annotation.values[index + 1].collect { selector ->
+                                selector.contains('(') ? selector : selector + '(Ljava/lang/StringBuilder;)V'
+                            }
+                        }
+                    }
+                }
+            }
+            def writer = new ClassWriter(0)
+            node.accept(writer)
+            new ZipOutputStream(new FileOutputStream(outputs.file(input.name))).withCloseable { out ->
+                zip.entries().each { original ->
+                    def copy = new ZipEntry(original.name)
+                    copy.time = original.time
+                    out.putNextEntry(copy)
+                    if (!original.directory) {
+                        out.write(original.name == path ? writer.toByteArray() : zip.getInputStream(original).bytes)
+                    }
+                    out.closeEntry()
+                }
+            }
+        }
+    }
+}
+
+def qualifiedMixins = Attribute.of('blackout.qualifiedMeteorMixins', Boolean)
+dependencies {
+    attributesSchema.attribute(qualifiedMixins)
+    artifactTypes.getByName('jar').attributes.attribute(qualifiedMixins, false)
+    registerTransform(QualifyMeteorMixin) {
+        from.attribute(qualifiedMixins, false)
+        to.attribute(qualifiedMixins, true)
+    }
+}
+configurations.configureEach {
+    attributes.attribute(qualifiedMixins, true)
+}

@@ -3,13 +3,13 @@ package kassuk.addon.blackout.utils;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import kassuk.addon.blackout.managers.Managers;
 import meteordevelopment.meteorclient.mixininterface.IClientPlayerInteractionManager;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
 import meteordevelopment.meteorclient.utils.player.SlotUtils;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.sync.ItemStackHash;
-import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.network.HashedStack;
+import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.item.ItemStack;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
 
@@ -27,12 +27,12 @@ public class BOInvUtils {
     public static boolean pickSwitch(int slot) {
         if (slot >= 0) {
             Managers.HOLDING.modifyStartTime = System.currentTimeMillis();
-            if (mc.player == null || mc.interactionManager == null) return false;
+            if (mc.player == null || mc.gameMode == null) return false;
             pickSlot = SlotUtils.indexToId(slot);
             if (pickSlot < 0) return false;
             pickHotbarSlot = mc.player.getInventory().getSelectedSlot();
-            pickSyncId = mc.player.currentScreenHandler.syncId;
-            mc.interactionManager.clickSlot(pickSyncId, pickSlot, pickHotbarSlot, SlotActionType.SWAP, mc.player);
+            pickSyncId = mc.player.containerMenu.containerId;
+            mc.gameMode.handleInventoryMouseClick(pickSyncId, pickSlot, pickHotbarSlot, ClickType.SWAP, mc.player);
 
             return true;
         }
@@ -40,8 +40,8 @@ public class BOInvUtils {
     }
     public static void pickSwapBack() {
         if (pickSlot >= 0) {
-            if (mc.player != null && mc.interactionManager != null && mc.player.currentScreenHandler.syncId == pickSyncId) {
-                mc.interactionManager.clickSlot(pickSyncId, pickSlot, pickHotbarSlot, SlotActionType.SWAP, mc.player);
+            if (mc.player != null && mc.gameMode != null && mc.player.containerMenu.containerId == pickSyncId) {
+                mc.gameMode.handleInventoryMouseClick(pickSyncId, pickSlot, pickHotbarSlot, ClickType.SWAP, mc.player);
             }
             pickSlot = -1;
         }
@@ -50,15 +50,15 @@ public class BOInvUtils {
     // Credits to rickyracuun
     public static boolean invSwitch(int slot) {
         if (slot >= 0) {
-            ScreenHandler handler = mc.player.currentScreenHandler;
-            Int2ObjectArrayMap<ItemStackHash> stack = new Int2ObjectArrayMap<>();
-            stack.put(slot, hash(handler.getSlot(slot).getStack()));
+            AbstractContainerMenu handler = mc.player.containerMenu;
+            Int2ObjectArrayMap<HashedStack> stack = new Int2ObjectArrayMap<>();
+            stack.put(slot, hash(handler.getSlot(slot).getItem()));
 
-            mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(handler.syncId,
-                handler.getRevision(), (short) (PlayerInventory.MAIN_SIZE + Managers.HOLDING.slot),
-                (byte) slot, SlotActionType.SWAP, stack, hash(handler.getSlot(slot).getStack()))
+            mc.getConnection().send(new ServerboundContainerClickPacket(handler.containerId,
+                handler.getStateId(), (short) (Inventory.INVENTORY_SIZE + Managers.HOLDING.slot),
+                (byte) slot, ClickType.SWAP, stack, hash(handler.getSlot(slot).getItem()))
             );
-            ((IClientPlayerInteractionManager) mc.interactionManager).meteor$syncSelected();
+            ((IClientPlayerInteractionManager) mc.gameMode).meteor$syncSelected();
             slots = new int[]{slot, Managers.HOLDING.slot};
             return true;
         }
@@ -66,17 +66,17 @@ public class BOInvUtils {
     }
 
     public static void swapBack() {
-        ScreenHandler handler = mc.player.currentScreenHandler;
-        Int2ObjectArrayMap<ItemStackHash> stack = new Int2ObjectArrayMap<>();
-        stack.put(slots[0], hash(handler.getSlot(slots[0]).getStack()));
+        AbstractContainerMenu handler = mc.player.containerMenu;
+        Int2ObjectArrayMap<HashedStack> stack = new Int2ObjectArrayMap<>();
+        stack.put(slots[0], hash(handler.getSlot(slots[0]).getItem()));
 
-        mc.getNetworkHandler().sendPacket(new ClickSlotC2SPacket(handler.syncId,
-            handler.getRevision(), (short) (PlayerInventory.MAIN_SIZE + slots[1]),
-            (byte) slots[0], SlotActionType.SWAP, stack, hash(handler.getSlot(slots[0]).getStack()))
+        mc.getConnection().send(new ServerboundContainerClickPacket(handler.containerId,
+            handler.getStateId(), (short) (Inventory.INVENTORY_SIZE + slots[1]),
+            (byte) slots[0], ClickType.SWAP, stack, hash(handler.getSlot(slots[0]).getItem()))
         );
-        ((IClientPlayerInteractionManager) mc.interactionManager).meteor$syncSelected();
+        ((IClientPlayerInteractionManager) mc.gameMode).meteor$syncSelected();
     }
-    private static ItemStackHash hash(ItemStack stack) {
-        return ItemStackHash.fromItemStack(stack, mc.getNetworkHandler().getComponentHasher());
+    private static HashedStack hash(ItemStack stack) {
+        return HashedStack.create(stack, mc.getConnection().decoratedHashOpsGenenerator());
     }
 }

@@ -8,8 +8,7 @@ import meteordevelopment.meteorclient.gui.tabs.WindowTabScreen;
 import meteordevelopment.meteorclient.gui.widgets.containers.WContainer;
 import meteordevelopment.meteorclient.settings.SettingGroup;
 import meteordevelopment.meteorclient.settings.Settings;
-import net.minecraft.client.gui.screen.Screen;
-
+import net.minecraft.client.gui.screens.Screen;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
