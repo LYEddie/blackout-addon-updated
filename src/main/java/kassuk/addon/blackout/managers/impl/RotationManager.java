@@ -17,7 +17,7 @@ import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.util.math.*;
-import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
+import net.minecraft.client.render.entity.state.LivingEntityRenderState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class RotationManager {
                 updateNextRotation();
 
                 if (rotated) {
-                    mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(next[0], next[1], Managers.ON_GROUND.isOnGround()));
+                    mc.getNetworkHandler().sendPacket(new PlayerMoveC2SPacket.LookAndOnGround(next[0], next[1], Managers.ON_GROUND.isOnGround(), mc.player.horizontalCollision));
                 }
             }
         }
@@ -113,10 +113,10 @@ public class RotationManager {
         updateNextRotation();
 
         if (rotated) {
-            return new PlayerMoveC2SPacket.Full(packet.getX(0), packet.getY(0), packet.getZ(0), next[0], next[1], packet.isOnGround());
+            return new PlayerMoveC2SPacket.Full(packet.getX(0), packet.getY(0), packet.getZ(0), next[0], next[1], packet.isOnGround(), packet.horizontalCollision());
         }
 
-        return new PlayerMoveC2SPacket.PositionAndOnGround(packet.getX(0), packet.getY(0), packet.getZ(0), packet.isOnGround());
+        return new PlayerMoveC2SPacket.PositionAndOnGround(packet.getX(0), packet.getY(0), packet.getZ(0), packet.isOnGround(), packet.horizontalCollision());
     }
 
     public PlayerMoveC2SPacket onPositionOnGround(PlayerMoveC2SPacket.PositionAndOnGround packet) {
@@ -130,7 +130,7 @@ public class RotationManager {
         updateNextRotation();
 
         if (rotated) {
-            return new PlayerMoveC2SPacket.Full(packet.getX(0), packet.getY(0), packet.getZ(0), next[0], next[1], packet.isOnGround());
+            return new PlayerMoveC2SPacket.Full(packet.getX(0), packet.getY(0), packet.getZ(0), next[0], next[1], packet.isOnGround(), packet.horizontalCollision());
         }
 
         return packet;
@@ -147,10 +147,11 @@ public class RotationManager {
         updateNextRotation();
 
         if (rotated) {
-            return new PlayerMoveC2SPacket.LookAndOnGround(next[0], next[1], packet.isOnGround());
+            return new PlayerMoveC2SPacket.LookAndOnGround(next[0], next[1], packet.isOnGround(), packet.horizontalCollision());
         }
-        if (packet.isOnGround() != Managers.ON_GROUND.isOnGround()) {
-            return new PlayerMoveC2SPacket.OnGroundOnly(packet.isOnGround());
+        if (packet.isOnGround() != Managers.ON_GROUND.isOnGround()
+            || packet.horizontalCollision() != Managers.ON_GROUND.hasHorizontalCollision()) {
+            return new PlayerMoveC2SPacket.OnGroundOnly(packet.isOnGround(), packet.horizontalCollision());
         }
 
         return null;
@@ -167,7 +168,7 @@ public class RotationManager {
         updateNextRotation();
 
         if (rotated) {
-            return new PlayerMoveC2SPacket.LookAndOnGround(next[0], next[1], packet.isOnGround());
+            return new PlayerMoveC2SPacket.LookAndOnGround(next[0], next[1], packet.isOnGround(), packet.horizontalCollision());
         }
 
         return packet;
@@ -343,23 +344,11 @@ public class RotationManager {
         return from + (to - from) * delta;
     }
 
-    public void setHeadYaw(Args args) {
-        if (!shouldRotate) {return;}
-
-        args.set(1, prevDir[0]);
-        args.set(2, currentDir[0]);
-    }
-    public void setBodyYaw(Args args) {
-        if (!shouldRotate) {return;}
-
-        args.set(1, prevDir[0]);
-        args.set(2, currentDir[0]);
-    }
-    public void setPitch(Args args) {
-        if (!shouldRotate) {return;}
-
-        args.set(1, prevDir[1]);
-        args.set(2, currentDir[1]);
+    public void applyRenderRotation(LivingEntityRenderState state, float tickDelta) {
+        if (!shouldRotate) return;
+        state.bodyYaw = MathHelper.lerpAngleDegrees(tickDelta, prevDir[0], currentDir[0]);
+        state.yawDegrees = 0;
+        state.pitch = MathHelper.lerp(tickDelta, prevDir[1], currentDir[1]);
     }
 
     private static class Target {}

@@ -197,7 +197,6 @@ public class TargetHud extends HudElement {
             (float) (y + (1 - animation) * getHeight() / 2), 0);
         matrices.scale((float) (animation * scale.get()), (float) (animation * scale.get()), 1);
         matrices.rotateZ((float) Math.toRadians(tilt));
-        RenderSystem.applyModelViewMatrix();
         renderer.begin(context);
         try {
             switch (mode.get()) {
@@ -211,7 +210,6 @@ public class TargetHud extends HudElement {
                 context.draw();
             } finally {
                 matrices.popMatrix();
-                RenderSystem.applyModelViewMatrix();
                 renderer.begin(context);
             }
         }
@@ -284,7 +282,7 @@ public class TargetHud extends HudElement {
 
     private void drawFace(HudRenderer renderer) {
         Identifier skin = renderSkin;
-        renderer.post(() -> PlayerSkinDrawer.draw(renderer.drawContext, skin, 20, 18, 32, false, false));
+        renderer.post(() -> PlayerSkinDrawer.draw(renderer.drawContext, skin, 20, 18, 32, false, false, -1));
     }
 
 

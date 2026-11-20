@@ -580,8 +580,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             Vec3d pPos = mc.player.getPos();
             switch (rangePlaceRangeFrom.get()) {
                 case Middle ->
-                    ((IVec3d) from).set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
-                case Feet -> ((IVec3d) from).set(pPos.x, pPos.y, pPos.z);
+                    ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
+                case Feet -> ((IVec3d) from).meteor$set(pPos.x, pPos.y, pPos.z);
             }
         }
 
@@ -633,7 +633,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             from = mc.player.getEyePos();
             switch (rangeAttackRangeFrom.get()) {
                 case Middle ->
-                    ((IVec3d) from).set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
+                    ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
                 case Feet -> from = mc.player.getPos();
             }
         } else {
@@ -682,12 +682,12 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         }
 
         if (dist.getZ() > 0.0) {
-            ((IVec3d) rangePos).setXZ(rangePos.x, rangePos.z + halfWidth);
+            ((IVec3d) rangePos).meteor$setXZ(rangePos.x, rangePos.z + halfWidth);
         } else if (dist.getZ() < 0.0) {
-            ((IVec3d) rangePos).setXZ(rangePos.x, rangePos.z - halfWidth);
+            ((IVec3d) rangePos).meteor$setXZ(rangePos.x, rangePos.z - halfWidth);
         } else if (dist.getX() > 0.0) {
-            ((IVec3d) rangePos).setXZ(rangePos.x + halfWidth, rangePos.z);
-        } else ((IVec3d) rangePos).setXZ(rangePos.x - halfWidth, rangePos.z);
+            ((IVec3d) rangePos).meteor$setXZ(rangePos.x + halfWidth, rangePos.z);
+        } else ((IVec3d) rangePos).meteor$setXZ(rangePos.x - halfWidth, rangePos.z);
 
 
         Vec3d vec2 = rangePos.subtract(startPos);
@@ -742,8 +742,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             from = mc.player.getEyePos();
             switch (rangeMiningRangeFrom.get()) {
                 case Middle ->
-                    ((IVec3d) from).set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minX + pBB.maxX) / 2);
-                case Feet -> ((IVec3d) from).set(pPos.x, pPos.y, pPos.z);
+                    ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minX + pBB.maxX) / 2);
+                case Feet -> ((IVec3d) from).meteor$set(pPos.x, pPos.y, pPos.z);
             }
         }
 
@@ -955,7 +955,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 return raytraceResult.getBlockPos().equals(pos);
             }
             case Sides -> {
-                ((IVec3d) raytraceVec).set(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                ((IVec3d) raytraceVec).meteor$set(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 for (Direction dir : Direction.values()) {
                     ((RaycastContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(dir.getOffsetX() / 2f, dir.getOffsetY() / 2f, dir.getOffsetZ() / 2f));
 
@@ -966,7 +966,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
             case Exposure -> {
-                ((IVec3d) raytraceVec).set(pos.getX(), pos.getY(), pos.getZ());
+                ((IVec3d) raytraceVec).meteor$set(pos.getX(), pos.getY(), pos.getZ());
 
                 raytraceHit = 0;
                 for (int x = 0; x <= 2; x += 1) {
@@ -986,7 +986,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
             case Any -> {
-                ((IVec3d) raytraceVec).set(pos.getX(), pos.getY(), pos.getZ());
+                ((IVec3d) raytraceVec).meteor$set(pos.getX(), pos.getY(), pos.getZ());
 
                 raytraceHit = 0;
                 for (int x = 0; x <= 2; x += 1) {
@@ -1015,21 +1015,21 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
         switch (raytraceAttackMode.get()) {
             case SinglePoint -> {
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
 
                 return BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK;
             }
             case DoublePoint -> {
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight1.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight1.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
                 if (BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK) {
                     return true;
                 }
 
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight2.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePos(), new Vec3d((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight2.get(), (box.minZ + box.maxZ) / 2f), RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, mc.player);
                 return BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK;
             }
             case Exposure -> {
-                ((IVec3d) raytraceVec).set(box.minX, box.minY, box.minZ);
+                ((IVec3d) raytraceVec).meteor$set(box.minX, box.minY, box.minZ);
                 double xw = box.maxX - box.minX;
                 double yh = box.maxY - box.minY;
                 double zw = box.maxZ - box.minZ;
@@ -1052,7 +1052,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
             case Any -> {
-                ((IVec3d) raytraceVec).set(box.minX, box.minY, box.minZ);
+                ((IVec3d) raytraceVec).meteor$set(box.minX, box.minY, box.minZ);
                 double xw = box.maxX - box.minX;
                 double yh = box.maxY - box.minY;
                 double zw = box.maxZ - box.minZ;

@@ -1,6 +1,5 @@
 package kassuk.addon.blackout.modules.impl;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import meteordevelopment.meteorclient.settings.*;
@@ -55,12 +54,11 @@ public class Fog extends BlackOutModule {
         .build()
     );
 
-    public void modifyFog() {
+    public net.minecraft.client.render.Fog modifyFog() {
         SettingColor fogColor = color.get();
         float alpha = (float) Math.min(1, fogColor.a / 255.0 * thickness.get() / 100.0);
-        RenderSystem.setShaderFogColor(fogColor.r / 255f, fogColor.g / 255f, fogColor.b / 255f, alpha);
-        RenderSystem.setShaderFogStart((float) (distance.get() * 1f));
-        RenderSystem.setShaderFogEnd((float) (distance.get() + fading.get()));
-        RenderSystem.setShaderFogShape(shape.get());
+        return new net.minecraft.client.render.Fog(distance.get().floatValue(),
+            (float) (distance.get() + fading.get()), shape.get(),
+            fogColor.r / 255f, fogColor.g / 255f, fogColor.b / 255f, alpha);
     }
 }

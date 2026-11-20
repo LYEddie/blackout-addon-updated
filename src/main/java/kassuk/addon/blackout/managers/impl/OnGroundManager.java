@@ -13,6 +13,7 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 public class OnGroundManager {
 
     private boolean onGround;
+    private boolean horizontalCollision;
 
     public OnGroundManager() {
         MeteorClient.EVENT_BUS.subscribe(this);
@@ -23,11 +24,16 @@ public class OnGroundManager {
     private void onPacket(PacketEvent.Send event) {
         if (event.packet instanceof PlayerMoveC2SPacket) {
             onGround = ((PlayerMoveC2SPacket) event.packet).isOnGround();
+            horizontalCollision = ((PlayerMoveC2SPacket) event.packet).horizontalCollision();
         }
     }
 
     public boolean isOnGround() {
         return onGround;
+    }
+
+    public boolean hasHorizontalCollision() {
+        return horizontalCollision;
     }
 }
 

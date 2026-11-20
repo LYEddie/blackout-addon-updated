@@ -6,7 +6,7 @@ import meteordevelopment.meteorclient.mixininterface.IClientPlayerInteractionMan
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.c2s.play.ClickSlotC2SPacket;
-import net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket;
+import meteordevelopment.meteorclient.utils.player.SlotUtils;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 
@@ -20,12 +20,18 @@ import static meteordevelopment.meteorclient.MeteorClient.mc;
 public class BOInvUtils {
     private static int[] slots;
     public static int pickSlot = -1;
+    private static int pickHotbarSlot;
+    private static int pickSyncId;
 
     public static boolean pickSwitch(int slot) {
         if (slot >= 0) {
             Managers.HOLDING.modifyStartTime = System.currentTimeMillis();
-            pickSlot = slot;
-            mc.getNetworkHandler().sendPacket(new PickFromInventoryC2SPacket(slot));
+            if (mc.player == null || mc.interactionManager == null) return false;
+            pickSlot = SlotUtils.indexToId(slot);
+            if (pickSlot < 0) return false;
+            pickHotbarSlot = mc.player.getInventory().selectedSlot;
+            pickSyncId = mc.player.currentScreenHandler.syncId;
+            mc.interactionManager.clickSlot(pickSyncId, pickSlot, pickHotbarSlot, SlotActionType.SWAP, mc.player);
 
             return true;
         }
@@ -33,7 +39,9 @@ public class BOInvUtils {
     }
     public static void pickSwapBack() {
         if (pickSlot >= 0) {
-            mc.getNetworkHandler().sendPacket(new PickFromInventoryC2SPacket(pickSlot));
+            if (mc.player != null && mc.interactionManager != null && mc.player.currentScreenHandler.syncId == pickSyncId) {
+                mc.interactionManager.clickSlot(pickSyncId, pickSlot, pickHotbarSlot, SlotActionType.SWAP, mc.player);
+            }
             pickSlot = -1;
         }
     }

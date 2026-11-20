@@ -165,7 +165,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     private void constantiamTick(PlayerMoveEvent event) {
         Vec3d motion = getMotion(mc.player.getVelocity());
         if (motion != null) {
-            ((IVec3d) event.movement).set(motion.getX(), motion.getY(), motion.getZ());
+            ((IVec3d) event.movement).meteor$set(motion.getX(), motion.getY(), motion.getZ());
             event.movement = motion;
         }
     }
@@ -197,7 +197,7 @@ public class ElytraFlyPlus extends BlackOutModule {
 
     // Wasp
     private void waspTick(PlayerMoveEvent event) {
-        if (!mc.player.isFallFlying()) return;
+        if (!mc.player.isGliding()) return;
 
         updateWaspMovement();
         pitch = mc.player.getPitch();
@@ -220,7 +220,7 @@ public class ElytraFlyPlus extends BlackOutModule {
             y = up.get();
         }
 
-        ((IVec3d) event.movement).set(x, y, z);
+        ((IVec3d) event.movement).meteor$set(x, y, z);
         mc.player.setVelocity(0, 0, 0);
     }
 
@@ -245,7 +245,7 @@ public class ElytraFlyPlus extends BlackOutModule {
 
     // Pitch
     private void controlTick(PlayerMoveEvent event) {
-        if (!mc.player.isFallFlying()) {return;}
+        if (!mc.player.isGliding()) {return;}
 
         updateControlMovement();
         pitch = 0;
@@ -279,7 +279,7 @@ public class ElytraFlyPlus extends BlackOutModule {
             y = -down.get();
         }
 
-        ((IVec3d) event.movement).set(x, y, z);
+        ((IVec3d) event.movement).meteor$set(x, y, z);
         mc.player.setVelocity(0, 0, 0);
     }
 
@@ -311,7 +311,7 @@ public class ElytraFlyPlus extends BlackOutModule {
             activeFor = 0;
             return false;
         }
-        return mc.player.isFallFlying();
+        return mc.player.isGliding();
     }
 
     public enum Mode {

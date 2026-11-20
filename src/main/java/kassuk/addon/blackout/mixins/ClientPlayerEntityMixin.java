@@ -51,26 +51,18 @@ public abstract class ClientPlayerEntityMixin {
         }
     }
 
-    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 2))
-    private void sendPacketFull(ClientPlayNetworkHandler instance, Packet<?> packet) {
-        networkHandler.sendPacket(Managers.ROTATION.onFull((PlayerMoveC2SPacket.Full) packet));
-    }
-
-    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 3))
-    private void sendPacketPosGround(ClientPlayNetworkHandler instance, Packet<?> packet) {
-        networkHandler.sendPacket(Managers.ROTATION.onPositionOnGround((PlayerMoveC2SPacket.PositionAndOnGround) packet));
-    }
-
-    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 4))
-    private void sendPacketLookGround(ClientPlayNetworkHandler instance, Packet<?> packet) {
-        PlayerMoveC2SPacket toSend = Managers.ROTATION.onLookAndOnGround((PlayerMoveC2SPacket.LookAndOnGround) packet);
-        if (toSend != null) {
-            networkHandler.sendPacket(toSend);
+    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V"))
+    private void blackoutAddon$sendMovementPacket(ClientPlayNetworkHandler handler, Packet<?> packet) {
+        Packet<?> result = packet;
+        if (packet instanceof PlayerMoveC2SPacket.Full full) {
+            result = Managers.ROTATION.onFull(full);
+        } else if (packet instanceof PlayerMoveC2SPacket.PositionAndOnGround position) {
+            result = Managers.ROTATION.onPositionOnGround(position);
+        } else if (packet instanceof PlayerMoveC2SPacket.LookAndOnGround look) {
+            result = Managers.ROTATION.onLookAndOnGround(look);
+        } else if (packet instanceof PlayerMoveC2SPacket.OnGroundOnly ground) {
+            result = Managers.ROTATION.onOnlyOnground(ground);
         }
-    }
-
-    @Redirect(method = "sendMovementPackets", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayNetworkHandler;sendPacket(Lnet/minecraft/network/packet/Packet;)V", ordinal = 5))
-    private void sendPacketGround(ClientPlayNetworkHandler instance, Packet<?> packet) {
-        networkHandler.sendPacket(Managers.ROTATION.onOnlyOnground((PlayerMoveC2SPacket.OnGroundOnly) packet));
+        if (result != null) handler.sendPacket(result);
     }
 }
