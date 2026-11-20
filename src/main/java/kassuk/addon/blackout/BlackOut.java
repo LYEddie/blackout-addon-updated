@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 public class BlackOut extends MeteorAddon {
     public static final Logger LOG = LogUtils.getLogger();
 
-    public static final Category BLACKOUT = new Category("BlackOut", Items.END_CRYSTAL.getDefaultInstance());
+    public static final Category BLACKOUT = new Category("BlackOut", Items.END_CRYSTAL::getDefaultInstance);
     public static final HudGroup HUD_BLACKOUT = new HudGroup("BlackOut");
     public static final String BLACKOUT_NAME = "BlackOut";
     public static final String BLACKOUT_VERSION = "1.0.1";

@@ -2,13 +2,13 @@ package kassuk.addon.blackout.utils;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import kassuk.addon.blackout.managers.Managers;
-import meteordevelopment.meteorclient.mixininterface.IClientPlayerInteractionManager;
+import meteordevelopment.meteorclient.mixininterface.IMultiPlayerGameMode;
 import meteordevelopment.meteorclient.utils.player.SlotUtils;
 import net.minecraft.network.HashedStack;
 import net.minecraft.network.protocol.game.ServerboundContainerClickPacket;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.item.ItemStack;
 
 import static meteordevelopment.meteorclient.MeteorClient.mc;
@@ -32,7 +32,7 @@ public class BOInvUtils {
             if (pickSlot < 0) return false;
             pickHotbarSlot = mc.player.getInventory().getSelectedSlot();
             pickSyncId = mc.player.containerMenu.containerId;
-            mc.gameMode.handleInventoryMouseClick(pickSyncId, pickSlot, pickHotbarSlot, ClickType.SWAP, mc.player);
+            mc.gameMode.handleContainerInput(pickSyncId, pickSlot, pickHotbarSlot, ContainerInput.SWAP, mc.player);
 
             return true;
         }
@@ -41,7 +41,7 @@ public class BOInvUtils {
     public static void pickSwapBack() {
         if (pickSlot >= 0) {
             if (mc.player != null && mc.gameMode != null && mc.player.containerMenu.containerId == pickSyncId) {
-                mc.gameMode.handleInventoryMouseClick(pickSyncId, pickSlot, pickHotbarSlot, ClickType.SWAP, mc.player);
+                mc.gameMode.handleContainerInput(pickSyncId, pickSlot, pickHotbarSlot, ContainerInput.SWAP, mc.player);
             }
             pickSlot = -1;
         }
@@ -56,9 +56,9 @@ public class BOInvUtils {
 
             mc.getConnection().send(new ServerboundContainerClickPacket(handler.containerId,
                 handler.getStateId(), (short) (Inventory.INVENTORY_SIZE + Managers.HOLDING.slot),
-                (byte) slot, ClickType.SWAP, stack, hash(handler.getSlot(slot).getItem()))
+                (byte) slot, ContainerInput.SWAP, stack, hash(handler.getSlot(slot).getItem()))
             );
-            ((IClientPlayerInteractionManager) mc.gameMode).meteor$syncSelected();
+            ((IMultiPlayerGameMode) mc.gameMode).meteor$syncSelected();
             slots = new int[]{slot, Managers.HOLDING.slot};
             return true;
         }
@@ -72,9 +72,9 @@ public class BOInvUtils {
 
         mc.getConnection().send(new ServerboundContainerClickPacket(handler.containerId,
             handler.getStateId(), (short) (Inventory.INVENTORY_SIZE + slots[1]),
-            (byte) slots[0], ClickType.SWAP, stack, hash(handler.getSlot(slots[0]).getItem()))
+            (byte) slots[0], ContainerInput.SWAP, stack, hash(handler.getSlot(slots[0]).getItem()))
         );
-        ((IClientPlayerInteractionManager) mc.gameMode).meteor$syncSelected();
+        ((IMultiPlayerGameMode) mc.gameMode).meteor$syncSelected();
     }
     private static HashedStack hash(ItemStack stack) {
         return HashedStack.create(stack, mc.getConnection().decoratedHashOpsGenenerator());

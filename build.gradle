@@ -1,13 +1,11 @@
 plugins {
-    id "fabric-loom" version "1.14-SNAPSHOT"
+    id "net.fabricmc.fabric-loom" version "1.18-SNAPSHOT"
 }
 
-apply from: 'gradle/meteor-mojang.gradle'
-
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
+    sourceCompatibility = JavaVersion.VERSION_25
+    targetCompatibility = JavaVersion.VERSION_25
 }
 
 base { archivesName = project.archives_base_name }
@@ -29,32 +27,14 @@ repositories {
     }
 }
 
-configurations {
-    baritoneBundle {
-        canBeConsumed = false
-        canBeResolved = true
-        transitive = false
-    }
-}
-
 dependencies {
     // Fabric
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings loom.officialMojangMappings()
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     // Meteor
-    modImplementation "meteordevelopment:meteor-client:${project.meteor_version}"
-    modImplementation "meteordevelopment:baritone:${project.baritone_version}"
-    baritoneBundle "meteordevelopment:baritone:${project.baritone_version}"
-
-    // Loom removes nested-JAR declarations when remapping Baritone for development.
-    // Use its bundled Pathfinder on the runtime classpath, including IntelliJ runs.
-    runtimeOnly files(provider {
-        zipTree(configurations.baritoneBundle.singleFile).matching {
-            include "META-INF/jars/nether-pathfinder-*.jar"
-        }.singleFile
-    })
+    implementation "meteordevelopment:meteor-client:${project.meteor_version}"
+    implementation "meteordevelopment:baritone:${project.baritone_version}"
 }
 
 processResources {

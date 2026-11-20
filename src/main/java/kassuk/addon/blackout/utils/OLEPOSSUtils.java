@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.utils;
 
 import kassuk.addon.blackout.mixins.accessor.BlockBehaviourPropertiesAccessor;
-import meteordevelopment.meteorclient.mixin.AbstractBlockAccessor;
+import meteordevelopment.meteorclient.mixin.BlockBehaviourAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
@@ -127,6 +127,6 @@ public class OLEPOSSUtils {
     }
 
     public static boolean collidable(BlockPos block) {
-        return ((AbstractBlockAccessor) mc.level.getBlockState(block).getBlock()).meteor$isCollidable();
+        return ((BlockBehaviourAccessor) mc.level.getBlockState(block).getBlock()).meteor$isHasCollision();
     }
 }

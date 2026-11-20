@@ -4,7 +4,7 @@ import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import meteordevelopment.meteorclient.events.entity.player.PlayerMoveEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.meteorclient.systems.modules.world.Timer;
@@ -125,7 +125,7 @@ public class FlightPlus extends BlackOutModule {
                     z = Math.sin(Math.toRadians(yaw)) * speed.get();
 
                 }
-                ((IVec3d) event.movement).meteor$set(x, y, z);
+                ((IVec3) event.movement).meteor$set(x, y, z);
             }
             if (flyMode.get().equals(FlightMode.Jump)){
                 if (mc.options.keyJump.consumeClick()){
@@ -143,11 +143,11 @@ public class FlightPlus extends BlackOutModule {
                     z = Math.sin(Math.toRadians(yaw)) * speed.get();
 
                 }
-                ((IVec3d) event.movement).meteor$setXZ(x, z);
+                ((IVec3) event.movement).meteor$setXZ(x, z);
             }
             if (flyMode.get().equals(FlightMode.Glide)){
                 if (!mc.player.onGround())
-                    ((IVec3d) event.movement).meteor$setY(-glideAmount.get());
+                    ((IVec3) event.movement).meteor$setY(-glideAmount.get());
 
             }
         }

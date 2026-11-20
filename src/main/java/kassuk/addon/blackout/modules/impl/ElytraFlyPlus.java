@@ -3,7 +3,7 @@ package kassuk.addon.blackout.modules.impl;
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import meteordevelopment.meteorclient.events.entity.player.PlayerMoveEvent;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.orbit.EventHandler;
 import meteordevelopment.orbit.EventPriority;
@@ -165,7 +165,7 @@ public class ElytraFlyPlus extends BlackOutModule {
     private void constantiamTick(PlayerMoveEvent event) {
         Vec3 motion = getMotion(mc.player.getDeltaMovement());
         if (motion != null) {
-            ((IVec3d) event.movement).meteor$set(motion.x(), motion.y(), motion.z());
+            ((IVec3) event.movement).meteor$set(motion.x(), motion.y(), motion.z());
             event.movement = motion;
         }
     }
@@ -220,7 +220,7 @@ public class ElytraFlyPlus extends BlackOutModule {
             y = up.get();
         }
 
-        ((IVec3d) event.movement).meteor$set(x, y, z);
+        ((IVec3) event.movement).meteor$set(x, y, z);
         mc.player.setDeltaMovement(0, 0, 0);
     }
 
@@ -279,7 +279,7 @@ public class ElytraFlyPlus extends BlackOutModule {
             y = -down.get();
         }
 
-        ((IVec3d) event.movement).meteor$set(x, y, z);
+        ((IVec3) event.movement).meteor$set(x, y, z);
         mc.player.setDeltaMovement(0, 0, 0);
     }
 

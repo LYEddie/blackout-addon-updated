@@ -6,7 +6,7 @@ import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import meteordevelopment.meteorclient.events.entity.player.PlayerMoveEvent;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
 import meteordevelopment.meteorclient.events.world.TickEvent;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.orbit.EventHandler;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
@@ -271,7 +271,7 @@ public class PacketFly extends BlackOutModule {
             }
         }
 
-        ((IVec3d) e.movement).meteor$set(offset.x, offset.y, offset.z);
+        ((IVec3) e.movement).meteor$set(offset.x, offset.y, offset.z);
 
         packetsToSend = Math.min(packetsToSend, 1);
     }

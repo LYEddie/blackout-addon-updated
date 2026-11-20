@@ -1,7 +1,7 @@
 package kassuk.addon.blackout.utils.RaksuTone;
 
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
-import meteordevelopment.meteorclient.mixin.AbstractBlockAccessor;
+import meteordevelopment.meteorclient.mixin.BlockBehaviourAccessor;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import java.util.ArrayList;
@@ -145,7 +145,7 @@ public class RaksuPath {
     }
 
     private boolean is(BlockPos pos) {
-        return ((AbstractBlockAccessor) mc.level.getBlockState(pos).getBlock()).meteor$isCollidable();
+        return ((BlockBehaviourAccessor) mc.level.getBlockState(pos).getBlock()).meteor$isHasCollision();
     }
 
     public record Movement(boolean valid, BlockPos pos, MovementType type) {

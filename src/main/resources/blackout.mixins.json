@@ -1,16 +1,16 @@
 {
   "required": true,
   "package": "kassuk.addon.blackout.mixins",
-  "compatibilityLevel": "JAVA_21",
+  "compatibilityLevel": "JAVA_25",
   "client": [
     "SystemsMixin",
     "TabsMixin",
+    "ModulesScreenMixin",
     "accessor.MinecraftAccessor",
     "accessor.BlockBehaviourPropertiesAccessor",
     "accessor.ClientboundMoveEntityPacketAccessor",
     "accessor.ClientboundRotateHeadPacketAccessor",
     "accessor.ClientboundEntityEventPacketAccessor",
-    "accessor.ServerboundInteractPacketAccessor",
     "accessor.ServerboundMovePlayerPacketAccessor",
     "accessor.ClipContextAccessor",
     "accessor.ClientboundSetCameraPacketAccessor",

@@ -26,7 +26,7 @@ import meteordevelopment.orbit.EventPriority;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.game.ServerboundInteractPacket;
+import net.minecraft.network.protocol.game.ServerboundAttackPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.tags.ItemTags;
@@ -450,7 +450,7 @@ public class AutoMine extends BlackOutModule {
             if (!SettingUtils.shouldRotate(RotationType.Attacking) || Managers.ROTATION.start(targetCrystal.getBoundingBox(), priority, RotationType.Attacking, Objects.hash(name + "attacking"))) {
 
                 SettingUtils.swing(SwingState.Pre, SwingType.Attacking, InteractionHand.MAIN_HAND);
-                sendPacket(ServerboundInteractPacket.createAttackPacket(targetCrystal, mc.player.isShiftKeyDown()));
+                sendPacket(new ServerboundAttackPacket(targetCrystal.getId()));
                 SettingUtils.swing(SwingState.Post, SwingType.Attacking, InteractionHand.MAIN_HAND);
                 if (attackSwing.get()) clientSwing(attackHand.get(), InteractionHand.MAIN_HAND);
 

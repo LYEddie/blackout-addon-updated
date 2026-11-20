@@ -1,6 +1,6 @@
 package kassuk.addon.blackout.utils;
 
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -42,7 +42,7 @@ public class MovementUtils {
 
         y(movement, x, z, step, reverseStep);
 
-        ((IVec3d) movement).meteor$setXZ(x, z);
+        ((IVec3) movement).meteor$setXZ(x, z);
     }
 
     private static void y(Vec3 movement, double x, double z, int step, int rev) {
@@ -54,7 +54,7 @@ public class MovementUtils {
             double s = getStep(mc.player.getBoundingBox().move(x, 0, z), step);
 
             if (s > 0) {
-                ((IVec3d) movement).meteor$setY(s);
+                ((IVec3) movement).meteor$setY(s);
                 mc.player.setDeltaMovement(mc.player.getDeltaMovement().x, 0, mc.player.getDeltaMovement().z);
             }
             return;
@@ -67,7 +67,7 @@ public class MovementUtils {
             double s = getReverse(mc.player.getBoundingBox(), rev);
 
             if (s > 0) {
-                ((IVec3d) movement).meteor$setY(-s);
+                ((IVec3) movement).meteor$setY(-s);
                 mc.player.setDeltaMovement(mc.player.getDeltaMovement().x, 0, mc.player.getDeltaMovement().z);
             }
         }

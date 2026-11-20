@@ -17,8 +17,8 @@ import meteordevelopment.meteorclient.systems.hud.HudRenderer;
 import meteordevelopment.meteorclient.utils.render.color.Color;
 import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import meteordevelopment.orbit.EventHandler;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.PlayerFaceExtractor;
 import net.minecraft.client.multiplayer.PlayerInfo;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.network.protocol.game.ClientboundEntityEventPacket;
@@ -188,7 +188,7 @@ public class TargetHud extends HudElement {
         if (animation <= 0) return;
 
         // Flush HUD batches at transform boundaries to isolate this element's animation.
-        GuiGraphics context = renderer.drawContext;
+        GuiGraphicsExtractor context = renderer.graphics;
         renderer.end();
         var matrices = RenderSystem.getModelViewStack();
         matrices.pushMatrix();
@@ -291,11 +291,11 @@ public class TargetHud extends HudElement {
     private void drawFace(HudRenderer renderer) {
         Identifier skin = renderSkin;
         renderer.post(() -> {
-            var matrices = renderer.drawContext.pose();
+            var matrices = renderer.graphics.pose();
             matrices.pushMatrix();
             try {
                 matrices.scale(1f / mc.getWindow().getGuiScale());
-                PlayerFaceRenderer.draw(renderer.drawContext, skin, 20, 18, 32, false, false, -1);
+                PlayerFaceExtractor.extractRenderState(renderer.graphics, skin, 20, 18, 32, false, false, -1);
             } finally {
                 matrices.popMatrix();
             }

@@ -9,8 +9,8 @@ import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import kassuk.addon.blackout.utils.SettingUtils;
 import meteordevelopment.meteorclient.MeteorClient;
 import meteordevelopment.meteorclient.events.game.GameJoinedEvent;
-import meteordevelopment.meteorclient.mixininterface.IRaycastContext;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IClipContext;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.utils.PreInit;
 import meteordevelopment.meteorclient.utils.entity.EntityUtils;
 import meteordevelopment.meteorclient.utils.entity.fakeplayer.FakePlayerEntity;
@@ -161,7 +161,7 @@ public class BODamageUtils {
     }
 
     public static double getExposure(Vec3 source, AABB box, BlockPos ignorePos, BlockPos obbyPos, boolean ignoreTerrain) {
-        ((IRaycastContext) raycastContext).meteor$set(source, null, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
+        ((IClipContext) raycastContext).meteor$set(source, null, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
 
         double lx = box.getXsize();
         double ly = box.getYsize();
@@ -188,7 +188,7 @@ public class BODamageUtils {
                 for (double z = box.minZ + offsetZ, maxZ = box.maxZ + offsetZ; z <= maxZ; z += stepZ) {
                     Vec3 vec3d = new Vec3(x, y, z);
 
-                    ((IRaycastContext) raycastContext).meteor$set(source, vec3d, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
+                    ((IClipContext) raycastContext).meteor$set(source, vec3d, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
                     if (raycast(BODamageUtils.raycastContext, ignorePos, obbyPos, ignoreTerrain).getType() == HitResult.Type.MISS) ++i;
 
                     ++j;

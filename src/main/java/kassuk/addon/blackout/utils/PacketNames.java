@@ -7,7 +7,6 @@
 package kassuk.addon.blackout.utils;
 
 import com.mojang.authlib.properties.Property;
-import kassuk.addon.blackout.mixins.accessor.ServerboundInteractPacketAccessor;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -109,7 +108,8 @@ public class PacketNames {
         c2s(ServerboundPlayerActionPacket.class, "PlayerAction", packet -> "action: " + packet.getAction().name() + "pos: " + packet.getPos().toShortString() + " direction: " + packet.getDirection().getSerializedName() + " sequence: " + packet.getSequence());
         c2s(ServerboundPlayerInputPacket.class, "PlayerInput", Object::toString);
         c2s(ServerboundUseItemOnPacket.class, "PlayerInteractBlock", packet -> "hand: " + packet.getHand().name() + " blockPos: " + packet.getHitResult().getBlockPos().toShortString() + " pos: " + packet.getHitResult().getLocation().toString() + " side: " + packet.getHitResult().getDirection() + " isInsideBlock: " + packet.getHitResult().isInside() + " type: " + packet.getHitResult().getType().name() + " sequence: " + packet.getSequence());
-        c2s(ServerboundInteractPacket.class, "PlayerInteractEntity", packet -> "id: " + ((ServerboundInteractPacketAccessor) packet).blackoutAddon$getId() + " type: " + ((ServerboundInteractPacketAccessor) packet).blackoutAddon$getType().getType().name() + " isPlayerSneaking: " + packet.isUsingSecondaryAction());
+        c2s(ServerboundInteractPacket.class, "PlayerInteractEntity", Object::toString);
+        c2s(ServerboundAttackPacket.class, "Attack", Object::toString);
         c2s(ServerboundUseItemPacket.class, "PlayerInteractItem", packet -> "hand: " + packet.getHand().name() + " sequence: " + packet.getSequence());
 
         c2s(ServerboundMovePlayerPacket.PosRot.class, "PlayerMove Full", packet -> "x: " + packet.getX(0) + " y: " + packet.getY(0) + " z: " + packet.getZ(0) + " yaw: " + packet.getYRot(0) + " pitch: " + packet.getXRot(0) + " isOnGround: " + packet.isOnGround());
@@ -341,7 +341,7 @@ public class PacketNames {
         });
         s2c(ClientboundSetEquipmentPacket.class, "EntityEquipmentUpdate", packet -> {
             StringBuilder builder = new StringBuilder("entityId: " + packet.getEntity() + " equipment: {");
-            packet.getSlots().forEach(pair -> builder.append("\n  type: ").append(pair.getFirst().getName()).append(" item: ").append(pair.getSecond().getItem().getName().getString()).append(" count: ").append(pair.getSecond().getCount()));
+            packet.getSlots().forEach(pair -> builder.append("\n  type: ").append(pair.getFirst().getName()).append(" item: ").append(pair.getSecond().getHoverName().getString()).append(" count: ").append(pair.getSecond().getCount()));
             builder.append("\n}");
             return builder.toString();
         });
@@ -366,7 +366,7 @@ public class PacketNames {
             builder.append("\n}");
             return builder.toString();
         });
-        s2c(ClientboundSetEntityMotionPacket.class, "EntityVelocityUpdate", packet -> "entityId: " + packet.getId() + " velocityX: " + packet.getMovement().x + " velocityY: " + packet.getMovement().y + " velocityZ: " + packet.getMovement().z);
+        s2c(ClientboundSetEntityMotionPacket.class, "EntityVelocityUpdate", Object::toString);
         s2c(ClientboundSetExperiencePacket.class, "ExperienceBarUpdate", packet -> "experience: " + packet.getExperienceLevel() + " barProgress: " + packet.getExperienceProgress() + " experienceLevel: " + packet.getTotalExperience());
         s2c(ClientboundExplodePacket.class, "Explosion", Object::toString);
         s2c(ClientboundLoginPacket.class, "GameJoin", Object::toString);
@@ -457,7 +457,7 @@ public class PacketNames {
         s2c(ClientboundResetScorePacket.class, "ScoreboardScoreReset", packet -> "objectiveName: " + packet.objectiveName() + " scoreHolderName: " + packet.owner());
         s2c(ClientboundSetScorePacket.class, "ScoreboardScoreUpdate", packet -> "objectiveName: " + packet.objectiveName() + " scoreHolderName: " + packet.owner() + " score: " + packet.score() + " display: " + packet.display().orElse(Component.nullToEmpty("null")).getString());
         s2c(ClientboundContainerSetDataPacket.class, "ScreenHandlerPropertyUpdate", packet -> "syncId: " + packet.getContainerId() + " propertyName: " + packet.getId() + " value: " + packet.getValue());
-        s2c(ClientboundContainerSetSlotPacket.class, "ScreenHandlerSlotUpdate", packet -> "syncId: " + packet.getContainerId() + " slot: " + packet.getSlot() + " revision: " + packet.getStateId() + " item: " + packet.getItem().getItem().getName() + " itemCount: " + packet.getItem().getCount());
+        s2c(ClientboundContainerSetSlotPacket.class, "ScreenHandlerSlotUpdate", packet -> "syncId: " + packet.getContainerId() + " slot: " + packet.getSlot() + " revision: " + packet.getStateId() + " item: " + packet.getItem().getHoverName() + " itemCount: " + packet.getItem().getCount());
         s2c(ClientboundSelectAdvancementsTabPacket.class, "SelectAdvancementTab", packet -> "tabId: " + packet.getTab());
         s2c(ClientboundServerDataPacket.class, "ServerMetadata", packet -> "description: " + packet.motd().getString() + " favicon: " + (packet.iconBytes().isPresent() ? byteArrToString(packet.iconBytes().get()) : "null"));
         s2c(ClientboundSetCameraPacket.class, "SetCameraEntity");
@@ -467,8 +467,8 @@ public class PacketNames {
                 builder.append("\n  uses: " + offer.getUses() + " maxUses: " + offer.getMaxUses() + " demandBonus: " + offer.getDemand() + " hasBeenUsed: " + offer.needsRestock() + " disabled: " + offer.isOutOfStock() + " specialPrice: " + offer.getSpecialPriceDiff() + " merchantExperience: " + offer.getXp() + " shouldRewardPlayerExperience: " + offer.shouldRewardExp() + " firstBuyItem: " + offer.getItemCostA().item().getRegisteredName() + " secondBuyItem: ");
                 Optional<ItemCost> v = offer.getItemCostB();
                 builder.append(v.isPresent() ? v.get().item().getRegisteredName() : "null").append(" sellItem: ").append(offer.getResult().getHoverName().getString()).append(" sellItemCount: ").append(offer.getResult().getCount());
-                builder.append(" displayedFirstBuyItem: ").append(offer.getCostA().getItem().getName().getString()).append(" displayedFirstBuyItemCount: ").append(offer.getCostA().getCount()).append(" displayedSecondBuyItem: ").append(offer.getCostB().getItem().getName().getString()).append(" displayedSecondBuyItemCount: ").append(offer.getCostB().getCount());
-                builder.append(" originalFirstBuyItem: " + offer.getBaseCostA().getItem().getName().getString()).append(" originalFirstBuyItemCount: " + offer.getBaseCostA().getCount());
+                builder.append(" displayedFirstBuyItem: ").append(offer.getCostA().getHoverName().getString()).append(" displayedFirstBuyItemCount: ").append(offer.getCostA().getCount()).append(" displayedSecondBuyItem: ").append(offer.getCostB().getHoverName().getString()).append(" displayedSecondBuyItemCount: ").append(offer.getCostB().getCount());
+                builder.append(" originalFirstBuyItem: " + offer.getBaseCostA().getHoverName().getString()).append(" originalFirstBuyItemCount: " + offer.getBaseCostA().getCount());
             });
             builder.append("\n}");
             return builder.toString();
@@ -531,7 +531,7 @@ public class PacketNames {
         s2c(ClientboundTickingStepPacket.class, "TickStep", packet -> "tickSteps: " + packet.tickSteps());
         s2c(ClientboundSetTitlesAnimationPacket.class, "TitleFade", packet -> "fadeInTicks: " + packet.getFadeIn() + " stayTicks: " + packet.getStay() + " fadeOutTicks: " + packet.getFadeOut());
         s2c(ClientboundSetTitleTextPacket.class, "Title", packet -> "text: " + packet.text().getString());
-        s2c(ClientboundForgetLevelChunkPacket.class, "UnloadChunk", packet -> "chunkX: " + packet.pos().x + " chunkZ: " + packet.pos().z);
+        s2c(ClientboundForgetLevelChunkPacket.class, "UnloadChunk", packet -> "chunkX: " + packet.pos().x() + " chunkZ: " + packet.pos().z());
         s2c(ClientboundSetHeldSlotPacket.class, "UpdateSelectedSlot", packet -> "slot: " + packet.slot());
         s2c(ClientboundTickingStatePacket.class, "UpdateTickRate", packet -> "isFrozen: " + packet.isFrozen() + " tickRate: " + packet.tickRate());
         s2c(ClientboundMoveVehiclePacket.class, "VehicleMove", Object::toString);

@@ -7,7 +7,6 @@ import kassuk.addon.blackout.enums.SwingHand;
 import kassuk.addon.blackout.enums.SwingState;
 import kassuk.addon.blackout.enums.SwingType;
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.mixins.accessor.ServerboundInteractPacketAccessor;
 import kassuk.addon.blackout.utils.timers.TimerList;
 import kassuk.addon.blackout.utils.BOInvUtils;
 import kassuk.addon.blackout.utils.ExtrapolationUtils;
@@ -31,7 +30,7 @@ import meteordevelopment.orbit.EventPriority;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.protocol.game.ServerboundInteractPacket;
+import net.minecraft.network.protocol.game.ServerboundAttackPacket;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.world.InteractionHand;
@@ -1189,8 +1188,7 @@ public class AutoCrystalPlus extends BlackOutModule {
             removeExisted(BlockPos.containing(vec));
 
             SettingUtils.registerAttack(bb);
-            ServerboundInteractPacket packet = ServerboundInteractPacket.createAttackPacket(mc.player, mc.player.isShiftKeyDown());
-            ((ServerboundInteractPacketAccessor) packet).blackoutAddon$setId(id);
+            ServerboundAttackPacket packet = new ServerboundAttackPacket(id);
 
             SettingUtils.swing(SwingState.Pre, SwingType.Attacking, InteractionHand.MAIN_HAND);
 

@@ -4,7 +4,7 @@ import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import meteordevelopment.meteorclient.events.entity.player.PlayerMoveEvent;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.DoubleSetting;
 import meteordevelopment.meteorclient.settings.Setting;
@@ -59,7 +59,7 @@ public class JesusPlus extends BlackOutModule {
             else inWater = false;
 
             if ((mc.player.isInWater() && !mc.player.isUnderWater()) || (mc.player.isInLava() && !mc.player.isEyeInFluid(FluidTags.LAVA))) {
-                ((IVec3d) mc.player.getDeltaMovement()).meteor$setY(bob.get());
+                ((IVec3) mc.player.getDeltaMovement()).meteor$setY(bob.get());
 
                 if (toggle.get() && !(mc.player.isInLava() && !mc.player.isEyeInFluid(FluidTags.LAVA)) && !isSlowed) {
                     double motion = water_speed.get();
@@ -76,9 +76,9 @@ public class JesusPlus extends BlackOutModule {
                     double x = Math.cos(Math.toRadians(yaw + 90.0f));
                     double z = Math.sin(Math.toRadians(yaw + 90.0f));
                     if (move) {
-                        ((IVec3d) event.movement).meteor$setXZ(motion * x, motion * z);
+                        ((IVec3) event.movement).meteor$setXZ(motion * x, motion * z);
                     } else {
-                        ((IVec3d) event.movement).meteor$setXZ(0, 0);
+                        ((IVec3) event.movement).meteor$setXZ(0, 0);
                     }
                 }
             }

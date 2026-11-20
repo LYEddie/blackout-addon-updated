@@ -4,7 +4,7 @@ import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import meteordevelopment.meteorclient.events.entity.player.PlayerMoveEvent;
 import meteordevelopment.meteorclient.events.packets.PacketEvent;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.settings.*;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import meteordevelopment.meteorclient.systems.modules.world.Timer;
@@ -146,9 +146,9 @@ public class SpeedPlus extends BlackOutModule {
     @EventHandler
     private void onKB(PacketEvent.Receive event) {
         if (mc.player != null && mc.level != null) {
-            if (knockBack.get() && event.packet instanceof ClientboundSetEntityMotionPacket packet && packet.getId() == mc.player.getId()) {
-                double x = packet.getMovement().x;
-                double z = packet.getMovement().z;
+            if (knockBack.get() && event.packet instanceof ClientboundSetEntityMotionPacket packet && packet.id() == mc.player.getId()) {
+                double x = packet.movement().x;
+                double z = packet.movement().z;
                 velocity = Math.max(velocity, Math.sqrt(x * x + z * z) * kbFactor.get());
             }
             if (rbReset.get() && event.packet instanceof ClientboundPlayerPositionPacket) {
@@ -215,7 +215,7 @@ public class SpeedPlus extends BlackOutModule {
                     jumpPhase = 4;
                 }
                 if (jumpPhase == 2) {
-                    ((IVec3d) event.movement).meteor$setY(0.4);
+                    ((IVec3) event.movement).meteor$setY(0.4);
                     velocity *= 1.85;
                     jumpPhase = 3;
                 }
@@ -248,9 +248,9 @@ public class SpeedPlus extends BlackOutModule {
             switch (mode.get()) {
                 case CCStrafe, Instant -> {
                     if (move) {
-                        ((IVec3d) event.movement).meteor$set(motion * x, y, motion * z);
+                        ((IVec3) event.movement).meteor$set(motion * x, y, motion * z);
                     } else {
-                        ((IVec3d) event.movement).meteor$set(0, y, 0);
+                        ((IVec3) event.movement).meteor$set(0, y, 0);
                     }
                 }
                 case Accelerate -> {
@@ -261,7 +261,7 @@ public class SpeedPlus extends BlackOutModule {
                         az = z;
                     }
 
-                    ((IVec3d) event.movement).meteor$setXZ(speed.get() * ax * acceleration, speed.get() * az * acceleration);
+                    ((IVec3) event.movement).meteor$setXZ(speed.get() * ax * acceleration, speed.get() * az * acceleration);
                 }
             }
         }

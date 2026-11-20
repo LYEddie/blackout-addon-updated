@@ -12,7 +12,7 @@ import kassuk.addon.blackout.enums.SwingType;
 import kassuk.addon.blackout.managers.impl.RotationManager;
 import kassuk.addon.blackout.mixins.accessor.ClipContextAccessor;
 import kassuk.addon.blackout.utils.*;
-import meteordevelopment.meteorclient.mixininterface.IVec3d;
+import meteordevelopment.meteorclient.mixininterface.IVec3;
 import meteordevelopment.meteorclient.settings.BoolSetting;
 import meteordevelopment.meteorclient.settings.DoubleSetting;
 import meteordevelopment.meteorclient.settings.EnumSetting;
@@ -580,8 +580,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             Vec3 pPos = mc.player.position();
             switch (rangePlaceRangeFrom.get()) {
                 case Middle ->
-                    ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
-                case Feet -> ((IVec3d) from).meteor$set(pPos.x, pPos.y, pPos.z);
+                    ((IVec3) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
+                case Feet -> ((IVec3) from).meteor$set(pPos.x, pPos.y, pPos.z);
             }
         }
 
@@ -633,7 +633,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             from = mc.player.getEyePosition();
             switch (rangeAttackRangeFrom.get()) {
                 case Middle ->
-                    ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
+                    ((IVec3) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minZ + pBB.maxZ) / 2);
                 case Feet -> from = mc.player.position();
             }
         } else {
@@ -682,12 +682,12 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         }
 
         if (dist.z() > 0.0) {
-            ((IVec3d) rangePos).meteor$setXZ(rangePos.x, rangePos.z + halfWidth);
+            ((IVec3) rangePos).meteor$setXZ(rangePos.x, rangePos.z + halfWidth);
         } else if (dist.z() < 0.0) {
-            ((IVec3d) rangePos).meteor$setXZ(rangePos.x, rangePos.z - halfWidth);
+            ((IVec3) rangePos).meteor$setXZ(rangePos.x, rangePos.z - halfWidth);
         } else if (dist.x() > 0.0) {
-            ((IVec3d) rangePos).meteor$setXZ(rangePos.x + halfWidth, rangePos.z);
-        } else ((IVec3d) rangePos).meteor$setXZ(rangePos.x - halfWidth, rangePos.z);
+            ((IVec3) rangePos).meteor$setXZ(rangePos.x + halfWidth, rangePos.z);
+        } else ((IVec3) rangePos).meteor$setXZ(rangePos.x - halfWidth, rangePos.z);
 
 
         Vec3 vec2 = rangePos.subtract(startPos);
@@ -742,8 +742,8 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             from = mc.player.getEyePosition();
             switch (rangeMiningRangeFrom.get()) {
                 case Middle ->
-                    ((IVec3d) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minX + pBB.maxX) / 2);
-                case Feet -> ((IVec3d) from).meteor$set(pPos.x, pPos.y, pPos.z);
+                    ((IVec3) from).meteor$set((pBB.minX + pBB.maxX) / 2, (pBB.minY + pBB.maxY) / 2, (pBB.minX + pBB.maxX) / 2);
+                case Feet -> ((IVec3) from).meteor$set(pPos.x, pPos.y, pPos.z);
             }
         }
 
@@ -955,7 +955,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 return raytraceResult.getBlockPos().equals(pos);
             }
             case Sides -> {
-                ((IVec3d) raytraceVec).meteor$set(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                ((IVec3) raytraceVec).meteor$set(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 for (Direction dir : Direction.values()) {
                     ((ClipContextAccessor) raytraceRaycastContext).blackoutAddon$setEnd(raytraceVec.add(dir.getStepX() / 2f, dir.getStepY() / 2f, dir.getStepZ() / 2f));
 
@@ -966,7 +966,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
             case Exposure -> {
-                ((IVec3d) raytraceVec).meteor$set(pos.getX(), pos.getY(), pos.getZ());
+                ((IVec3) raytraceVec).meteor$set(pos.getX(), pos.getY(), pos.getZ());
 
                 raytraceHit = 0;
                 for (int x = 0; x <= 2; x += 1) {
@@ -986,7 +986,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
             case Any -> {
-                ((IVec3d) raytraceVec).meteor$set(pos.getX(), pos.getY(), pos.getZ());
+                ((IVec3) raytraceVec).meteor$set(pos.getX(), pos.getY(), pos.getZ());
 
                 raytraceHit = 0;
                 for (int x = 0; x <= 2; x += 1) {
@@ -1015,21 +1015,21 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
         switch (raytraceAttackMode.get()) {
             case SinglePoint -> {
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IClipContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
 
                 return BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK;
             }
             case DoublePoint -> {
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight1.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IClipContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight1.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
                 if (BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK) {
                     return true;
                 }
 
-                ((meteordevelopment.meteorclient.mixininterface.IRaycastContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight2.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
+                ((meteordevelopment.meteorclient.mixininterface.IClipContext) BODamageUtils.raycastContext).meteor$set(mc.player.getEyePosition(), new Vec3((box.minX + box.maxX) / 2f, box.minY + raytraceAttackHeight2.get(), (box.minZ + box.maxZ) / 2f), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, mc.player);
                 return BODamageUtils.raycast(BODamageUtils.raycastContext).getType() != HitResult.Type.BLOCK;
             }
             case Exposure -> {
-                ((IVec3d) raytraceVec).meteor$set(box.minX, box.minY, box.minZ);
+                ((IVec3) raytraceVec).meteor$set(box.minX, box.minY, box.minZ);
                 double xw = box.maxX - box.minX;
                 double yh = box.maxY - box.minY;
                 double zw = box.maxZ - box.minZ;
@@ -1052,7 +1052,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
                 }
             }
             case Any -> {
-                ((IVec3d) raytraceVec).meteor$set(box.minX, box.minY, box.minZ);
+                ((IVec3) raytraceVec).meteor$set(box.minX, box.minY, box.minZ);
                 double xw = box.maxX - box.minX;
                 double yh = box.maxY - box.minY;
                 double zw = box.maxZ - box.minZ;

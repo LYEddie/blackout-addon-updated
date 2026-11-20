@@ -7,10 +7,10 @@ package kassuk.addon.blackout.utils.meteor;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.LongBidirectionalIterator;
 import it.unimi.dsi.fastutil.longs.LongSortedSet;
-import meteordevelopment.meteorclient.mixin.EntityTrackingSectionAccessor;
-import meteordevelopment.meteorclient.mixin.SectionedEntityCacheAccessor;
-import meteordevelopment.meteorclient.mixin.SimpleEntityLookupAccessor;
-import meteordevelopment.meteorclient.mixin.WorldAccessor;
+import meteordevelopment.meteorclient.mixin.EntitySectionAccessor;
+import meteordevelopment.meteorclient.mixin.EntitySectionStorageAccessor;
+import meteordevelopment.meteorclient.mixin.LevelEntityGetterAdapterAccessor;
+import meteordevelopment.meteorclient.mixin.LevelAccessor;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.core.SectionPos;
 import net.minecraft.world.entity.Entity;
@@ -28,13 +28,13 @@ import static meteordevelopment.meteorclient.MeteorClient.mc;
 
 public class BOEntityUtils {
     public static boolean intersectsWithEntity(AABB box, Predicate<Entity> predicate, Map<AbstractClientPlayer, AABB> customBoxes) {
-        LevelEntityGetter<Entity> entityLookup = ((WorldAccessor) mc.level).meteor$getEntityLookup();
+        LevelEntityGetter<Entity> entityLookup = ((LevelAccessor) mc.level).meteor$getEntityLookup();
 
         // Fast implementation using SimpleEntityLookup that returns on the first intersecting entity
         if (entityLookup instanceof LevelEntityGetterAdapter<Entity> simpleEntityLookup) {
-            EntitySectionStorage<Entity> cache = ((SimpleEntityLookupAccessor) simpleEntityLookup).meteor$getCache();
-            LongSortedSet trackedPositions = ((SectionedEntityCacheAccessor) cache).meteor$getTrackedPositions();
-            Long2ObjectMap<EntitySection<Entity>> trackingSections = ((SectionedEntityCacheAccessor) cache).meteor$getTrackingSections();
+            EntitySectionStorage<Entity> cache = ((LevelEntityGetterAdapterAccessor) simpleEntityLookup).meteor$getSectionStorage();
+            LongSortedSet trackedPositions = ((EntitySectionStorageAccessor) cache).meteor$getSectionIds();
+            Long2ObjectMap<EntitySection<Entity>> trackingSections = ((EntitySectionStorageAccessor) cache).meteor$getSections();
 
             int i = SectionPos.posToSectionCoord(box.minX - 2);
             int j = SectionPos.posToSectionCoord(box.minY - 2);
@@ -57,7 +57,7 @@ public class BOEntityUtils {
                         EntitySection<Entity> entityTrackingSection = trackingSections.get(r);
 
                         if (entityTrackingSection != null && entityTrackingSection.getStatus().isAccessible()) {
-                            for (Entity entity : ((EntityTrackingSectionAccessor) entityTrackingSection).<Entity>meteor$getCollection()) {
+                            for (Entity entity : ((EntitySectionAccessor) entityTrackingSection).<Entity>meteor$getStorage()) {
                                 if ((entity instanceof Player && customBoxes.containsKey(entity) ? customBoxes.get(entity) : entity.getBoundingBox()).intersects(box) && predicate.test(entity)) return true;
                             }
                         }
