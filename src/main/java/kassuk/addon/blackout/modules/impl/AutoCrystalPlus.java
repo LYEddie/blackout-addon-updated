@@ -932,14 +932,14 @@ public class AutoCrystalPlus extends BlackOutModule {
 
             if (event.packet instanceof ServerboundUseItemOnPacket packet) {
 
-                if (!(packet.getHand() == InteractionHand.MAIN_HAND ? Managers.HOLDING.isHolding(Items.END_CRYSTAL) : mc.player.getOffhandItem().getItem() == Items.END_CRYSTAL))
+                if (!(packet.hand() == InteractionHand.MAIN_HAND ? Managers.HOLDING.isHolding(Items.END_CRYSTAL) : mc.player.getOffhandItem().getItem() == Items.END_CRYSTAL))
                     return;
 
-                if (isOwn(packet.getHitResult().getBlockPos().above())) own.remove(packet.getHitResult().getBlockPos().above());
+                if (isOwn(packet.hitResult().getBlockPos().above())) own.remove(packet.hitResult().getBlockPos().above());
 
-                own.put(packet.getHitResult().getBlockPos().above(), System.currentTimeMillis());
-                blocked.add(OLEPOSSUtils.getCrystalBox(packet.getHitResult().getBlockPos().above()));
-                addExisted(packet.getHitResult().getBlockPos().above());
+                own.put(packet.hitResult().getBlockPos().above(), System.currentTimeMillis());
+                blocked.add(OLEPOSSUtils.getCrystalBox(packet.hitResult().getBlockPos().above()));
+                addExisted(packet.hitResult().getBlockPos().above());
             }
         }
     }

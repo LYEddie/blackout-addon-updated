@@ -1,14 +1,12 @@
 package kassuk.addon.blackout.mixins;
 
 import kassuk.addon.blackout.managers.Managers;
-import kassuk.addon.blackout.modules.impl.SwingModifier;
 import kassuk.addon.blackout.modules.impl.TickShift;
 import meteordevelopment.meteorclient.systems.modules.Modules;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
-import net.minecraft.world.InteractionHand;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -25,11 +23,6 @@ public abstract class LocalPlayerMixin {
     public ClientPacketListener connection;
     @Unique
     private static boolean sent = false;
-
-    @Inject(method = "swing(Lnet/minecraft/world/InteractionHand;)V", at = @At(value = "HEAD"))
-    private void swingHand(InteractionHand hand, CallbackInfo ci) {
-        Modules.get().get(SwingModifier.class).startSwing(hand);
-    }
 
     @Inject(method = "sendPosition", at = @At("HEAD"))
     private void sendPacketsHead(CallbackInfo ci) {

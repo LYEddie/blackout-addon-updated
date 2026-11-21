@@ -295,7 +295,8 @@ public class PacketFly extends BlackOutModule {
             if (debugID.get()) {
                 debug("id: " + packet.id());
             }
-            Vec3 vec = PositionMoveRotation.calculateAbsolute(PositionMoveRotation.of(mc.player), packet.change(), packet.relatives()).position();
+            PositionMoveRotation absolute = PositionMoveRotation.calculateAbsolute(PositionMoveRotation.of(mc.player), packet.change(), packet.relatives());
+            Vec3 vec = absolute.position();
 
             if (validPos.containsKey(packet.id()) && validPos.get(packet.id()).equals(vec)) {
                 if (debugID.get()) {
@@ -303,7 +304,7 @@ public class PacketFly extends BlackOutModule {
                 }
                 e.cancel();
                 if (!predictID.get()) {
-                    sendPacket(new ServerboundAcceptTeleportationPacket(packet.id()));
+                    sendPacket(new ServerboundAcceptTeleportationPacket(packet.id(), vec.x, vec.y, vec.z, absolute.yRot(), absolute.xRot()));
                 }
                 validPos.remove(packet.id());
                 return;
@@ -370,7 +371,7 @@ public class PacketFly extends BlackOutModule {
 
         id++;
         if (predictID.get()) {
-            sendPacket(new ServerboundAcceptTeleportationPacket(id));
+            sendPacket(new ServerboundAcceptTeleportationPacket(id, pos.x, pos.y, pos.z, mc.player.getYRot(), mc.player.getXRot()));
         }
     }
 

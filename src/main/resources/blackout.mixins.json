@@ -21,8 +21,9 @@
     "MultiPlayerGameModeMixin",
     "EntityMixin",
     "ClientPacketListenerMixin",
-    "ItemInHandRendererMixin",
+    "FirstPersonHandsAndItemsRendererMixin",
     "LivingEntityRendererMixin",
+    "LivingEntityMixin",
     "PlayerMixin"
   ],
   "injectors": {

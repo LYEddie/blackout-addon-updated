@@ -27,7 +27,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.game.ServerboundSwingPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.ClipContext;
@@ -1394,7 +1393,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
 
     public final Setting<Boolean> swingInteract = swingSgInteract.add(new BoolSetting.Builder()
         .name("interact-swing")
-        .description("Swings your hand when you interact with a block.")
+        .description("Sends a main-hand swing to the server when interacting with a block.")
         .defaultValue(true)
         .build()
     );
@@ -1407,7 +1406,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     );
     public final Setting<Boolean> swingBlockPlace = swingSgBlockPlace.add(new BoolSetting.Builder()
         .name("block-place-swing")
-        .description("Swings your hand when you interact with a block.")
+        .description("Sends a main-hand swing to the server when interacting with a block.")
         .defaultValue(true)
         .build()
     );
@@ -1420,13 +1419,13 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     );
     public final Setting<MiningSwingState> swingMining = swingSgMining.add(new EnumSetting.Builder<MiningSwingState>()
         .name("mining-swing")
-        .description("Swings your hand when you place a crystal.")
+        .description("When to send a main-hand swing to the server while mining.")
         .defaultValue(MiningSwingState.Double)
         .build()
     );
     public final Setting<Boolean> swingAttack = swingSgAttack.add(new BoolSetting.Builder()
         .name("attack-swing")
-        .description("Swings your hand when you attack any entity.")
+        .description("Sends a main-hand swing to the server when attacking an entity.")
         .defaultValue(true)
         .build()
     );
@@ -1439,7 +1438,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
     );
     public final Setting<Boolean> swingUse = swingSgUse.add(new BoolSetting.Builder()
         .name("use-swing")
-        .description("Swings your hand when using an item. NCP doesn't check this.")
+        .description("Sends a main-hand swing to the server when using an item.")
         .defaultValue(true)
         .build()
     );
@@ -1460,10 +1459,10 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         }
 
         switch (type) {
-            case Interact -> swingSwing(swingInteract.get(), hand);
-            case Placing -> swingSwing(swingBlockPlace.get(), hand);
-            case Attacking -> swingSwing(swingAttack.get(), hand);
-            case Using -> swingSwing(swingUse.get(), hand);
+            case Interact -> swingSwing(swingInteract.get());
+            case Placing -> swingSwing(swingBlockPlace.get());
+            case Attacking -> swingSwing(swingAttack.get());
+            case Using -> swingSwing(swingUse.get());
         }
     }
 
@@ -1487,7 +1486,7 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
             return;
         }
 
-        swingSwing(true, InteractionHand.MAIN_HAND);
+        swingSwing(true);
     }
 
     private SwingState swingGetState(SwingType type) {
@@ -1500,12 +1499,13 @@ public final class GlobalSettingsConfig extends System<GlobalSettingsConfig> {
         };
     }
 
-    private void swingSwing(boolean shouldSwing, InteractionHand hand) {
+    private void swingSwing(boolean shouldSwing) {
         if (mc.player == null) {
             return;
         }
 
-        if (shouldSwing) mc.player.connection.send(new ServerboundSwingPacket(hand));
+        // Punch has no hand parameter; local offhand animations are handled separately.
+        if (shouldSwing) mc.player.connection.send(net.minecraft.network.protocol.game.ServerboundPunchPacket.INSTANCE);
     }
 
     public enum MiningSwingState {

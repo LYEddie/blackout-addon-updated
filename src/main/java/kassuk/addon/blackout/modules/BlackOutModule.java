@@ -108,7 +108,7 @@ public class BlackOutModule extends Module {
             case RealHand -> realHand;
         };
 
-        mc.player.swing(hand, true);
+        mc.player.swing(hand, net.minecraft.world.item.component.SwingAnimation.DEFAULT, true);
         Modules.get().get(SwingModifier.class).startSwing(hand);
     }
 

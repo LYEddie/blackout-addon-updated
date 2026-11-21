@@ -24,7 +24,6 @@ import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BedItem;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.AABB;
@@ -583,7 +582,7 @@ public class BedAuraPlus extends BlackOutModule {
     }
 
     private boolean placeUpdate() {
-        InteractionHand hand = Managers.HOLDING.getStack().getItem() instanceof BedItem ? InteractionHand.MAIN_HAND : mc.player.getOffhandItem().getItem() instanceof BedItem ? InteractionHand.OFF_HAND : null;
+        InteractionHand hand = Managers.HOLDING.getStack().getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS) ? InteractionHand.MAIN_HAND : mc.player.getOffhandItem().getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS) ? InteractionHand.OFF_HAND : null;
 
         int beds = hand == InteractionHand.MAIN_HAND ? Managers.HOLDING.getStack().getCount() :
             hand == InteractionHand.OFF_HAND ? mc.player.getOffhandItem().getCount() : 0;
@@ -591,11 +590,11 @@ public class BedAuraPlus extends BlackOutModule {
         if (hand == null) {
             switch (switchMode.get()) {
                 case Silent, Normal -> {
-                    FindItemResult result = InvUtils.findInHotbar(item -> item.getItem() instanceof BedItem);
+                    FindItemResult result = InvUtils.findInHotbar(item -> item.getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS));
                     beds = result.count();
                 }
                 case PickSilent, InvSwitch -> {
-                    FindItemResult result = InvUtils.find(item -> item.getItem() instanceof BedItem);
+                    FindItemResult result = InvUtils.find(item -> item.getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS));
                     beds = result.slot() >= 0 ? result.count() : -1;
                 }
             }
@@ -623,16 +622,16 @@ public class BedAuraPlus extends BlackOutModule {
         if (!switched) {
             switch (switchMode.get()) {
                 case Silent, Normal -> {
-                    FindItemResult result = InvUtils.findInHotbar(item -> item.getItem() instanceof BedItem);
+                    FindItemResult result = InvUtils.findInHotbar(item -> item.getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS));
                     InvUtils.swap(result.slot(), true);
                     switched = true;
                 }
                 case PickSilent -> {
-                    FindItemResult result = InvUtils.find(item -> item.getItem() instanceof BedItem);
+                    FindItemResult result = InvUtils.find(item -> item.getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS));
                     switched = BOInvUtils.pickSwitch(result.slot());
                 }
                 case InvSwitch -> {
-                    FindItemResult result = InvUtils.find(item -> item.getItem() instanceof BedItem);
+                    FindItemResult result = InvUtils.find(item -> item.getItem().builtInRegistryHolder().is(net.minecraft.tags.ItemTags.BEDS));
                     switched = BOInvUtils.invSwitch(result.slot());
                 }
             }

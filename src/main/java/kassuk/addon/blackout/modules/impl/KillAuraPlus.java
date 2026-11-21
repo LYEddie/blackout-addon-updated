@@ -21,7 +21,6 @@ import net.minecraft.network.protocol.game.ServerboundAttackPacket;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import java.util.Objects;
 
@@ -106,7 +105,7 @@ public class KillAuraPlus extends BlackOutModule {
         boolean switched = false;
         switch (switchMode.get()) {
             case Disabled ->
-                switched = !onlyWeapon.get() || mc.player.getMainHandItem().is(ItemTags.SWORDS) || mc.player.getMainHandItem().getItem() instanceof AxeItem;
+                switched = !onlyWeapon.get() || mc.player.getMainHandItem().is(ItemTags.SWORDS) || mc.player.getMainHandItem().is(ItemTags.AXES);
             case Normal -> {
                 int slot = bestSlot(false);
                 if (slot >= 0) {
@@ -193,7 +192,7 @@ public class KillAuraPlus extends BlackOutModule {
         double dmg;
         for (int i = 0; i < (inventory ? mc.player.getInventory().getContainerSize() + 1 : 9); i++) {
             ItemStack stack = mc.player.getInventory().getItem(i);
-            if (onlyWeapon.get() && !(stack.is(ItemTags.SWORDS)) && !(stack.getItem() instanceof AxeItem)) {
+            if (onlyWeapon.get() && !(stack.is(ItemTags.SWORDS)) && !(stack.is(ItemTags.AXES))) {
                 continue;
             }
 

@@ -54,7 +54,7 @@ public class StrictNoSlow extends BlackOutModule {
     @EventHandler
     private void onSend(PacketEvent.Sent event) {
         if (mc.player != null && event.packet instanceof ServerboundUseItemPacket packet) {
-            if (shouldSend(packet.getHand() == InteractionHand.MAIN_HAND ? Managers.HOLDING.getStack() : mc.player.getOffhandItem())) {
+            if (shouldSend(packet.hand() == InteractionHand.MAIN_HAND ? Managers.HOLDING.getStack() : mc.player.getOffhandItem())) {
                 send();
                 timer = 0;
             }

@@ -102,15 +102,17 @@ public class PacketNames {
         c2s(ServerboundChatCommandPacket.class, "CommandExecution", packet -> "command: " + packet.command());
         c2s(ServerboundPlaceRecipePacket.class, "CraftRequest", Object::toString);
         c2s(ServerboundSetCreativeModeSlotPacket.class, "CreativeInventoryAction", packet -> "slot: " + packet.slotNum() + " name: " + packet.itemStack().getHoverName().getString() + " count: " + packet.itemStack().getCount());
-        c2s(ServerboundSwingPacket.class, "HandSwing", packet -> "hand: " + packet.getHand().name());
+
         c2s(ServerboundJigsawGeneratePacket.class, "JigsawGenerating", packet -> "pos: " + packet.getPos().toShortString() + " maxDepth: " + packet.levels() + " shouldKeepJigsaws: " + packet.keepJigsaws());
         c2s(ServerboundChatAckPacket.class, "MessageAcknowledgment", packet -> "offset: " + packet.offset());
         c2s(ServerboundPlayerActionPacket.class, "PlayerAction", packet -> "action: " + packet.getAction().name() + "pos: " + packet.getPos().toShortString() + " direction: " + packet.getDirection().getSerializedName() + " sequence: " + packet.getSequence());
         c2s(ServerboundPlayerInputPacket.class, "PlayerInput", Object::toString);
-        c2s(ServerboundUseItemOnPacket.class, "PlayerInteractBlock", packet -> "hand: " + packet.getHand().name() + " blockPos: " + packet.getHitResult().getBlockPos().toShortString() + " pos: " + packet.getHitResult().getLocation().toString() + " side: " + packet.getHitResult().getDirection() + " isInsideBlock: " + packet.getHitResult().isInside() + " type: " + packet.getHitResult().getType().name() + " sequence: " + packet.getSequence());
+        c2s(ServerboundPunchPacket.class, "Punch", Object::toString);
+        c2s(ServerboundClientTickEndPacket.class, "ClientTickEnd", Object::toString);
+        c2s(ServerboundUseItemOnPacket.class, "PlayerInteractBlock", Object::toString);
         c2s(ServerboundInteractPacket.class, "PlayerInteractEntity", Object::toString);
         c2s(ServerboundAttackPacket.class, "Attack", Object::toString);
-        c2s(ServerboundUseItemPacket.class, "PlayerInteractItem", packet -> "hand: " + packet.getHand().name() + " sequence: " + packet.getSequence());
+        c2s(ServerboundUseItemPacket.class, "PlayerInteractItem", Object::toString);
 
         c2s(ServerboundMovePlayerPacket.PosRot.class, "PlayerMove Full", packet -> "x: " + packet.getX(0) + " y: " + packet.getY(0) + " z: " + packet.getZ(0) + " yaw: " + packet.getYRot(0) + " pitch: " + packet.getXRot(0) + " isOnGround: " + packet.isOnGround());
         c2s(ServerboundMovePlayerPacket.Pos.class, "PlayerMove PositionAndOnGround", packet -> "x: " + packet.getX(0) + " y: " + packet.getY(0) + " z: " + packet.getZ(0) + " isOnGround: " + packet.isOnGround());
@@ -123,11 +125,11 @@ public class PacketNames {
         c2s(ServerboundRecipeBookSeenRecipePacket.class, "RecipeBookData", Object::toString);
         c2s(ServerboundRecipeBookChangeSettingsPacket.class, "RecipeCategoryOptions", packet -> "category: " + packet.getBookType().name() + " isFilteringCraftable: " + packet.isFiltering() + " isGuiOpen: " + packet.isOpen());
         c2s(ServerboundRenameItemPacket.class, "RenameItem", packet -> "name: " + packet.getName());
-        c2s(ServerboundCommandSuggestionPacket.class, "RequestCommandCompletions", packet -> "partialCommand: " + packet.getCommand() + " completionId: " + packet.getId());
+        c2s(ServerboundCommandSuggestionPacket.class, "RequestCommandCompletions", Object::toString);
         c2s(ServerboundSelectTradePacket.class, "SelectMerchantTrade", packet -> "tradeId: " + packet.getItem());
         c2s(ServerboundContainerSlotStateChangedPacket.class, "SlotChangedState", packet -> "slotId: " + packet.slotId() + " newState: " + packet.newState() + " screenHandlerId: " + packet.containerId());
         c2s(ServerboundTeleportToEntityPacket.class, "SpectatorTeleport");
-        c2s(ServerboundAcceptTeleportationPacket.class, "TeleportConfirm", packet -> "teleportId: " + packet.getId());
+        c2s(ServerboundAcceptTeleportationPacket.class, "TeleportConfirm", Object::toString);
         c2s(ServerboundSetBeaconPacket.class, "UpdateBeacon", packet -> {
             StringBuilder builder = new StringBuilder();
 
@@ -152,11 +154,7 @@ public class PacketNames {
         c2s(ServerboundSetJigsawBlockPacket.class, "UpdateJigsaw", packet -> "name: " + packet.getName().toString() + " pos: " + packet.getPos().toShortString() + " finalState: " + packet.getFinalState() + " jointType: " + packet.getJoint().getSerializedName() + " target: " + packet.getTarget().toString() + " pool: " + packet.getPool().toString() + " placementPriority: " + packet.getPlacementPriority() + " selectionPriority: " + packet.getSelectionPriority());
         c2s(ServerboundPlayerAbilitiesPacket.class, "UpdatePlayerAbilities", packet -> "isFlying: " + packet.isFlying());
         c2s(ServerboundSetCarriedItemPacket.class, "UpdateSelectedSlot", packet -> "selectedSlot: " + packet.getSlot());
-        c2s(ServerboundSignUpdatePacket.class, "UpdateSign", packet -> {
-            StringBuilder builder = new StringBuilder("pos: " + packet.getPos().toShortString() + " isFront: " + packet.isFrontText());
-            for (String str : packet.getLines()) builder.append("\n").append(str);
-            return builder.toString();
-        });
+        c2s(ServerboundSignUpdatePacket.class, "UpdateSign", Object::toString);
         c2s(ServerboundSetStructureBlockPacket.class, "UpdateStructureBlock", packet -> "pos: " + packet.getPos().toShortString() + " rotation: " + packet.getRotation().getSerializedName() + " offset: " + packet.getOffset().toShortString() + " size: " + packet.getSize().toShortString() + " seed: " + packet.getSeed() + " templateName: " + packet.getName() + " mode: " + packet.getMode().getSerializedName() + " action: " + packet.getUpdateType().name() + " metaData: " + packet.getData() + " integrity: " + packet.getIntegrity() + " mirror: " + packet.getMirror());
         c2s(ServerboundMoveVehiclePacket.class, "VehicleMove", Object::toString);
 
@@ -173,11 +171,7 @@ public class PacketNames {
         s2c(ClientboundKeepAlivePacket.class, "KeepAlive", packet -> "id: " + packet.getId());
         s2c(ClientboundResourcePackPopPacket.class, "ResourcePackRemove", packet -> "id: " + packet.id());
         s2c(ClientboundResourcePackPushPacket.class, "ResourcePackSend", packet -> "url: " + packet.url() + " hash: " + packet.hash() + " id: " + packet.id().toString() + " prompt: " + packet.prompt().orElse(Component.nullToEmpty("null")).getString() + " required: " + packet.required());
-        s2c(ClientboundUpdateTagsPacket.class, "SynchronizeTags", packet -> {
-            StringBuilder builder = new StringBuilder("groups: ");
-            packet.getTags().forEach((key, serialized) -> builder.append("\n").append(key.toString()).append(" serializedSize: ").append(serialized.size()));
-            return builder.toString();
-        });
+        s2c(ClientboundUpdateTagsPacket.class, "SynchronizeTags", Object::toString);
 
         // config
         s2c(ClientboundRegistryDataPacket.class, "DynamicRegistries");
@@ -207,43 +201,7 @@ public class PacketNames {
         });
 
         // play
-        s2c(ClientboundUpdateAdvancementsPacket.class, "AdvancementUpdate", packet -> {
-            StringBuilder builder = new StringBuilder("shouldClearCurrent: " + packet.shouldReset());
-
-            // this packet is gonna fill the whole log
-            builder.append(" advancementIdsToRemove: {");
-            for (Identifier v : packet.getRemoved())
-                builder.append("\n  ").append(v.toString());
-            builder.append("\n}");
-
-            builder.append(" advancementsToEarn: {");
-            for (AdvancementHolder v : packet.getAdded())
-                builder.append("\n  ").append(v.toString());
-            builder.append("\n}");
-
-            builder.append(" advancementsToEarn: {");
-            packet.getProgress().forEach((id, progress) -> {
-                builder.append("\n  id: ").append(id.toString())
-                    .append(" isDone: ").append(progress.isDone())
-                    .append(" isAnyObtained: ").append(progress.hasProgress())
-                    .append(" progressBarPercentage: ").append(progress.getPercent())
-                    .append(" progressBarFraction: ").append(progress.getProgressText() == null ? "null" : progress.getProgressText().getString())
-                    .append(" earliestProgressObtainDate: ").append(progress.getFirstProgressDate() == null ? "null" : progress.getFirstProgressDate().toString())
-                    .append(" obtainedCriteria: {");
-
-                for (String str : progress.getCompletedCriteria()) {
-                    builder.append("\n    ").append(str);
-                }
-
-                builder.append("\n  }\n   unobtainedCriteria");
-                for (String str : progress.getRemainingCriteria()) {
-                    builder.append("\n    ").append(str);
-                }
-                builder.append("\n  }");
-            });
-            builder.append("\n}");
-            return builder.toString();
-        });
+        s2c(ClientboundUpdateAdvancementsPacket.class, "AdvancementUpdate", Object::toString);
         s2c(ClientboundBlockDestructionPacket.class, "BlockBreakingProgress", packet -> "pos: " + packet.getPos().toShortString() + " progress: " + packet.getProgress() + " entityId: " + packet.getId());
         s2c(ClientboundBlockEntityDataPacket.class, "BlockEntityUpdate", packet -> {
             StringBuilder builder = new StringBuilder("pos: " + packet.getPos().toShortString() + " blockEntityType: ");
@@ -265,7 +223,7 @@ public class PacketNames {
             builder.append("\nBUNDLE END");
             return builder.toString();
         });
-        s2c(ClientboundPlayerChatPacket.class, "ChatMessage", packet -> "unsignedContent: " + (packet.unsignedContent() == null ? "null" : packet.unsignedContent().getString()) + " sender: " + packet.sender().toString() + " index: " + packet.index() + " isWritingErrorSkippable: " + packet.isSkippable() + " isFullyFiltered: " + packet.filterMask().isFullyFiltered() + " isPassThrough: " + packet.filterMask().isEmpty() + " bodyContent: " + packet.body().content() + " bodySalt: " + packet.body().salt() + " bodyTimestamp: " + packet.body().timeStamp() + " bodyLastSeenSize: " + packet.body().lastSeen().entries().size() + " signature: " + (packet.signature() == null ? "null" : byteArrToString(packet.signature().bytes())) + " serializedParametersName: " + packet.chatType().name().getString() + " serializedParametersTargetName: " + packet.chatType().targetName().orElse(Component.nullToEmpty("null")).getString());
+        s2c(ClientboundPlayerChatPacket.class, "ChatMessage", Object::toString);
         s2c(ClientboundCustomChatCompletionsPacket.class, "ChatSuggestions", packet -> {
             StringBuilder builder = new StringBuilder("action: " + packet.action().name() + " entries: {");
             for (String entry : packet.entries()) builder.append("\n  ").append(entry);
@@ -279,14 +237,7 @@ public class PacketNames {
             builder.append("\n}");
             return builder.toString();
         });
-        s2c(ClientboundLevelChunkWithLightPacket.class, "ChunkData", packet -> {
-
-            String builder = "chunkX: " + packet.getX() + " chunkZ: " + packet.getZ() + " chunkDataSectionsDataBuf: " + byteArrToString(packet.getChunkData().getReadBuffer().array()) + " chunkDataHeightMap: {" + "\n} " +
-                " lightDataBlockNibblesSize: " + packet.getLightData().getBlockUpdates().size() +
-                " lightDataBlockNibblesSize: " + packet.getLightData().getSkyUpdates().size();
-
-            return builder;
-        });
+        s2c(ClientboundLevelChunkWithLightPacket.class, "ChunkData", Object::toString);
         s2c(ClientboundSectionBlocksUpdatePacket.class, "ChunkDeltaUpdate");
         s2c(ClientboundSetChunkCacheRadiusPacket.class, "ChunkLoadDistance", packet -> "distance: " + packet.getRadius());
         s2c(ClientboundSetChunkCacheCenterPacket.class, "ChunkRenderDistanceCenter", packet -> "chunkX: " + packet.getX() + " chunkZ: " + packet.getZ());
@@ -308,12 +259,7 @@ public class PacketNames {
         s2c(ClientboundPlayerCombatEndPacket.class, "EndCombat");
         s2c(ClientboundPlayerCombatEnterPacket.class, "EnterCombat");
         s2c(ClientboundStartConfigurationPacket.class, "EnterReconfiguration");
-        s2c(ClientboundRemoveEntitiesPacket.class, "EntitiesDestroy", packet -> {
-            StringBuilder builder = new StringBuilder("entityIds: {");
-            packet.getEntityIds().forEach(id -> builder.append("\n  ").append(id));
-            builder.append("\n}");
-            return builder.toString();
-        });
+        s2c(ClientboundRemoveEntitiesPacket.class, "EntitiesDestroy", Object::toString);
         s2c(ClientboundAnimatePacket.class, "EntityAnimation", packet -> "entityId: " + packet.getId() + " animationId: " + packet.getAction());
         s2c(ClientboundSetEntityLinkPacket.class, "EntityAttach", packet -> "holdingEntityId: " + packet.getDestId() + " attachedEntityId: " + packet.getSourceId());
         s2c(ClientboundUpdateAttributesPacket.class, "EntityAttributes", packet -> {
@@ -352,7 +298,7 @@ public class PacketNames {
             return builder.toString();
         });
         s2c(ClientboundTeleportEntityPacket.class, "EntityPosition", Object::toString);
-        s2c(ClientboundMoveEntityPacket.class, "Entity", packet -> "deltaX: " + packet.getXa() + " deltaY: " + packet.getYa() + " deltaZ: " + packet.getZa() + " yaw: " + packet.getYRot() + " pitch: " + packet.getXRot() + " hasRotation: " + packet.hasRotation() + " isPositionChanged: " + packet.hasPosition() + " isOnGround: " + packet.isOnGround());
+        s2c(ClientboundMoveEntityPacket.class, "Entity", packet -> "positionDelta: " + packet.getPositionDelta() + " yaw: " + packet.getYRot() + " pitch: " + packet.getXRot() + " hasRotation: " + packet.hasRotation() + " hasPosition: " + packet.hasPosition() + " onGround: " + packet.isOnGround());
         s2c(ClientboundRotateHeadPacket.class, "EntitySetHeadYaw", packet -> "headYaw: " + packet.getYHeadRot());
         s2c(ClientboundAddEntityPacket.class, "EntitySpawn", packet -> "entityId: " + packet.getId() + " entityData: " + packet.getData() + " entityType: " + packet.getType().getDescription() + " uuid: " + packet.getUUID().toString() + " x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ() + " yaw: " + packet.getYRot() + " pitch: " + packet.getXRot() + " headYaw: " + packet.getYHeadRot() + " velocityX: " + packet.getMovement().x + " velocityY: " + packet.getMovement().y + " velocityZ: " + packet.getMovement().z);
         s2c(ClientboundUpdateMobEffectPacket.class, "EntityStatusEffect", packet -> {
@@ -375,7 +321,7 @@ public class PacketNames {
         s2c(ClientboundSetHealthPacket.class, "HealthUpdate", packet -> "health: " + packet.getHealth() + " food: " + packet.getFood() + " saturation: " + packet.getSaturation());
         s2c(ClientboundContainerSetContentPacket.class, "Inventory", Object::toString);
         s2c(ClientboundTakeItemEntityPacket.class, "ItemPickupAnimation", packet -> "entityId: " + packet.getItemId() + " collectorEntityId: " + packet.getPlayerId() + " stackAmount: " + packet.getAmount());
-        s2c(ClientboundLightUpdatePacket.class, "LightUpdate", packet -> "chunkX: " + packet.getX() + " chunkZ: " + packet.getZ() + " blockNibblesSize: " + packet.getLightData().getBlockUpdates().size() + " skyNibblesSize: " + packet.getLightData().getSkyUpdates().size());
+        s2c(ClientboundLightUpdatePacket.class, "LightUpdate", Object::toString);
         s2c(ClientboundPlayerLookAtPacket.class, "LookAt");
         s2c(ClientboundMapItemDataPacket.class, "MapUpdate", packet -> {
             StringBuilder builder = new StringBuilder("mapId: " + packet.mapId().id() + " locked: " + packet.locked() + " scale: " + packet.scale());
@@ -421,9 +367,9 @@ public class PacketNames {
         });
         s2c(ClientboundMountScreenOpenPacket.class, "OpenMountScreen", packet -> "syncId: " + packet.getContainerId() + " mountId: " + packet.getEntityId() + " slotColumnCount: " + packet.getInventoryColumns());
         s2c(ClientboundOpenScreenPacket.class, "OpenScreen", packet -> "name: " + packet.getTitle().getString() + " syncId: " + packet.getContainerId() + " screenHandlerType: " + packet.getType());
-        s2c(ClientboundOpenBookPacket.class, "OpenWrittenBook", packet -> "hand: " + packet.getHand().name());
+        s2c(ClientboundOpenBookPacket.class, "OpenWrittenBook", Object::toString);
         s2c(ClientboundSetActionBarTextPacket.class, "OverlayMessage", packet -> "text: " + packet.text().getString());
-        s2c(ClientboundLevelParticlesPacket.class, "Particle", packet -> "count: " + packet.getCount() + " x: " + packet.getX() + " y: " + packet.getY() + " z: " + packet.getZ() + " offsetX: " + packet.getXDist() + " offsetY: " + packet.getYDist() + " offsetZ: " + packet.getZDist() + " speed: " + packet.getMaxSpeed() + " isLongDistance: " + packet.isOverrideLimiter() + " parameterType: " + packet.getParticle().getType());
+        s2c(ClientboundLevelParticlesPacket.class, "Particle", Object::toString);
         s2c(ClientboundPlayerAbilitiesPacket.class, "PlayerAbilities", packet -> "isCreativeMod: " + packet.canInstabuild() + " allowFlying: " + packet.canFly() + " isInvulnerable: " + packet.isInvulnerable() + " isFlying: " + packet.isFlying() + " flySpeed: " + packet.getFlyingSpeed() + " walkSpeed: " + packet.getWalkingSpeed());
         s2c(ClientboundBlockChangedAckPacket.class, "PlayerActionResponse", packet -> "sequence: " + packet.sequence());
         s2c(ClientboundTabListPacket.class, "PlayerListHeader", packet -> "header: " + packet.header().getString() + " footer: " + packet.footer().getString());
@@ -473,7 +419,7 @@ public class PacketNames {
             builder.append("\n}");
             return builder.toString();
         });
-        s2c(ClientboundOpenSignEditorPacket.class, "SignEditorOpen", packet -> "pos: " + packet.getPos().toShortString() + " isFront: " + packet.isFrontText());
+        s2c(ClientboundOpenSignEditorPacket.class, "SignEditorOpen", Object::toString);
         s2c(ClientboundSetSimulationDistancePacket.class, "SimulationDistance", packet -> "simulationDistance: " + packet.simulationDistance());
         s2c(ClientboundChunkBatchStartPacket.class, "StartChunkSend");
         s2c(ClientboundAwardStatsPacket.class, "Statistics", packet -> {
