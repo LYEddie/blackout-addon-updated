@@ -710,7 +710,7 @@ public class AutoMine extends BlackOutModule {
             return false;
         }
 
-        interactBlock(hand == null ? InteractionHand.MAIN_HAND : hand, target.crystalPos.below().getCenter(), dir, target.crystalPos.below());
+        interactBlock(hand == null ? InteractionHand.MAIN_HAND : hand, Vec3.atCenterOf(target.crystalPos.below()), dir, target.crystalPos.below());
 
         if (placeSwing.get()) clientSwing(placeHand.get(), hand == null ? InteractionHand.MAIN_HAND : hand);
 

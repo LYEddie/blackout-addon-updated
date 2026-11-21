@@ -1,5 +1,7 @@
 package kassuk.addon.blackout.modules.impl;
 
+import net.minecraft.world.phys.Vec3;
+
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.RotationType;
@@ -165,7 +167,7 @@ public class BurrowPlus extends BlackOutModule {
             sendPacket(new ServerboundMovePlayerPacket.Pos(mc.player.getX(), mc.player.getY() + y, mc.player.getZ(), false, mc.player.horizontalCollision));
         }
 
-        placeBlock(InteractionHand.MAIN_HAND, mc.player.blockPosition().below().getCenter(), Direction.UP, mc.player.blockPosition().below());
+        placeBlock(InteractionHand.MAIN_HAND, Vec3.atCenterOf(mc.player.blockPosition().below()), Direction.UP, mc.player.blockPosition().below());
         if (!instaRot.get() && SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "placing"));
 
         if (placeSwing.get()) clientSwing(placeHand.get(), InteractionHand.MAIN_HAND);

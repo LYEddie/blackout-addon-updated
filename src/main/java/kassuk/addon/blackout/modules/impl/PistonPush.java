@@ -1,5 +1,7 @@
 package kassuk.addon.blackout.modules.impl;
 
+import net.minecraft.world.phys.Vec3;
+
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.HoleType;
@@ -301,7 +303,7 @@ public class PistonPush extends BlackOutModule {
 
         hand = hand == null ? InteractionHand.MAIN_HAND : hand;
 
-        placeBlock(hand, pistonData.pos().getCenter(), pistonData.dir(), pistonData.pos());
+        placeBlock(hand, Vec3.atCenterOf(pistonData.pos()), pistonData.dir(), pistonData.pos());
 
         if (SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "piston"));
         pistonTime = System.currentTimeMillis();
@@ -357,7 +359,7 @@ public class PistonPush extends BlackOutModule {
 
         hand = hand == null ? InteractionHand.MAIN_HAND : hand;
 
-        placeBlock(hand, redstoneData.pos().getCenter(), redstoneData.dir(), redstoneData.pos());
+        placeBlock(hand, Vec3.atCenterOf(redstoneData.pos()), redstoneData.dir(), redstoneData.pos());
 
         if (SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "redstone"));
         redstonePlaced = true;
@@ -441,7 +443,7 @@ public class PistonPush extends BlackOutModule {
 
         if (OLEPOSSUtils.solid2(eyePos.above())) return;
 
-        for (Direction dir : Direction.Plane.HORIZONTAL.stream().sorted(Comparator.comparingDouble(d -> eyePos.relative(d).getCenter().distanceTo(mc.player.getEyePosition()))).toList()) {
+        for (Direction dir : Direction.Plane.HORIZONTAL.stream().sorted(Comparator.comparingDouble(d -> Vec3.atCenterOf(eyePos.relative(d)).distanceTo(mc.player.getEyePosition()))).toList()) {
             resetPos();
 
             BlockPos pos = eyePos.relative(dir);
@@ -472,7 +474,7 @@ public class PistonPush extends BlackOutModule {
 
     private void updateRedstone(BlockPos pos) {
         if (redstone.get() == Redstone.Torch) {
-            for (Direction direction : Arrays.stream(Direction.values()).sorted(Comparator.comparingDouble(i -> pos.relative(i).getCenter().distanceTo(mc.player.getEyePosition()))).toList()) {
+            for (Direction direction : Arrays.stream(Direction.values()).sorted(Comparator.comparingDouble(i -> Vec3.atCenterOf(pos.relative(i)).distanceTo(mc.player.getEyePosition()))).toList()) {
                 if (direction == pistonDir.getOpposite() || direction == Direction.DOWN || direction == Direction.UP) continue;
 
                 BlockPos position = pos.relative(direction);
@@ -505,7 +507,7 @@ public class PistonPush extends BlackOutModule {
             return;
         }
 
-        for (Direction direction : Arrays.stream(Direction.values()).sorted(Comparator.comparingDouble(i -> pos.relative(i).getCenter().distanceTo(mc.player.getEyePosition()))).toList()) {
+        for (Direction direction : Arrays.stream(Direction.values()).sorted(Comparator.comparingDouble(i -> Vec3.atCenterOf(pos.relative(i)).distanceTo(mc.player.getEyePosition()))).toList()) {
             if (direction == pistonDir.getOpposite() || direction == Direction.DOWN) {
                 continue;
             }

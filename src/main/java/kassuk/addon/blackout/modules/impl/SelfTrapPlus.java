@@ -24,7 +24,7 @@ import meteordevelopment.orbit.EventPriority;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -358,7 +358,7 @@ public class SelfTrapPlus extends BlackOutModule {
         placeTimer = 0;
         placesLeft--;
 
-        placeBlock(hand, d.pos().getCenter(), d.dir(), d.pos());
+        placeBlock(hand, Vec3.atCenterOf(d.pos()), d.dir(), d.pos());
 
         if (placeSwing.get()) clientSwing(placeHand.get(), hand);
 
@@ -439,7 +439,7 @@ public class SelfTrapPlus extends BlackOutModule {
                 continue;
             }
 
-            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityType.ITEM)) {
+            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityTypes.ITEM)) {
                 double dist = mc.player.getEyePosition().distanceTo(Vec3.atCenterOf(position.relative(dir)));
 
                 if (dist < cDist || value < 2) {
@@ -449,7 +449,7 @@ public class SelfTrapPlus extends BlackOutModule {
                 }
             }
 
-            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityType.ITEM && entity.getType() != EntityType.END_CRYSTAL)) {
+            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityTypes.ITEM && entity.getType() != EntityTypes.END_CRYSTAL)) {
                 double dist = mc.player.getEyePosition().distanceTo(Vec3.atCenterOf(position.relative(dir)));
 
                 if (dist < cDist || value < 1) {

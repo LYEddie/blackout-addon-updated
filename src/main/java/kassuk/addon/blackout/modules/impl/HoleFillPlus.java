@@ -402,7 +402,7 @@ public class HoleFillPlus extends BlackOutModule {
         hand = getHand();
         switched = false;
 
-        holes.stream().sorted(Comparator.comparingDouble(pos -> pos.getCenter().distanceTo(mc.player.getEyePosition()))).forEach(this::place);
+        holes.stream().sorted(Comparator.comparingDouble(pos -> Vec3.atCenterOf(pos).distanceTo(mc.player.getEyePosition()))).forEach(this::place);
 
         if (switched && hand == null) {
             switch (switchMode.get()) {
@@ -672,7 +672,7 @@ public class HoleFillPlus extends BlackOutModule {
         render.add(new Render(pos, System.currentTimeMillis()));
         timers.add(pos, delay.get());
 
-        placeBlock(hand == null ? InteractionHand.MAIN_HAND : hand, data.pos().getCenter(), data.dir(), data.pos());
+        placeBlock(hand == null ? InteractionHand.MAIN_HAND : hand, Vec3.atCenterOf(data.pos()), data.dir(), data.pos());
 
         if (placeSwing.get()) clientSwing(placeHand.get(), hand == null ? InteractionHand.MAIN_HAND : hand);
 

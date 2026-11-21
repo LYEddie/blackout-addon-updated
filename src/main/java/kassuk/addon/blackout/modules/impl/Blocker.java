@@ -526,7 +526,7 @@ public class Blocker extends BlackOutModule {
 
         if (!switched && hand == null) return;
 
-        placeBlock(hand == null ? InteractionHand.MAIN_HAND : hand, data.pos().getCenter(), data.dir(), data.pos());
+        placeBlock(hand == null ? InteractionHand.MAIN_HAND : hand, Vec3.atCenterOf(data.pos()), data.dir(), data.pos());
 
         if (placeSwing.get()) clientSwing(placeHand.get(), hand == null ? InteractionHand.MAIN_HAND : hand);
 

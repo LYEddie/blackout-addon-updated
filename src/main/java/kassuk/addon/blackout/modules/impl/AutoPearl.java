@@ -160,7 +160,7 @@ public class AutoPearl extends BlackOutModule {
         if (!rotated) return false;
 
         if (instaRot.get())
-            sendPacket(new ServerboundMovePlayerPacket.Rot((float) RotationUtils.getYaw(mc.player.getEyePosition(), pos.getCenter()), (float) RotationUtils.getPitch(mc.player.getEyePosition(), pos.getCenter()), Managers.ON_GROUND.isOnGround(), mc.player.horizontalCollision));
+            sendPacket(new ServerboundMovePlayerPacket.Rot((float) RotationUtils.getYaw(mc.player.getEyePosition(), Vec3.atCenterOf(pos)), (float) RotationUtils.getPitch(mc.player.getEyePosition(), Vec3.atCenterOf(pos)), Managers.ON_GROUND.isOnGround(), mc.player.horizontalCollision));
 
         InteractionHand hand = mc.player.getOffhandItem().getItem() instanceof BlockItem ? InteractionHand.OFF_HAND :
             Managers.HOLDING.getStack().getItem() instanceof BlockItem ? InteractionHand.MAIN_HAND : null;
@@ -182,7 +182,7 @@ public class AutoPearl extends BlackOutModule {
 
         if (hand == null && !switched) return false;
 
-        placeBlock(hand == null ? InteractionHand.MAIN_HAND : hand, pos.below().getCenter(), Direction.UP, pos.below());
+        placeBlock(hand == null ? InteractionHand.MAIN_HAND : hand, Vec3.atCenterOf(pos.below()), Direction.UP, pos.below());
 
         if (!instaRot.get() && SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "placing"));
         placed = true;

@@ -430,7 +430,7 @@ public class BedAuraPlus extends BlackOutModule {
 
     private boolean inRangeToTargets(BlockPos pos) {
         for (Player target : targets) {
-            if (target.position().add(0, 1, 0).distanceTo(pos.getCenter()) < 3.5) {
+            if (target.position().add(0, 1, 0).distanceTo(Vec3.atCenterOf(pos)) < 3.5) {
                 return true;
             }
         }
@@ -493,7 +493,7 @@ public class BedAuraPlus extends BlackOutModule {
     }
 
     private void place(InteractionHand hand) {
-        placeBlock(hand, placeData.pos().getCenter(), placeData.dir(), placeData.pos());
+        placeBlock(hand, Vec3.atCenterOf(placeData.pos()), placeData.dir(), placeData.pos());
 
         if (placeSwing.get()) clientSwing(placeHand.get(), hand);
     }
@@ -538,7 +538,7 @@ public class BedAuraPlus extends BlackOutModule {
             return null;
         }
 
-        interactBlock(InteractionHand.MAIN_HAND, interactPos.getCenter(), interactDir, interactPos);
+        interactBlock(InteractionHand.MAIN_HAND, Vec3.atCenterOf(interactPos), interactDir, interactPos);
 
         if (interactSwing.get()) clientSwing(interactHand.get(), InteractionHand.MAIN_HAND);
 
@@ -557,7 +557,7 @@ public class BedAuraPlus extends BlackOutModule {
             return false;
         }
 
-        interactBlock(InteractionHand.MAIN_HAND, pos.getCenter(), dir, pos);
+        interactBlock(InteractionHand.MAIN_HAND, Vec3.atCenterOf(pos), dir, pos);
 
         if (interactSwing.get()) clientSwing(interactHand.get(), InteractionHand.MAIN_HAND);
         return true;
@@ -698,7 +698,7 @@ public class BedAuraPlus extends BlackOutModule {
     private double getDmg(BlockPos pos) {
         double highest = -1;
         for (Player target : targets) {
-            highest = Math.max(highest, BODamageUtils.anchorDamage(target, target.getBoundingBox(), pos.getCenter(), pos, false));
+            highest = Math.max(highest, BODamageUtils.anchorDamage(target, target.getBoundingBox(), Vec3.atCenterOf(pos), pos, false));
         }
         return highest;
     }
@@ -710,14 +710,14 @@ public class BedAuraPlus extends BlackOutModule {
         for (Player target : targets) {
             if (target.getHealth() <= 0) continue;
 
-            highest = Math.max(highest, BODamageUtils.anchorDamage(target, target.getBoundingBox(), pos.getCenter(), pos, true));
+            highest = Math.max(highest, BODamageUtils.anchorDamage(target, target.getBoundingBox(), Vec3.atCenterOf(pos), pos, true));
             highestHP = target.getHealth() + target.getAbsorptionAmount();
         }
         dmg = highest;
         enemyHP = highestHP;
 
         // Self
-        self = BODamageUtils.anchorDamage(mc.player, mc.player.getBoundingBox(), pos.getCenter(), pos, false);
+        self = BODamageUtils.anchorDamage(mc.player, mc.player.getBoundingBox(), Vec3.atCenterOf(pos), pos, false);
         selfHP = mc.player.getHealth() + mc.player.getAbsorptionAmount();
 
         // Friend
@@ -726,7 +726,7 @@ public class BedAuraPlus extends BlackOutModule {
         for (Player friend : friends) {
             if (friend.getHealth() <= 0) continue;
 
-            highest = Math.max(highest, BODamageUtils.anchorDamage(friend, friend.getBoundingBox(), pos.getCenter(), pos, true));
+            highest = Math.max(highest, BODamageUtils.anchorDamage(friend, friend.getBoundingBox(), Vec3.atCenterOf(pos), pos, true));
             highestHP = friend.getHealth() + friend.getAbsorptionAmount();
         }
         friend = highest;

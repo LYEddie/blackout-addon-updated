@@ -499,13 +499,13 @@ public class PacketNames {
             String suffix;
             if (packet.getParameters().isPresent()) {
                 ClientboundSetPlayerTeamPacket.Parameters v = packet.getParameters().get();
-                displayName = v.getDisplayName().getString();
-                collisionRule =  v.getCollisionRule().toString();
-                color = v.getColor().getName();
-                friendlyFlagsBitwise = String.valueOf(v.getOptions());
-                nameTagVisibilityRule = v.getNametagVisibility().toString();
-                prefix = v.getPlayerPrefix().getString();
-                suffix = v.getPlayerSuffix().getString();
+                displayName = v.displayName().getString();
+                collisionRule =  v.collisionRule().toString();
+                color = v.color().map(net.minecraft.world.scores.TeamColor::getSerializedName).orElse("reset");
+                friendlyFlagsBitwise = String.valueOf(v.options());
+                nameTagVisibilityRule = v.nameTagVisibility().toString();
+                prefix = v.playerPrefix().getString();
+                suffix = v.playerSuffix().getString();
             } else {
                 displayName = "null";
                 collisionRule = "null";

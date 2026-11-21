@@ -1,5 +1,7 @@
 package kassuk.addon.blackout.modules.impl;
 
+import net.minecraft.world.phys.Vec3;
+
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.*;
@@ -22,7 +24,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -372,7 +374,7 @@ public class AutoTrapPlus extends BlackOutModule {
         placeTimer = 0;
         placesLeft--;
 
-        placeBlock(hand, d.pos().getCenter(), d.dir(), d.pos());
+        placeBlock(hand, Vec3.atCenterOf(d.pos()), d.dir(), d.pos());
 
         if (placeSwing.get()) clientSwing(placeHand.get(), hand);
 
@@ -449,8 +451,8 @@ public class AutoTrapPlus extends BlackOutModule {
                 continue;
             }
 
-            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityType.ITEM)) {
-                double dist = mc.player.getEyePosition().distanceTo(position.relative(dir).getCenter());
+            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityTypes.ITEM)) {
+                double dist = mc.player.getEyePosition().distanceTo(Vec3.atCenterOf(position.relative(dir)));
 
                 if (dist < cDist || value < 2) {
                     value = 2;
@@ -459,8 +461,8 @@ public class AutoTrapPlus extends BlackOutModule {
                 }
             }
 
-            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityType.ITEM && entity.getType() != EntityType.END_CRYSTAL)) {
-                double dist = mc.player.getEyePosition().distanceTo(position.relative(dir).getCenter());
+            if (!EntityUtils.intersectsWithEntity(AABB.of(new BoundingBox(position.relative(dir))), entity -> !entity.isSpectator() && entity.getType() != EntityTypes.ITEM && entity.getType() != EntityTypes.END_CRYSTAL)) {
+                double dist = mc.player.getEyePosition().distanceTo(Vec3.atCenterOf(position.relative(dir)));
 
                 if (dist < cDist || value < 1) {
                     value = 1;

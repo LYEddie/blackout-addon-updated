@@ -135,7 +135,7 @@ public class OffHandPlus extends BlackOutModule {
     private void update() {
         if (timer > 0) return;
         if (getPredicate(item).test(mc.player.getOffhandItem().getItem())) return;
-        if (onlyInInv.get() && !(mc.screen instanceof InventoryScreen)) return;
+        if (onlyInInv.get() && !(mc.gui.screen() instanceof InventoryScreen)) return;
 
         int slot = getSlot(getPredicate(item));
 
@@ -157,7 +157,7 @@ public class OffHandPlus extends BlackOutModule {
 
     private Predicate<Item> getPredicate(Item item) {
         if (item == Items.GOLDEN_APPLE) return OLEPOSSUtils::isGapple;
-        if (item == Items.RED_BED) return BedItem.class::isInstance;
+        if (item == Items.BED.red()) return BedItem.class::isInstance;
         return item::equals;
     }
 
@@ -198,7 +198,7 @@ public class OffHandPlus extends BlackOutModule {
             }
             case Bed -> {
                 if (itemAvailable(itemStack -> itemStack.getItem() instanceof BedItem)) {
-                    return Items.RED_BED;
+                    return Items.BED.red();
                 }
             }
         }

@@ -1,5 +1,7 @@
 package kassuk.addon.blackout.utils.RaksuTone;
 
+import net.minecraft.world.phys.Vec3;
+
 import kassuk.addon.blackout.utils.OLEPOSSUtils;
 import meteordevelopment.meteorclient.mixin.BlockBehaviourAccessor;
 import net.minecraft.core.BlockPos;
@@ -127,7 +129,7 @@ public class RaksuPath {
 
     private void closestDir(BlockPos from, BlockPos target, boolean reversed) {
         if (reversed) {
-            Comparator<Direction> c = Comparator.comparingDouble(i -> from.relative(i).getCenter().distanceTo(target.getCenter()));
+            Comparator<Direction> c = Comparator.comparingDouble(i -> Vec3.atCenterOf(from.relative(i)).distanceTo(Vec3.atCenterOf(target)));
             dirs = Arrays.stream(new Direction[]{
                 Direction.EAST,
                 Direction.WEST,
@@ -140,7 +142,7 @@ public class RaksuPath {
                 Direction.WEST,
                 Direction.NORTH,
                 Direction.SOUTH
-            }).sorted(Comparator.comparingDouble(i -> from.relative(i).getCenter().distanceTo(target.getCenter()))).toList();
+            }).sorted(Comparator.comparingDouble(i -> Vec3.atCenterOf(from.relative(i)).distanceTo(Vec3.atCenterOf(target)))).toList();
         }
     }
 

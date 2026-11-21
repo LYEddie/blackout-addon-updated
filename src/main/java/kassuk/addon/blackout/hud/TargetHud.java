@@ -36,6 +36,8 @@ import static meteordevelopment.meteorclient.MeteorClient.mc;
  * @author OLEPOSSU
  */
 
+// TODO: Reduce Exhibition's custom-font sizes and avoid loading a separate font
+// just to measure text height; font-cache churn repeatedly rebuilds GPU textures.
 public class TargetHud extends HudElement {
 
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
@@ -196,16 +198,14 @@ public class TargetHud extends HudElement {
             (float) (y + (1 - animation) * getHeight() / 2), 0);
         matrices.scale((float) (animation * scale.get()), (float) (animation * scale.get()), 1);
         matrices.rotateZ((float) Math.toRadians(tilt));
-        // DrawContext records GUI commands now; capture the same transform in its
-        // 2D matrix for faces and items rather than relying on a later GL flush.
+        // HudRenderer.begin converts GUI coordinates to HUD pixels. Apply the
+        // element transform afterward so faces, items and text share that space.
+        renderer.begin(context);
         var guiMatrices = context.pose();
-        guiMatrices.pushMatrix();
-        float guiScale = mc.getWindow().getGuiScale();
-        guiMatrices.translate((float) (x + (1 - animation) * getWidth() / 2) / guiScale,
-            (float) (y + (1 - animation) * getHeight() / 2) / guiScale);
+        guiMatrices.translate((float) (x + (1 - animation) * getWidth() / 2),
+            (float) (y + (1 - animation) * getHeight() / 2));
         guiMatrices.scale((float) (animation * scale.get()));
         guiMatrices.rotate((float) Math.toRadians(tilt));
-        renderer.begin(context);
         try {
             switch (mode.get()) {
                 case Blackout -> renderBlackout(renderer, width, height);
@@ -216,7 +216,6 @@ public class TargetHud extends HudElement {
             try {
                 renderer.end();
             } finally {
-                guiMatrices.popMatrix();
                 matrices.popMatrix();
                 renderer.begin(context);
             }
@@ -225,7 +224,7 @@ public class TargetHud extends HudElement {
 
     private void renderBlackout(HudRenderer renderer, int width, int height) {
         RoundedRenderer2D.quadRounded(Renderer2D.COLOR, 0, 0, width, height, bgColor.get(), 15, true);
-        drawFace(renderer);
+        drawFace(renderer, 20, 18, 32);
         renderer.text(renderName, 60, 20, textColor.get(), false, fontScale(0.5));
         renderer.text(Math.round(renderPing) + "ms", 60, 30, textColor.get(), false, fontScale(0.5));
         String health = String.valueOf(Math.round(renderHealth * 10) / 10f);
@@ -247,7 +246,7 @@ public class TargetHud extends HudElement {
     private void renderExhibitionOld(HudRenderer renderer, int width, int height) {
         renderer.quad(0, 0, width, height, bgColor.get());
         renderer.quad(1, 1, 58, 58, new Color(102, 102, 102, 255));
-        drawFace(renderer);
+        drawFace(renderer, 2, 2, 56);
         renderer.text(renderName, 66, 4, textColor.get(), false, fontScale(1));
         renderer.text(Math.round(renderHealth * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f,
             66, 35 - renderer.textHeight(false, fontScale(0.5)) / 2, textColor.get(), false, fontScale(0.5));
@@ -266,6 +265,7 @@ public class TargetHud extends HudElement {
         renderer.quad(-2, -2, width + 4, height + 4, new Color(52, 52, 52, 255));
         renderer.quad(-1, -1, width + 2, height + 2, new Color(32, 32, 32, 255));
         renderer.quad(0, 0, width, height, new Color(52, 52, 52, 255));
+        drawFace(renderer, 2, 2, 56);
         renderer.text(renderName, 61.5, 3, textColor.get(), false, fontScale(0.75));
         renderer.text(Math.round(renderHealth * 10) / 10f + " Dist: " + Math.round(mc.player.distanceTo(target) * 10) / 10f,
             62.25, (40 - renderer.textHeight(false, fontScale(0.5)) / 2) * 0.75, textColor.get(), false, fontScale(0.375));
@@ -288,20 +288,11 @@ public class TargetHud extends HudElement {
         return Hud.get().hasCustomFont() ? Math.sqrt(vanillaScale) : vanillaScale;
     }
 
-    private void drawFace(HudRenderer renderer) {
+    private void drawFace(HudRenderer renderer, int faceX, int faceY, int size) {
         Identifier skin = renderSkin;
-        renderer.post(() -> {
-            var matrices = renderer.graphics.pose();
-            matrices.pushMatrix();
-            try {
-                matrices.scale(1f / mc.getWindow().getGuiScale());
-                PlayerFaceExtractor.extractRenderState(renderer.graphics, skin, 20, 18, 32, false, false, -1);
-            } finally {
-                matrices.popMatrix();
-            }
-        });
+        renderer.post(() -> PlayerFaceExtractor.extractRenderState(
+            renderer.graphics, skin, faceX, faceY, size, false, false, -1));
     }
-
 
     private void updateTarget() {
         target = null;

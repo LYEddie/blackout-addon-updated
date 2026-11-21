@@ -1,5 +1,7 @@
 package kassuk.addon.blackout.modules.impl;
 
+import net.minecraft.world.phys.Vec3;
+
 import kassuk.addon.blackout.BlackOut;
 import kassuk.addon.blackout.modules.BlackOutModule;
 import kassuk.addon.blackout.enums.RotationType;
@@ -534,7 +536,7 @@ public class PistonCrystal extends BlackOutModule {
 
         hand = hand == null ? InteractionHand.MAIN_HAND : hand;
 
-        placeBlock(hand, pistonData.pos().getCenter(), pistonData.dir(), pistonData.pos());
+        placeBlock(hand, Vec3.atCenterOf(pistonData.pos()), pistonData.dir(), pistonData.pos());
 
         if (SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "piston"));
         if (pistonSwing.get()) clientSwing(pistonHand.get(), hand);
@@ -591,7 +593,7 @@ public class PistonCrystal extends BlackOutModule {
 
         hand = hand == null ? InteractionHand.MAIN_HAND : hand;
 
-        interactBlock(hand, crystalPos.below().getCenter(), crystalPlaceDir, crystalPos.below());
+        interactBlock(hand, Vec3.atCenterOf(crystalPos.below()), crystalPlaceDir, crystalPos.below());
 
         if (SettingUtils.shouldRotate(RotationType.Interact)) Managers.ROTATION.end(Objects.hash(name + "crystal"));
         if (crystalSwing.get()) clientSwing(crystalHand.get(), hand);
@@ -645,7 +647,7 @@ public class PistonCrystal extends BlackOutModule {
 
         hand = hand == null ? InteractionHand.MAIN_HAND : hand;
 
-        placeBlock(hand, redstoneData.pos().getCenter(), redstoneData.dir(), redstoneData.pos());
+        placeBlock(hand, Vec3.atCenterOf(redstoneData.pos()), redstoneData.dir(), redstoneData.pos());
 
         if (SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "redstone"));
         if (redstoneSwing.get()) clientSwing(redstoneHand.get(), hand);
@@ -695,7 +697,7 @@ public class PistonCrystal extends BlackOutModule {
                     if (!OLEPOSSUtils.solid(pos.below())) continue;
                     if (!(mc.level.getBlockState(pos).getBlock() instanceof AirBlock)) continue;
 
-                    double d = pos.getCenter().distanceTo(mc.player.getEyePosition());
+                    double d = Vec3.atCenterOf(pos).distanceTo(mc.player.getEyePosition());
                     if (d >= closesD) continue;
 
                     PlaceData da = SettingUtils.getPlaceData(pos);
@@ -748,7 +750,7 @@ public class PistonCrystal extends BlackOutModule {
 
         hand = hand == null ? InteractionHand.MAIN_HAND : hand;
 
-        interactBlock(hand, data.pos().getCenter(), data.dir(), data.pos());
+        interactBlock(hand, Vec3.atCenterOf(data.pos()), data.dir(), data.pos());
 
         if (SettingUtils.shouldRotate(RotationType.BlockPlace)) Managers.ROTATION.end(Objects.hash(name + "fire"));
         if (fireSwing.get()) clientSwing(fireHand.get(), hand);
@@ -805,7 +807,7 @@ public class PistonCrystal extends BlackOutModule {
             resetPos();
             BlockPos cPos = top ? BlockPos.containing(player.getEyePosition()).relative(dir).above() : BlockPos.containing(player.getEyePosition()).relative(dir);
 
-            d = cPos.getCenter().distanceTo(mc.player.position());
+            d = Vec3.atCenterOf(cPos).distanceTo(mc.player.position());
             if (!cPos.equals(lastCrystalPos) && d > cd) continue;
 
             Block b = mc.level.getBlockState(cPos).getBlock();
@@ -877,7 +879,7 @@ public class PistonCrystal extends BlackOutModule {
 
         for (BlockPos position : pistonBlocks) {
 
-            d = mc.player.getEyePosition().distanceTo(position.getCenter());
+            d = mc.player.getEyePosition().distanceTo(Vec3.atCenterOf(position));
             if (!position.equals(lastPistonPos) && cd < d) continue;
 
             PlaceData placeData = SettingUtils.getPlaceDataAND(position, d -> true, b -> !isRedstone(b) &&
@@ -967,7 +969,7 @@ public class PistonCrystal extends BlackOutModule {
 
                 BlockPos position = pos.relative(direction);
 
-                d = position.getCenter().distanceTo(mc.player.getEyePosition());
+                d = Vec3.atCenterOf(position).distanceTo(mc.player.getEyePosition());
                 if (!position.equals(lastPistonPos) && cd < d) continue;
 
                 if (position.equals(cPos)) {
@@ -1015,7 +1017,7 @@ public class PistonCrystal extends BlackOutModule {
 
             BlockPos position = pos.relative(direction);
 
-            d = position.getCenter().distanceTo(mc.player.getEyePosition());
+            d = Vec3.atCenterOf(position).distanceTo(mc.player.getEyePosition());
             if (!position.equals(lastPistonPos) && cd < d) continue;
 
             if (position.equals(cPos)) {
