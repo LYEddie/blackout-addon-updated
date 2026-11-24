@@ -63,17 +63,12 @@ jobs:
             echo "java_version=$JAVA"
             echo "tag=$TAG"
             echo "jar=$JAR"
-            echo "title=BlackOut Addon ${MOD} — Minecraft ${MC}"
+            echo "title=Release ${MC} - Blackout Addon ${MOD}"
           } >> "$GITHUB_OUTPUT"
 
           {
-            printf '**Minecraft:** `%s`\n**Addon:** `%s`\n**Commit:** `%s`\n\n### Changes\n' "$MC" "$MOD" "$GITHUB_SHA"
-            if git rev-parse -q --verify "refs/tags/${TAG}^{commit}" >/dev/null &&
-               git merge-base --is-ancestor "$TAG" "$GITHUB_SHA"; then
-              CHANGES="$(git log "${TAG}..${GITHUB_SHA}" --pretty=format:'- %s (%h)' --no-merges)"
-            else
-              CHANGES="$(git log "$GITHUB_SHA" -20 --pretty=format:'- %s (%h)' --no-merges)"
-            fi
+            printf '**Minecraft:** `%s` | **Addon:** `%s` | **Commit:** `%s`\n\n### Changes\n' "$MC" "$MOD" "$GITHUB_SHA"
+            CHANGES="$(git log "$GITHUB_SHA" -9 --pretty=format:'- %s (%h)' --no-merges)"
             printf '%s\n' "${CHANGES:-- No changes}"
           } > release-notes.md
 
