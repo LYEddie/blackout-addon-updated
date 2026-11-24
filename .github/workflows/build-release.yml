@@ -1,0 +1,142 @@
+name: Build and publish latest BlackOut release
+
+on:
+  push:
+    branches:
+      - main
+      - 'port_*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blackout-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-release:
+    if: github.ref_type == 'branch' && (github.ref_name == 'main' || startsWith(github.ref_name, 'port_'))
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Read build metadata
+        id: meta
+        shell: bash
+        run: |
+          set -euo pipefail
+          read_property() {
+            awk -F= -v key="$1" '
+              $1 ~ "^[[:space:]]*" key "[[:space:]]*$" {
+                value = substr($0, index($0, "=") + 1)
+                gsub(/^[[:space:]]+|[[:space:]]+$/, "", value)
+                print value
+                exit
+              }
+            ' gradle.properties
+          }
+
+          MC="$(read_property minecraft_version)"
+          MOD="$(read_property mod_version)"
+          [[ "$MC" =~ ^[0-9]+(\.[0-9]+){1,2}$ ]] || { echo 'Invalid minecraft_version'; exit 1; }
+          [[ "$MOD" =~ ^[A-Za-z0-9][A-Za-z0-9.+-]*$ ]] || { echo 'Invalid mod_version'; exit 1; }
+
+          if [[ "$GITHUB_REF_NAME" == port_* ]]; then
+            BRANCH_MC="${GITHUB_REF_NAME#port_}"
+            [[ "${BRANCH_MC//_/.}" == "$MC" ]] || { echo 'Branch and Minecraft versions differ'; exit 1; }
+          fi
+
+          if (( ${MC%%.*} >= 26 )); then JAVA=25; else JAVA=21; fi
+          TAG="mc${MC}-latest"
+          JAR="blackout-addon-${MOD}-mc${MC}.jar"
+
+          {
+            echo "minecraft_version=$MC"
+            echo "mod_version=$MOD"
+            echo "java_version=$JAVA"
+            echo "tag=$TAG"
+            echo "jar=$JAR"
+            echo "title=Release ${MC} - Blackout Addon ${MOD}"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            printf '**Minecraft:** `%s` | **Addon:** `%s` | **Commit:** `%s`\n\n### Changes\n' "$MC" "$MOD" "$GITHUB_SHA"
+            CHANGES="$(git log "$GITHUB_SHA" -9 --pretty=format:'- %s (%h)' --no-merges)"
+            printf '%s\n' "${CHANGES:-- No changes}"
+          } > release-notes.md
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/actions/wrapper-validation@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: ${{ steps.meta.outputs.java_version }}
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build addon
+        run: |
+          chmod +x ./gradlew
+          ./gradlew clean build --no-daemon
+
+      - name: Prepare release JAR
+        env:
+          RELEASE_JAR: ${{ steps.meta.outputs.jar }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t JARS < <(find build/libs -maxdepth 1 -type f -name 'blackout-*.jar' \
+            ! -name '*-sources.jar' ! -name '*-javadoc.jar' ! -name '*-dev.jar' ! -name '*-dev-shadow.jar')
+          if (( ${#JARS[@]} != 1 )); then
+            echo "Expected one release JAR, found ${#JARS[@]}"
+            find build/libs -maxdepth 1 -type f -print
+            exit 1
+          fi
+          mkdir -p release
+          cp "${JARS[0]}" "release/$RELEASE_JAR"
+
+      - name: Update release tag
+        env:
+          TAG: ${{ steps.meta.outputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag -fa "$TAG" "$GITHUB_SHA" -m "Latest BlackOut release for $TAG"
+          git push --force origin "refs/tags/$TAG"
+
+      - name: Publish or replace final release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          TITLE: ${{ steps.meta.outputs.title }}
+          JAR: ${{ steps.meta.outputs.jar }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "release/$JAR" --clobber
+            gh release view "$TAG" --json assets --jq '.assets[].name' |
+              while IFS= read -r asset; do
+                if [[ "$asset" != "$JAR" ]]; then
+                  gh release delete-asset "$TAG" "$asset" --yes
+                fi
+              done
+            gh release edit "$TAG" --title "$TITLE" --notes-file release-notes.md \
+              --prerelease=false --draft=false --latest
+          else
+            gh release create "$TAG" "release/$JAR" --verify-tag \
+              --title "$TITLE" --notes-file release-notes.md --latest
+          fi
